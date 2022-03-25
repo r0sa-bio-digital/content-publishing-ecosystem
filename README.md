@@ -36,8 +36,12 @@ Content publishing ecosystem to organize content exchange between authors and co
 * `Organize content storage with authorship and tariffication.`
 * Establish role of hosting provider.
 * Implement simplest content delivery with automated payment transactions.
+	* View content by direct link
+	* User dashboard to check balance and track transactions
 * Build semantic graph upon content storage.
 	* Visualisation
+	* Editor
 	* Implementation
+	* Recursive content space with references
 	* Search Engine
 * Transfere all useful data from (https://knyte-space.herokuapp.com/)[https://knyte-space.herokuapp.com/] to (https://c0ntent.herokuapp.com/)[https://c0ntent.herokuapp.com/]. Then dispose knyte-space DB instance in Heroku to save money.
