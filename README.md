@@ -19,3 +19,25 @@ Content publishing ecosystem to organize content exchange between authors and co
 * c0ntent.xyz
 * c0ntent.tech
 * c0ntent.online
+
+## Technical entry point
+
+(https://c0ntent.herokuapp.com/)[https://c0ntent.herokuapp.com/]
+
+## Technology stack
+
+* GitHub
+* Heroku
+* PostgreSQL
+* Node.js
+
+## Work Plan
+
+* `Organize content storage with authorship and tariffication.`
+* Establish role of hosting provider.
+* Implement simplest content delivery with automated payment transactions.
+* Build semantic graph upon content storage.
+	* Visualisation
+	* Implementation
+	* Search Engine
+* Transfere all useful data from (https://knyte-space.herokuapp.com/)[https://knyte-space.herokuapp.com/] to (https://c0ntent.herokuapp.com/)[https://c0ntent.herokuapp.com/]. Then dispose knyte-space DB instance in Heroku to save money.
