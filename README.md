@@ -33,7 +33,10 @@ Content publishing ecosystem to organize content exchange between authors and co
 
 ## Work Plan
 
-* `Organize content storage with authorship and tariffication.`
+* Organize content storage with authorship and tariffication.
+	* `Simple unique content table`
+	* Authentication
+	* Authorization
 * Establish role of hosting provider.
 * Implement simplest content delivery with automated payment transactions.
 	* View content by direct link
