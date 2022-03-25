@@ -22,7 +22,7 @@ Content publishing ecosystem to organize content exchange between authors and co
 
 ## Technical entry point
 
-(https://c0ntent.herokuapp.com/)[https://c0ntent.herokuapp.com/]
+[https://c0ntent.herokuapp.com/](https://c0ntent.herokuapp.com/)
 
 ## Technology stack
 
@@ -44,4 +44,4 @@ Content publishing ecosystem to organize content exchange between authors and co
 	* Implementation
 	* Recursive content space with references
 	* Search Engine
-* Transfere all useful data from (https://knyte-space.herokuapp.com/)[https://knyte-space.herokuapp.com/] to (https://c0ntent.herokuapp.com/)[https://c0ntent.herokuapp.com/]. Then dispose knyte-space DB instance in Heroku to save money.
+* Transfere all useful data from [https://knyte-space.herokuapp.com/](https://knyte-space.herokuapp.com/) to [https://c0ntent.herokuapp.com/](https://c0ntent.herokuapp.com/). Then dispose knyte-space DB instance in Heroku to save money.
