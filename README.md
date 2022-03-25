@@ -4,6 +4,5 @@ Content publishing ecosystem to organize content exchange between authors and co
 
 ## Possible domains for web3 entry point and identification
 
-c0ntent.dao
-
-c0ntent.nft
+* c0ntent.dao
+* c0ntent.nft
