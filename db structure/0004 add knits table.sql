@@ -1,0 +1,1 @@
+CREATE TABLE "public"."knits" ("id" uuid NOT NULL,"creation" timestamp NOT NULL DEFAULT NOW(), PRIMARY KEY ("id"));
