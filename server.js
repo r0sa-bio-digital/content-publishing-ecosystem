@@ -1,6 +1,6 @@
 console.info('welcome to c0ntent.dao');
 // common instances
-const knit = require('uuid');
+const knit = require('ordered-uuid-v4');
 const express = require('express');
 const app = express();
 const cors = require('cors');
