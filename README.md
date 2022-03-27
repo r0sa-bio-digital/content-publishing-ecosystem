@@ -38,8 +38,9 @@ Content publishing ecosystem to organize content exchange between authors and co
 	* Authentication
 	* Migration from standard UUID v4 to COMB (combined time-GUID)
 		* https://www.npmjs.com/package/ordered-uuid-v4
-			* `Generate COMB UUID by https://c0ntent.herokuapp.com/knit/new`
+			* Generate COMB UUID by https://c0ntent.herokuapp.com/knit/new
 			* Replace all standard UUIDs by COMB UUIDs in c0ntent db
+			* `Prevent users.id to be added to content.id and vise versa`
 	* Add creation time field to content and users tables
 	* Authorization	
 * Establish role of hosting provider.
