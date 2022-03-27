@@ -16,4 +16,7 @@ app.get('/knit/new', auth.public, (req, res) => {
     res.set('Content-Type', 'text/html');
     res.send(knit.generate());
 });
+app.get('/*', auth.public, (req, res) => {
+    res.status(404).end();
+});
 http.listen(port, () => console.info(`\tserver is ready and running at port ${port}`));
