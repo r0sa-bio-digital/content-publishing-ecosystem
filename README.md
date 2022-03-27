@@ -38,7 +38,7 @@ Content publishing ecosystem to organize content exchange between authors and co
 	* Authentication
 	* `Migration from standard UUID v4 to COMB (combined time-GUID)`
 		* https://www.npmjs.com/package/ordered-uuid-v4
-	* Add creation time field to content table
+	* Add creation time field to content and users tables
 	* Authorization	
 * Establish role of hosting provider.
 * Implement simplest content delivery with automated payment transactions.
