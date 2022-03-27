@@ -34,9 +34,12 @@ Content publishing ecosystem to organize content exchange between authors and co
 ## Work Plan
 
 * Organize content storage with authorship and tariffication.
-	* `Simple unique content table`
+	* Simple unique content table
 	* Authentication
-	* Authorization
+	* `Migration from standard UUID v4 to COMB (combined time-GUID)`
+		* https://www.npmjs.com/package/ordered-uuid-v4
+	* Add creation time field to content table
+	* Authorization	
 * Establish role of hosting provider.
 * Implement simplest content delivery with automated payment transactions.
 	* View content by direct link
