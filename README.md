@@ -40,11 +40,10 @@ Content publishing ecosystem to organize content exchange between authors and co
 		* https://www.npmjs.com/package/ordered-uuid-v4
 			* Generate COMB UUID by https://c0ntent.herokuapp.com/knit/new
 			* Replace all standard UUIDs by COMB UUIDs in c0ntent db
-			* Prevent users.id to be added to content.id and vise versa
-				* Add knits table as aggregation of all ids from all other tables
-				* `Add new content and users only via special api`
-					* This api first trys to add id to knits, and only then to specified table
-	* Add creation time field to content and users tables
+	* Prevent users.id to be added to content.id and vise versa
+		* Add knits table as aggregation of all ids from all other tables
+		* `Add new content and users only via special api`
+			* This api first trys to add id to knits, and only then to specified table
 	* Authorization	
 * Establish role of hosting provider.
 * Implement simplest content delivery with automated payment transactions.
