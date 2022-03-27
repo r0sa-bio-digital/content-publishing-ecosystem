@@ -1,0 +1,15 @@
+{
+    "name": "c0ntent-dao",
+    "engines": {
+       "node": "16.4.2",
+        "npm": "7.19.1"
+    },
+    "scripts": {
+        "start": "node server.js"
+    },
+    "dependencies": {
+        "ordered-uuid-v4": "^0.2.1",
+        "express": "^4.17.1",
+        "cors": "^2.8.5"
+    }
+}
