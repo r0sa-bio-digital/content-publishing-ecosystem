@@ -79,9 +79,9 @@ Content publishing ecosystem to organize content exchange between authors and co
 		* Formalise communication rules
 * Establish role of hosting provider in the system.
 	* Describe roles
-	* `Implement hosting provider table and balance`
-	* Implement user balance
-	* Implement user authentication for api calls
+	* Implement hosting provider table with balance storage
+	* Implement user balance storage
+	* `Implement user authentication for api calls`
 	* Implement automated api call charges
 * Establish process for db backups
 * Implement simplest content delivery with automated payment transactions.

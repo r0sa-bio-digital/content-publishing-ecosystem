@@ -1,0 +1,1 @@
+ALTER TABLE "public"."users" ADD COLUMN "balance" int8 NOT NULL DEFAULT 0;
