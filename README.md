@@ -37,6 +37,15 @@ Content publishing ecosystem to organize content exchange between authors and co
 1. Add it to knits table with default creation field
 1. Use this id as pk for new record in users or content table
 
+## How users to communicate with hosting provider
+
+1. Request registration
+	1. Give your name
+	1. Get your user id
+1. Request content creation
+	1. Give user id and textual content
+	1. Get content id or justified refusal
+
 ## Work Plan
 
 * Organize content storage with authorship and tariffication.
@@ -50,10 +59,12 @@ Content publishing ecosystem to organize content exchange between authors and co
 		* Add knits table as aggregation of all ids from all other tables
 		* Rename /knit/new to /knit/generate
 		* Describe manual process of adding new entities (users, content)
-		* `Add new content`
+		* Add new content
 		* Add new user
-	* Authorization	
-* Establish role of hosting provider.
+	* Authorization
+		* Implemented by direct communication with hosting provider
+		* Formalise communication rules
+* `Establish role of hosting provider in the system.`
 * Implement simplest content delivery with automated payment transactions.
 	* View content by direct link
 	* User dashboard to check balance and track transactions
