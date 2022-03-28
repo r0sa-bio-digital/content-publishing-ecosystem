@@ -83,6 +83,7 @@ Content publishing ecosystem to organize content exchange between authors and co
 	* Implement user balance
 	* Implement user authentication for api calls
 	* Implement automated api call charges
+* Establish process for db backups
 * Implement simplest content delivery with automated payment transactions.
 	* View content by direct link
 	* User dashboard to check balance and track transactions
