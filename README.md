@@ -34,7 +34,7 @@ Content publishing ecosystem to organize content exchange between authors and co
 ## Roles
 
 * Hosting provider
-	* Provides resources of the ecosystem via api calls
+	* Provide resources of the ecosystem via api calls
 	* Each api call is charged - users pay to hosting providers
 * User
 	* Use resources of hosting provider
