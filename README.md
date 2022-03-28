@@ -31,13 +31,26 @@ Content publishing ecosystem to organize content exchange between authors and co
 * PostgreSQL
 * Node.js
 
+## Roles
+
+* Hosting provider
+	* Provides resources of the ecosystem via api calls
+	* Each api call is charged - users pay to hosting providers
+* User
+	* Use resources of hosting provider
+* Author
+	* Add original content to the ecosystem
+* Consumer
+	* Watch content
+
 ## How to add new entity
 
+1. Ensure that you are hosting provider and have an access to c0ntent db
 1. Generate new id by https://c0ntent.herokuapp.com/knit/generate
 1. Add it to knits table with default creation field
 1. Use this id as pk for new record in users or content table
 
-## How users to communicate with hosting provider
+## How users communicate with hosting provider
 
 1. Request registration
 	1. Give your name
@@ -64,7 +77,12 @@ Content publishing ecosystem to organize content exchange between authors and co
 	* Authorization
 		* Implemented by direct communication with hosting provider
 		* Formalise communication rules
-* `Establish role of hosting provider in the system.`
+* Establish role of hosting provider in the system.
+	* Describe roles
+	* `Implement hosting provider table and balance`
+	* Implement user balance
+	* Implement user authentication for api calls
+	* Implement automated api call charges
 * Implement simplest content delivery with automated payment transactions.
 	* View content by direct link
 	* User dashboard to check balance and track transactions
