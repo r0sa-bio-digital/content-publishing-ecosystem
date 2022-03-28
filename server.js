@@ -12,7 +12,7 @@ console.info('\tserver booting started');
 const auth = {
     public: (req, res, next) => next()
 };
-app.get('/knit/new', auth.public, (req, res) => {
+app.get('/knit/generate', auth.public, (req, res) => {
     res.set('Content-Type', 'text/html');
     res.send(knit.generate());
 });

@@ -31,6 +31,12 @@ Content publishing ecosystem to organize content exchange between authors and co
 * PostgreSQL
 * Node.js
 
+## How to add new entity
+
+1. Generate new id by https://c0ntent.herokuapp.com/knit/generate
+1. Add it to knits table with default creation field
+1. Use this id as pk for new record in users or content table
+
 ## Work Plan
 
 * Organize content storage with authorship and tariffication.
@@ -42,8 +48,10 @@ Content publishing ecosystem to organize content exchange between authors and co
 			* Replace all standard UUIDs by COMB UUIDs in c0ntent db
 	* Prevent users.id to be added to content.id and vise versa
 		* Add knits table as aggregation of all ids from all other tables
-		* `Add new content and users only via special api`
-			* This api first trys to add id to knits, and only then to specified table
+		* Rename /knit/new to /knit/generate
+		* Describe manual process of adding new entities (users, content)
+		* `Add new content`
+		* Add new user
 	* Authorization	
 * Establish role of hosting provider.
 * Implement simplest content delivery with automated payment transactions.
