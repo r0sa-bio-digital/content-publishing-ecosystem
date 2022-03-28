@@ -61,7 +61,7 @@ Content publishing ecosystem to organize content exchange between authors and co
 
 ## Work Plan
 
-* Organize content storage with authorship and tariffication.
+* Organize content storage with authorship.
 	* Simple unique content table
 	* Authentication
 	* Migration from standard UUID v4 to COMB (combined time-GUID)
