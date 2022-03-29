@@ -7,6 +7,7 @@ const http = require('http').Server(app);
 const pg = require('pg');
 const connectionString = process.env.DATABASE_URL;
 const port = process.env.PORT || 3000;
+const defaultHostingProvider = { id: process.env.HOSTER_ID, name: process.env.HOSTER_NAME }; // TODO: implement proper hosting provider detection
 const users = {};
 app.use(express.json({limit: '10mb'}));
 // common functions
@@ -39,8 +40,9 @@ async function runQuery(queryString) {
     }
     return result;
 }
-async function chargeUser(userId, amount) {
-    const queryString = 'UPDATE "public"."users" SET "balance" = "balance" - ' + amount + ' WHERE "id" = \'' + userId + '\';';
+async function hostingFeeTransfer(userId, hostingProviderId, amount) {
+    const queryString = 'UPDATE "public"."users" SET "balance" = "balance" - ' + amount + ' WHERE "id" = \'' + userId + '\';\n' +
+        'UPDATE "public"."hosting_providers" SET "balance" = "balance" + ' + amount + ' WHERE "id" = \'' + hostingProviderId + '\';';
     await runQuery(queryString);
 }
 const auth = {
@@ -64,7 +66,7 @@ console.info('\tserver booting started');
 
 const queryString = 'SELECT * FROM "public"."users" ORDER BY "id" LIMIT 5000 OFFSET 0;';
 runQuery(queryString).then( async (result) => {
-    // cache users list for auth
+    // cache users list for auth // TODO: update users list every db update or read it dynamically
     for (let i = 0; i < result.length; ++i)
     {
         const user = result[i];
@@ -72,8 +74,9 @@ runQuery(queryString).then( async (result) => {
     }
     // define api calls
     app.get('/knit/generate', auth.user, async (req, res) => {
+        const apiCallPrice = 1;
         const resultKnit = knit.generate();
-        await chargeUser(req.user.id, 1);
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice);
         res.set('Content-Type', 'text/html');
         res.send(resultKnit);
     });
