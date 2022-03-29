@@ -102,14 +102,17 @@ Content publishing ecosystem to organize content exchange between authors and co
 			* Cost of a single /knit/generate in thе currency
 			* Exchange rate for fiat money to thе currency and vice versa
 * Check knit-integrity of the db
-	* `Add api call to extract timestamp from knit`
+	* Add api call to extract timestamp from knit
 	* Fix date 2022-03-29 07:28:24.182474 for knit record
-* Implement simplest content delivery with automated payment transactions.
-	* View content by direct link
-	* User dashboard to check balance and track transactions
-	* Transactions log
-		* Research best db for the log, thus postgresql too much costly
-			* Check out ClickHouse first
+* `Sell first c01ns for fiat money`
+	* Implement simplest content delivery with automated payment transactions.
+		* View content by direct link
+		* User dashboard to check balance and track transactions
+		* Transactions log
+			* Research best db for the log, thus postgresql too much costly
+				* Check out ClickHouse first
+	* Organize c0ntent community
+	* Organize first c01n sale inside of the community
 * Establish backup process
 	* All tables' pks must be stored in knits, every knits entry must have a corresponding record in some other table
 	* db

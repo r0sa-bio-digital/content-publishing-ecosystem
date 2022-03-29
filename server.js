@@ -87,7 +87,7 @@ runQuery(queryString).then( async (result) => {
         console.log(resultTimestamp);
         await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice);
         res.set('Content-Type', 'text/html');
-        res.send(resultTimestamp.toString());
+        res.send(resultTimestamp.toISOString());
     });
     app.get('/*', auth.public, (req, res) => {
         res.status(404).end();
