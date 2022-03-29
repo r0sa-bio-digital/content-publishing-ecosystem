@@ -49,13 +49,10 @@ const auth = {
         const base64Credentials =  req.headers.authorization.split(' ')[1];
         const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
         const userId = credentials.split(':')[0];
-        console.log('auth: ' + userId); // TODO: check if userId inside of users table, charge user for operation
-        /*
-        const user = ???;
+        const user = users[userId];
         if (!user)
             return res.status(401).json({ message: 'Invalid Authentication Credentials' });
         req.user = user
-        */
         next();
     }
 };
@@ -70,9 +67,9 @@ runQuery(queryString).then( async (result) => {
         const user = result[i];
         users[user.id] = user;
     }
-    console.log(users);
     // define api calls
     app.get('/knit/generate', auth.user, (req, res) => {
+        console.log('charge:', req.user); // TODO: charge user for the call
         res.set('Content-Type', 'text/html');
         res.send(knit.generate());
     });
