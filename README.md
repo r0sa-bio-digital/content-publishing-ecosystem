@@ -59,6 +59,14 @@ Content publishing ecosystem to organize content exchange between authors and co
 	1. Give user id and textual content
 	1. Get content id or justified refusal
 
+## c0ntent c01n exchange rates
+
+* 1 RUB = 100,000 C10N
+* 1 INR = 120,000 C10N
+* 1 CNY = 1,423,000 C10N
+* 1 USD = 9,000,000 C10N
+* 1 EUR = 10,000,000 C10N
+
 ## Work Plan
 
 * Organize content storage with authorship.
@@ -90,9 +98,12 @@ Content publishing ecosystem to organize content exchange between authors and co
 		* Debit user
 		* Credit hosting provider
 		* Determine basic financial rules
-			* `Name of the currency stored in balance fields`
+			* Name of the currency stored in balance fields
 			* Cost of a single /knit/generate in thе currency
 			* Exchange rate for fiat money to thе currency and vice versa
+* `Check knit-integrity of the db`
+	* Fix date 2022-03-29 07:28:24.182474 for knit record
+	* All pks must be stored in knits, every knits entry must have a corresponding record in some other table
 * Establish process for db backups
 * Establish process for insomnia calls backups
 * Implement simplest content delivery with automated payment transactions.
