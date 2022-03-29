@@ -8,6 +8,7 @@ const http = require('http').Server(app);
 const pg = require('pg');
 const connectionString = process.env.DATABASE_URL;
 const port = process.env.PORT || 3000;
+const users = {};
 app.use(express.json({limit: '10mb'}));
 // common functions
 async function runQuery(queryString) {
@@ -63,8 +64,14 @@ console.info('\tserver booting started');
 
 const queryString = 'SELECT * FROM "public"."users" ORDER BY "id" LIMIT 5000 OFFSET 0;';
 runQuery(queryString).then( async (result) => {
-    console.log(result);
-    // TODO: cache users list for auth
+    // cache users list for auth
+    for (let i = 0; i < result.length; ++i)
+    {
+        const user = result[i];
+        users[user.id] = user;
+    }
+    console.log(users);
+    // define api calls
     app.get('/knit/generate', auth.user, (req, res) => {
         res.set('Content-Type', 'text/html');
         res.send(knit.generate());
