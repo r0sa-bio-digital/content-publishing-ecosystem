@@ -91,8 +91,8 @@ Content publishing ecosystem to organize content exchange between authors and co
 		* Credit hosting provider
 		* Determine basic financial rules
 			* `Name of the currency stored in balance fields`
-			* Cost of a single /knit/generate in tht currency
-			* Exchange rate for fiat money to thr currency and vice versa
+			* Cost of a single /knit/generate in thе currency
+			* Exchange rate for fiat money to thе currency and vice versa
 * Establish process for db backups
 * Establish process for insomnia calls backups
 * Implement simplest content delivery with automated payment transactions.
