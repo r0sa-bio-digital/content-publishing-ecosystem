@@ -3,7 +3,6 @@ console.info('welcome to c0ntent.dao');
 const knit = require('ordered-uuid-v4');
 const express = require('express');
 const app = express();
-const cors = require('cors');
 const http = require('http').Server(app);
 const pg = require('pg');
 const connectionString = process.env.DATABASE_URL;
