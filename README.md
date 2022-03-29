@@ -104,8 +104,9 @@ Content publishing ecosystem to organize content exchange between authors and co
 * `Check knit-integrity of the db`
 	* Fix date 2022-03-29 07:28:24.182474 for knit record
 	* All pks must be stored in knits, every knits entry must have a corresponding record in some other table
-* Establish process for db backups
-* Establish process for insomnia calls backups
+* Establish backup process
+	* db
+	* insomnia collections
 * Implement simplest content delivery with automated payment transactions.
 	* View content by direct link
 	* User dashboard to check balance and track transactions
