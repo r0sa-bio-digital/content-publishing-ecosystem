@@ -101,15 +101,19 @@ Content publishing ecosystem to organize content exchange between authors and co
 			* Name of the currency stored in balance fields
 			* Cost of a single /knit/generate in thе currency
 			* Exchange rate for fiat money to thе currency and vice versa
-* `Check knit-integrity of the db`
+* Check knit-integrity of the db
+	* `Add api call to extract timestamp from knit`
 	* Fix date 2022-03-29 07:28:24.182474 for knit record
-	* All pks must be stored in knits, every knits entry must have a corresponding record in some other table
-* Establish backup process
-	* db
-	* insomnia collections
 * Implement simplest content delivery with automated payment transactions.
 	* View content by direct link
 	* User dashboard to check balance and track transactions
+	* Transactions log
+		* Research best db for the log, thus postgresql too much costly
+			* Check out ClickHouse first
+* Establish backup process
+	* All tables' pks must be stored in knits, every knits entry must have a corresponding record in some other table
+	* db
+	* insomnia collections
 * Build semantic graph upon content storage.
 	* Visualisation
 	* Editor
