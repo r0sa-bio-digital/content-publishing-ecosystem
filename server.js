@@ -6,6 +6,7 @@ const app = express();
 const cors = require('cors');
 const http = require('http').Server(app);
 const pg = require('pg');
+const connectionString = process.env.DATABASE_URL;
 const port = process.env.PORT || 3000;
 app.use(express.json({limit: '10mb'}));
 // common functions
