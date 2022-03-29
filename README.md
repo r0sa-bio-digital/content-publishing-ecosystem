@@ -86,7 +86,13 @@ Content publishing ecosystem to organize content exchange between authors and co
 		* Connect server to pg db
 		* Check auth for every api call 
 	* Remove useless cors
-	* `Implement automated api call charges`
+	* Implement automated api call charges
+		* Debit user
+		* `Credit hosting provider`
+		* Determine basic financial rules
+			* Name of the currency stored in balance fields
+			* Cost of a single /knit/generate in tht currency
+			* Exchange rate for fiat money to thr currency and vice versa
 * Establish process for db backups
 * Establish process for insomnia calls backups
 * Implement simplest content delivery with automated payment transactions.
