@@ -28,7 +28,7 @@ const auth = {
         next();
     }
 };
-app.get('/knit/generate', auth.public, (req, res) => {
+app.get('/knit/generate', auth.user, (req, res) => {
     res.set('Content-Type', 'text/html');
     res.send(knit.generate());
 });
