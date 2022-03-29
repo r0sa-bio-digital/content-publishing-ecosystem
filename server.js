@@ -74,7 +74,7 @@ runQuery(queryString).then( async (result) => {
     }
     // define api calls
     app.get('/knit/generate', auth.user, async (req, res) => {
-        const apiCallPrice = 100;
+        const apiCallPrice = 1000;
         const resultKnit = knit.generate();
         await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice);
         res.set('Content-Type', 'text/html');

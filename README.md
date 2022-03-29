@@ -61,11 +61,11 @@ Content publishing ecosystem to organize content exchange between authors and co
 
 ## c0ntent c01n exchange rates
 
-* 1 RUB = 100,000 C10N
-* 1 INR = 120,000 C10N
-* 1 CNY = 1,423,000 C10N
-* 1 USD = 9,000,000 C10N
-* 1 EUR = 10,000,000 C10N
+* 1 RUB = ... 1,000,000 C10N
+* 1 INR = ... 1,200,000 C10N
+* 1 CNY = .. 14,200,000 C10N
+* 1 USD = .. 90,000,000 C10N
+* 1 EUR = . 100,000,000 C10N
 
 ## Work Plan
 
