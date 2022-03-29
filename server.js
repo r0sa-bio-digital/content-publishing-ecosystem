@@ -84,7 +84,6 @@ runQuery(queryString).then( async (result) => {
         const apiCallPrice = 1000;
         const id = req.params.knit.split('=')[1];
         const resultTimestamp = knit.convertTime(id, 'date-object');
-        console.log(resultTimestamp);
         await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice);
         res.set('Content-Type', 'text/html');
         res.send(resultTimestamp.toISOString());
