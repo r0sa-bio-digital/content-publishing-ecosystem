@@ -80,6 +80,15 @@ runQuery(queryString).then( async (result) => {
         res.set('Content-Type', 'text/html');
         res.send(resultKnit);
     });
+    app.get('/knit/extract/timestamp/:id', auth.user, async (req, res) => {
+        const apiCallPrice = 1000;
+        const id = req.params.id.split('=')[1];
+        const resultTimestamp = knit.convertTime(id, 'date-object');
+        console.log(resultTimestamp);
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice);
+        res.set('Content-Type', 'text/html');
+        res.send(resultTimestamp.toString());
+    });
     app.get('/*', auth.public, (req, res) => {
         res.status(404).end();
     });
