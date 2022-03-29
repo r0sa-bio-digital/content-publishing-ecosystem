@@ -39,6 +39,10 @@ async function runQuery(queryString) {
     }
     return result;
 }
+async function chargeUser(userId, amount) {
+    const queryString = 'UPDATE "public"."users" SET "balance" = "balance" - ' + amount + ' WHERE "id" = \'' + userId + '\';';
+    await runQuery(queryString);
+}
 const auth = {
     public: (req, res, next) => next(),
     user: (req, res, next) => {
@@ -67,10 +71,11 @@ runQuery(queryString).then( async (result) => {
         users[user.id] = user;
     }
     // define api calls
-    app.get('/knit/generate', auth.user, (req, res) => {
-        console.log('charge:', req.user); // TODO: charge user for the call
+    app.get('/knit/generate', auth.user, async (req, res) => {
+        const resultKnit = knit.generate();
+        await chargeUser(req.user.id, 1);
         res.set('Content-Type', 'text/html');
-        res.send(knit.generate());
+        res.send(resultKnit);
     });
     app.get('/*', auth.public, (req, res) => {
         res.status(404).end();
