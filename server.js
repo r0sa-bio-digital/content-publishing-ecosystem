@@ -5,10 +5,39 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const http = require('http').Server(app);
+const pg = require('pg');
 const port = process.env.PORT || 3000;
 app.use(express.json({limit: '10mb'}));
-// boot the system
-console.info('\tserver booting started');
+// common functions
+async function runQuery(queryString) {
+    const client = new pg.Client({
+        connectionString,
+        ssl: {
+            require: true,
+            rejectUnauthorized: false
+        }
+    });
+    try {
+        await client.connect();
+    } catch(e) {
+        console.warn(e);
+        return {error: e, step: 'client connect'};
+    }
+    let result = {};
+    try {
+        result = (await client.query(queryString)).rows;
+    } catch (e) {
+        console.warn(e);
+        result = {error: e, step: 'client query'};
+    }
+    try {
+        await client.end();
+    } catch(e) {
+        console.warn(e);
+        return {error: e, step: 'client end'};
+    }
+    return result;
+}
 const auth = {
     public: (req, res, next) => next(),
     user: (req, res, next) => {
@@ -28,11 +57,19 @@ const auth = {
         next();
     }
 };
-app.get('/knit/generate', auth.user, (req, res) => {
-    res.set('Content-Type', 'text/html');
-    res.send(knit.generate());
+// boot the system
+console.info('\tserver booting started');
+
+const queryString = 'SELECT * FROM "public"."users" ORDER BY "id" LIMIT 5000 OFFSET 0;';
+runQuery(queryString).then( async (result) => {
+    console.log(result);
+    // TODO: cache users list for auth
+    app.get('/knit/generate', auth.user, (req, res) => {
+        res.set('Content-Type', 'text/html');
+        res.send(knit.generate());
+    });
+    app.get('/*', auth.public, (req, res) => {
+        res.status(404).end();
+    });
+    http.listen(port, () => console.info(`\tserver is ready and running at port ${port}`));
 });
-app.get('/*', auth.public, (req, res) => {
-    res.status(404).end();
-});
-http.listen(port, () => console.info(`\tserver is ready and running at port ${port}`));

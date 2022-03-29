@@ -85,8 +85,10 @@ Content publishing ecosystem to organize content exchange between authors and co
 		* Serverside decoding of basic auth
 		* `Connect server to pg db`
 		* Check auth and charge for every api call
+	* Remove useless cors
 	* Implement automated api call charges
 * Establish process for db backups
+* Establish process for insomnia calls backups
 * Implement simplest content delivery with automated payment transactions.
 	* View content by direct link
 	* User dashboard to check balance and track transactions
