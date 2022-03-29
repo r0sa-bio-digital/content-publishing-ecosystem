@@ -80,9 +80,9 @@ runQuery(queryString).then( async (result) => {
         res.set('Content-Type', 'text/html');
         res.send(resultKnit);
     });
-    app.get('/knit/extract/timestamp/:id', auth.user, async (req, res) => {
+    app.get('/:knit/extract/timestamp/', auth.user, async (req, res) => {
         const apiCallPrice = 1000;
-        const id = req.params.id.split('=')[1];
+        const id = req.params.knit.split('=')[1];
         const resultTimestamp = knit.convertTime(id, 'date-object');
         console.log(resultTimestamp);
         await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice);
