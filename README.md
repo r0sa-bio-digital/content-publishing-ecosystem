@@ -117,6 +117,7 @@ Content publishing ecosystem to organize content exchange between authors and co
 	* All tables' pks must be stored in knits, every knits entry must have a corresponding record in some other table
 	* db
 	* insomnia collections
+* Raise funds for the project development
 * Build semantic graph upon content storage.
 	* Visualisation
 	* Editor
