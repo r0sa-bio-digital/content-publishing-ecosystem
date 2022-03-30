@@ -45,6 +45,11 @@ async function hostingFeeTransfer(userId, hostingProviderId, amount) {
         'UPDATE "public"."hosting_providers" SET "balance" = "balance" + ' + amount + ' WHERE "id" = \'' + hostingProviderId + '\';';
     await runQuery(queryString);
 }
+async function authorFeeTransfer(userId, authorId, amount) {
+    const queryString = 'UPDATE "public"."users" SET "balance" = "balance" - ' + amount + ' WHERE "id" = \'' + userId + '\';\n' +
+        'UPDATE "public"."users" SET "balance" = "balance" + ' + amount + ' WHERE "id" = \'' + authorId + '\';';
+    await runQuery(queryString);
+}
 async function getContentRecord(contentId) {
     const queryString = 'SELECT * FROM "public"."content" WHERE "id" = \'' + contentId + '\';';
     return await runQuery(queryString);
@@ -101,7 +106,8 @@ runQuery(queryString).then( async (result) => {
             const {text, author} = contentRecord;
             const apiCallTotalPrice = apiCallPrice.base + apiCallPrice.perSymbol * text.length;
             await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallTotalPrice);
-            //await authorFeeTransfer(req.user.id, author, contentViewPrice);
+            const contentViewPrice = 100000; // TODO: implement proper contentViewPrice management
+            await authorFeeTransfer(req.user.id, author, contentViewPrice);
             res.set('Content-Type', 'text/html');
             res.send(text);
         }
