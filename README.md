@@ -109,8 +109,8 @@ Content publishing ecosystem to organize content exchange between authors and co
 		* View content by api call with provider fee
 		* Copyright fee
 			* Placeholder
-			* `Author fee management for content records`
-		* Transactions log
+			* Author fee management for content records
+		* `Transactions log`
 		* User dashboard api calls to check balance and track transactions
 		* View content frontend
 		* User dashboard frontend
