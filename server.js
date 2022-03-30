@@ -95,14 +95,21 @@ runQuery(queryString).then( async (result) => {
     app.get('/:knit', auth.user, async (req, res) => {
         const apiCallPrice = {base: 10000, perSymbol: 10};
         const id = req.params.knit.split('=')[1];
-        const contentRecord = await getContentRecord(id);
-        console.log(contentRecord);
-        const {text, author} = contentRecord[0];
-        const apiCallTotalPrice = apiCallPrice.base + apiCallPrice.perSymbol * text.length;
-        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallTotalPrice);
-        //await authorFeeTransfer(req.user.id, author, contentViewPrice);
-        res.set('Content-Type', 'text/html');
-        res.send(text);
+        const contentRecord = (await getContentRecord(id))[0];
+        if (contentRecord)
+        {
+            const {text, author} = contentRecord;
+            const apiCallTotalPrice = apiCallPrice.base + apiCallPrice.perSymbol * text.length;
+            await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallTotalPrice);
+            //await authorFeeTransfer(req.user.id, author, contentViewPrice);
+            res.set('Content-Type', 'text/html');
+            res.send(text);
+        }
+        else
+        {
+            await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice.base);
+            res.status(404).json({ message: 'Content not found' });
+        }
     });
     app.get('/*', auth.public, (req, res) => {
         res.status(404).end();
