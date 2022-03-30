@@ -106,10 +106,14 @@ Content publishing ecosystem to organize content exchange between authors and co
 	* Fix date 2022-03-29 07:28:24.182474 for knit record
 * Sell first c01ns for fiat money
 	* Implement simplest content delivery with automated payment transactions.
-		* `View content by direct link with provider fee`
+		* View content by api call with provider fee
 		* Copyright fee
+			* Placeholder
+			* `Author fee management for content records`
 		* Transactions log
-		* User dashboard to check balance and track transactions
+		* User dashboard api calls to check balance and track transactions
+		* View content frontend
+		* User dashboard frontend
 	* Post some exclusive content on the platform
 		* c0ntent
 		* r0sa
