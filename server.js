@@ -97,7 +97,7 @@ runQuery(queryString).then( async (result) => {
         const id = req.params.knit.split('=')[1];
         const contentRecord = await getContentRecord(id);
         console.log(contentRecord);
-        const {text, author} = contentRecord;
+        const {text, author} = contentRecord[0];
         const apiCallTotalPrice = apiCallPrice.base + apiCallPrice.perSymbol * text.length;
         await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice);
         //await authorFeeTransfer(req.user.id, author, contentViewPrice);
