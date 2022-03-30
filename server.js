@@ -45,7 +45,7 @@ async function hostingFeeTransfer(userId, hostingProviderId, amount) {
         'UPDATE "public"."hosting_providers" SET "balance" = "balance" + ' + amount + ' WHERE "id" = \'' + hostingProviderId + '\';';
     await runQuery(queryString);
 }
-async function getContent(contentId) {
+async function getContentRecord(contentId) {
     const queryString = 'SELECT * FROM "public"."content" WHERE "id" = \'' + contentId + '\';';
     return await runQuery(queryString);
 }
@@ -95,12 +95,14 @@ runQuery(queryString).then( async (result) => {
     app.get('/:knit', auth.user, async (req, res) => {
         const apiCallPrice = {base: 10000, perSymbol: 10};
         const id = req.params.knit.split('=')[1];
-        const resultContent = await getContent(id);
-        console.log(resultContent);
-        const apiCallTotalPrice = apiCallPrice.base + apiCallPrice.perSymbol * resultContent.length;
+        const contentRecord = await getContentRecord(id);
+        console.log(contentRecord);
+        const {text, author} = contentRecord;
+        const apiCallTotalPrice = apiCallPrice.base + apiCallPrice.perSymbol * text.length;
         await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice);
+        //await authorFeeTransfer(req.user.id, author, contentViewPrice);
         res.set('Content-Type', 'text/html');
-        res.send(resultContent);
+        res.send(text);
     });
     app.get('/*', auth.public, (req, res) => {
         res.status(404).end();
