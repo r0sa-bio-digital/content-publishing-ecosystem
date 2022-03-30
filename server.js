@@ -95,7 +95,7 @@ runQuery(queryString).then( async (result) => {
     app.get('/:knit', auth.user, async (req, res) => {
         const apiCallPrice = {base: 10000, perSymbol: 10};
         const id = req.params.knit.split('=')[1];
-        const resultContent = getContent(id);
+        const resultContent = await getContent(id);
         console.log(resultContent);
         const apiCallTotalPrice = apiCallPrice.base + apiCallPrice.perSymbol * resultContent.length;
         await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice);
