@@ -104,19 +104,28 @@ Content publishing ecosystem to organize content exchange between authors and co
 * Check knit-integrity of the db
 	* Add api call to extract timestamp from knit
 	* Fix date 2022-03-29 07:28:24.182474 for knit record
-* `Sell first c01ns for fiat money`
+* Sell first c01ns for fiat money
 	* Implement simplest content delivery with automated payment transactions.
-		* View content by direct link
-		* User dashboard to check balance and track transactions
+		* `View content by direct link with provider fee`
+		* Copyright fee
 		* Transactions log
-			* Research best db for the log, thus postgresql too much costly
-				* Check out ClickHouse first
+		* User dashboard to check balance and track transactions
+	* Post some exclusive content on the platform
+		* c0ntent
+		* r0sa
+		* РОСА
+		* Jeet
+		* Balaji
 	* Organize c0ntent community
-	* Organize first c01n sale inside of the community
+		* Add at least 5 interested members
+		* Make exclusive presentation of c0ntent by c0ntent itself
+		* Organize first c01n sale inside of the community
 * Establish backup process
 	* All tables' pks must be stored in knits, every knits entry must have a corresponding record in some other table
 	* db
 	* insomnia collections
+* Research best db for the log, thus postgresql too much costly
+	* Check out ClickHouse first
 * Raise funds for the project development
 * Build semantic graph upon content storage.
 	* Visualisation
