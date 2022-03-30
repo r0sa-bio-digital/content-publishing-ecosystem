@@ -46,7 +46,7 @@ async function hostingFeeTransfer(userId, hostingProviderId, amount) {
     await runQuery(queryString);
 }
 async function getContent(contentId) {
-    const queryString = 'SELECT * FROM "public"."content" WHERE "id" = \'' + contentId + '\';\n' +
+    const queryString = 'SELECT * FROM "public"."content" WHERE "id" = \'' + contentId + '\';';
     await runQuery(queryString);
 }
 const auth = {
