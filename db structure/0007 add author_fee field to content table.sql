@@ -1,0 +1,1 @@
+ALTER TABLE "public"."content" ADD COLUMN "author_fee" int8 NOT NULL DEFAULT 0;

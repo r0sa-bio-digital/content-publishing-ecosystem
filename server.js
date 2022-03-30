@@ -103,11 +103,10 @@ runQuery(queryString).then( async (result) => {
         const contentRecord = (await getContentRecord(id))[0];
         if (contentRecord)
         {
-            const {text, author} = contentRecord;
+            const {text, author, author_fee} = contentRecord;
             const apiCallTotalPrice = apiCallPrice.base + apiCallPrice.perSymbol * text.length;
             await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallTotalPrice);
-            const contentViewPrice = 100000; // TODO: implement proper contentViewPrice management
-            await authorFeeTransfer(req.user.id, author, contentViewPrice);
+            await authorFeeTransfer(req.user.id, author, author_fee);
             res.set('Content-Type', 'text/html');
             res.send(text);
         }
