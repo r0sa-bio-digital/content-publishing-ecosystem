@@ -113,14 +113,20 @@ Content publishing ecosystem to organize content exchange between authors and co
 		* Transactions log
 			* Add table
 			* Write log after every internal transaction
-				* `Implementation`
+				* Implementation
 				* Testing
 			* Add api calls for external transactions with logging
-				* Implementation
+				* `Implementation`
 				* Testing
 		* User dashboard api calls to check balance and track transactions
 		* View content frontend
+			* html/css
+			* text
+			* svg
+			* png/jpg
 		* User dashboard frontend
+	* Research best db for the transactions log, because postgresql is too much costly
+		* Check out ClickHouse first
 	* Post some exclusive content on the platform
 		* c0ntent
 		* r0sa
@@ -135,8 +141,6 @@ Content publishing ecosystem to organize content exchange between authors and co
 	* All tables' pks must be stored in knits, every knits entry must have a corresponding record in some other table
 	* db
 	* insomnia collections
-* Research best db for the log, thus postgresql too much costly
-	* Check out ClickHouse first
 * Raise funds for the project development
 * Build semantic graph upon content storage.
 	* Visualisation
