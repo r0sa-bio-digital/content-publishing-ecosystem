@@ -48,7 +48,7 @@ async function hostingFeeTransfer(userId, hostingProviderId, amount, contentId) 
     const transactionId = knit.generate();
     const contentIdValue = contentId ? '\'' + contentId + '\'' : 'NULL';
     const queryString = 'INSERT INTO "public"."transaction_log" ("id", "debited_account", "credited_account", "c01n_amount", "content_id") ' +
-        'VALUES (\'' + transactionId + '\', \'' + userId + '\', \'' + hostingProviderId + '\', ' + amount + ', \'' + contentIdValue + '\');\n' +
+        'VALUES (\'' + transactionId + '\', \'' + userId + '\', \'' + hostingProviderId + '\', ' + amount + ', ' + contentIdValue + ');\n' +
         'UPDATE "public"."users" SET "balance" = "balance" - ' + amount + ' WHERE "id" = \'' + userId + '\';\n' +
         'UPDATE "public"."hosting_providers" SET "balance" = "balance" + ' + amount + ' WHERE "id" = \'' + hostingProviderId + '\';';
     await runQuery(queryString);
