@@ -110,7 +110,14 @@ Content publishing ecosystem to organize content exchange between authors and co
 		* Copyright fee
 			* Placeholder
 			* Author fee management for content records
-		* `Transactions log`
+		* Transactions log
+			* Add table
+			* Write log after every internal transaction
+				* `Implementation`
+				* Testing
+			* Add api calls for external transactions with logging
+				* Implementation
+				* Testing
 		* User dashboard api calls to check balance and track transactions
 		* View content frontend
 		* User dashboard frontend
