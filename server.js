@@ -57,6 +57,25 @@ async function authorFeeTransfer(userId, authorId, amount, contentId, apiCallId)
         'UPDATE "public"."users" SET "balance" = "balance" + ' + amount + ' WHERE "id" = \'' + authorId + '\';';
     await runQuery(queryString);
 }
+function convertCurrencyToC01n(currencyAmount, currencyId)
+{
+    const c01nAmount = currencyAmount * 1000; // TODO: implement correct currency convertion
+    return c01nAmount;
+}
+async function depositUserFunds(userId, fundsAmount, feeAmount, currencyId, apiCallId) {
+    const transactionId = knit.generate();
+    const amount = convertCurrencyToC01n(fundsAmount, currencyId);
+    const queryString = 'INSERT INTO "public"."transaction_log" ("id", "debited_account", "credited_account", "c01n_amount", "external_amount", "external_currency_id", "content_id", "api_call_id") ' +
+        'VALUES (\'' + transactionId + '\', NULL, \'' + userId + '\', ' + amount + ',' + fundsAmount + ',' + currencyId + ', NULL, \'' + apiCallId + '\');\n' +
+        'UPDATE "public"."users" SET "balance" = "balance" + ' + amount + ' WHERE "id" = \'' + userId + '\';';
+}
+async function withdrawUserFunds(userId, fundsAmount, feeAmount, currencyId, apiCallId) {
+    const transactionId = knit.generate();
+    const amount = convertCurrencyToC01n(fundsAmount, currencyId);
+    const queryString = 'INSERT INTO "public"."transaction_log" ("id", "debited_account", "credited_account", "c01n_amount", "external_amount", "external_currency_id", "content_id", "api_call_id") ' +
+        'VALUES (\'' + transactionId + '\', \'' + userId + '\', NULL, ' + amount + ',' + fundsAmount + ',' + currencyId + ', NULL, \'' + apiCallId + '\');\n' +
+        'UPDATE "public"."users" SET "balance" = "balance" - ' + amount + ' WHERE "id" = \'' + userId + '\';';
+}
 async function getContentRecord(contentId) {
     const queryString = 'SELECT * FROM "public"."content" WHERE "id" = \'' + contentId + '\';';
     return await runQuery(queryString);
@@ -125,6 +144,24 @@ runQuery(queryString).then( async (result) => {
             await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice.base, undefined, apiCallId);
             res.status(404).json({ message: 'Content not found' });
         }
+    });
+    app.get('/deposit/:amount/:currency', auth.user, async (req, res) => {
+        const apiCallId = '95f40824-f51c-4a3c-85b4-c15d53b91df5';
+        const apiCallPrice = 5000;
+        const fundsAmount = parseInt(req.params.amount.split('=')[1]);
+        const currencyId = req.params.amount.split('=')[1];
+        const c01nsDepositted = await depositUserFunds(
+            req.user.id, defaultHostingProvider.id, fundsAmount, apiCallPrice, currencyId, apiCallId);
+        res.status(200).json({ c01ns: c01nsDepositted, message: 'depositted successfully' });
+    });
+    app.get('/withdraw/:amount/:currency', auth.user, async (req, res) => {
+        const apiCallId = '95f40876-76a1-4399-90b9-143c3b9d5c52';
+        const apiCallPrice = 5000;
+        const fundsAmount = parseInt(req.params.amount.split('=')[1]);
+        const currencyId = req.params.amount.split('=')[1];
+        const c01nsWithdrew = await withdrawUserFunds(
+            req.user.id, defaultHostingProvider.id, fundsAmount, apiCallPrice, currencyId, apiCallId);
+        res.status(200).json({ c01ns: c01nsWithdrew, message: 'withdrew successfully' });
     });
     app.get('/*', auth.public, (req, res) => {
         res.status(404).end();
