@@ -1,1 +1,1 @@
-CREATE TABLE "public"."transaction_log" ("id" uuid NOT NULL,"debited_account" uuid NOT NULL,"credited_account" uuid NOT NULL,"c01n_amount" int8 NOT NULL,"creation" date NOT NULL DEFAULT NOW(),"external_amount" numeric DEFAULT NULL,"content_id" uuid DEFAULT NULL,PRIMARY KEY ("id"));
+CREATE TABLE "public"."transaction_log" ("id" uuid NOT NULL,"debited_account" uuid NOT NULL,"credited_account" uuid NOT NULL,"c01n_amount" int8 NOT NULL,"creation" timestamp NOT NULL DEFAULT NOW(),"external_amount" numeric DEFAULT NULL,"content_id" uuid DEFAULT NULL,PRIMARY KEY ("id"));
