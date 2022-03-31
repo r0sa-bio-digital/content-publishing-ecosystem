@@ -116,7 +116,7 @@ runQuery(queryString).then( async (result) => {
             const {text, author, author_fee} = contentRecord;
             const apiCallTotalPrice = apiCallPrice.base + apiCallPrice.perSymbol * text.length;
             await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallTotalPrice, id, apiCallId);
-            await authorFeeTransfer(req.user.id, author, author_fee);
+            await authorFeeTransfer(req.user.id, author, author_fee, id, apiCallId);
             res.set('Content-Type', 'text/html');
             res.send(text);
         }
