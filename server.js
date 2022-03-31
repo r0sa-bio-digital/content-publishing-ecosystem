@@ -40,8 +40,16 @@ async function runQuery(queryString) {
     }
     return result;
 }
-async function hostingFeeTransfer(userId, hostingProviderId, amount) {
-    const queryString = 'UPDATE "public"."users" SET "balance" = "balance" - ' + amount + ' WHERE "id" = \'' + userId + '\';\n' +
+
+
+
+
+async function hostingFeeTransfer(userId, hostingProviderId, amount, contentId) {
+    const transactionId = knit.generate();
+    const contentIdValue = contentId ? '\'' + contentId + '\'' : 'NULL';
+    const queryString = 'INSERT INTO "public"."transaction_log" ("id", "debited_account", "credited_account", "c01n_amount", "content_id") ' +
+        'VALUES (\'' + transactionId + '\', \'' + userId + '\', \'' + hostingProviderId + '\', ' + amount + ', \'' + contentIdValue + '\');\n' +
+        'UPDATE "public"."users" SET "balance" = "balance" - ' + amount + ' WHERE "id" = \'' + userId + '\';\n' +
         'UPDATE "public"."hosting_providers" SET "balance" = "balance" + ' + amount + ' WHERE "id" = \'' + hostingProviderId + '\';';
     await runQuery(queryString);
 }
@@ -105,7 +113,7 @@ runQuery(queryString).then( async (result) => {
         {
             const {text, author, author_fee} = contentRecord;
             const apiCallTotalPrice = apiCallPrice.base + apiCallPrice.perSymbol * text.length;
-            await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallTotalPrice);
+            await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallTotalPrice, id);
             await authorFeeTransfer(req.user.id, author, author_fee);
             res.set('Content-Type', 'text/html');
             res.send(text);
