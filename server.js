@@ -68,7 +68,6 @@ async function depositUserFunds(userId, fundsAmount, currencyId, apiCallId) {
     const queryString = 'INSERT INTO "public"."transaction_log" ("id", "debited_account", "credited_account", "c01n_amount", "external_amount", "external_currency_id", "content_id", "api_call_id") ' +
         'VALUES (\'' + transactionId + '\', \'00000000-0000-0000-0000-000000000000\', \'' + userId + '\', ' + amount + ', ' + fundsAmount + ', \'' + currencyId + '\', NULL, \'' + apiCallId + '\');\n' +
         'UPDATE "public"."users" SET "balance" = "balance" + ' + amount + ' WHERE "id" = \'' + userId + '\';';
-    console.log(queryString); // logging added
     await runQuery(queryString);
     return amount;
 }
