@@ -99,6 +99,18 @@ const auth = {
             return res.status(401).json({ message: 'Invalid Authentication Credentials' });
         req.user = user
         next();
+    },
+    provider: (req, res, next) => {
+        if (!req.headers.authorization || req.headers.authorization.indexOf('Basic ') === -1) {
+            return res.status(401).json({ message: 'Missing Authorization Header' });
+        }
+        const base64Credentials =  req.headers.authorization.split(' ')[1];
+        const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
+        const providerId = credentials.split(':')[0];
+        if (providerId !== defaultHostingProvider.id)
+            return res.status(401).json({ message: 'Invalid Authentication Credentials' });
+        req.provider = defaultHostingProvider;
+        next();
     }
 };
 // boot the system
@@ -150,24 +162,26 @@ runQuery(queryString).then( async (result) => {
             res.status(404).json({ message: 'Content not found' });
         }
     });
-    app.get('/deposit/:amount/:currency', auth.user, async (req, res) => {
+    app.get('/deposit/:user/:amount/:currency', auth.provider, async (req, res) => {
         const apiCallId = '95f40824-f51c-4a3c-85b4-c15d53b91df5';
         const apiCallPrice = 5000;
+        const userId = req.params.user.split('=')[1];
         const fundsAmount = parseInt(req.params.amount.split('=')[1]);
         const currencyId = req.params.currency.split('=')[1];
-        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
+        await hostingFeeTransfer(userId, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
         const c01nsDepositted = await depositUserFunds(
-            req.user.id, fundsAmount, currencyId, apiCallId);
+            userId, fundsAmount, currencyId, apiCallId);
         res.status(200).json({ c01ns: c01nsDepositted, message: 'depositted successfully' });
     });
-    app.get('/withdraw/:amount/:currency', auth.user, async (req, res) => {
+    app.get('/withdraw/:user/:amount/:currency', auth.provider, async (req, res) => {
         const apiCallId = '95f40876-76a1-4399-90b9-143c3b9d5c52';
         const apiCallPrice = 5000;
+        const userId = req.params.user.split('=')[1];
         const fundsAmount = parseInt(req.params.amount.split('=')[1]);
         const currencyId = req.params.currency.split('=')[1];
-        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
+        await hostingFeeTransfer(userId, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
         const c01nsWithdrew = await withdrawUserFunds(
-            req.user.id, fundsAmount, currencyId, apiCallId);
+            userId, fundsAmount, currencyId, apiCallId);
         res.status(200).json({ c01ns: c01nsWithdrew, message: 'withdrew successfully' });
     });
     app.get('/*', auth.public, (req, res) => {
