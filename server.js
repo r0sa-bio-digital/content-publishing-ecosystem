@@ -62,7 +62,7 @@ function convertCurrencyToC01n(currencyAmount, currencyId)
     const c01nAmount = currencyAmount * 1000; // TODO: implement correct currency convertion
     return c01nAmount;
 }
-async function depositUserFunds(userId, fundsAmount, feeAmount, currencyId, apiCallId) {
+async function depositUserFunds(userId, fundsAmount, currencyId, apiCallId) {
     const transactionId = knit.generate();
     const amount = convertCurrencyToC01n(fundsAmount, currencyId);
     const queryString = 'INSERT INTO "public"."transaction_log" ("id", "debited_account", "credited_account", "c01n_amount", "external_amount", "external_currency_id", "content_id", "api_call_id") ' +
@@ -72,7 +72,7 @@ async function depositUserFunds(userId, fundsAmount, feeAmount, currencyId, apiC
     await runQuery(queryString);
     return amount;
 }
-async function withdrawUserFunds(userId, fundsAmount, feeAmount, currencyId, apiCallId) {
+async function withdrawUserFunds(userId, fundsAmount, currencyId, apiCallId) {
     const transactionId = knit.generate();
     const amount = convertCurrencyToC01n(fundsAmount, currencyId);
     const queryString = 'INSERT INTO "public"."transaction_log" ("id", "debited_account", "credited_account", "c01n_amount", "external_amount", "external_currency_id", "content_id", "api_call_id") ' +
@@ -155,8 +155,9 @@ runQuery(queryString).then( async (result) => {
         const apiCallPrice = 5000;
         const fundsAmount = parseInt(req.params.amount.split('=')[1]);
         const currencyId = req.params.currency.split('=')[1];
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
         const c01nsDepositted = await depositUserFunds(
-            req.user.id, defaultHostingProvider.id, fundsAmount, apiCallPrice, currencyId, apiCallId);
+            req.user.id, fundsAmount, currencyId, apiCallId);
         res.status(200).json({ c01ns: c01nsDepositted, message: 'depositted successfully' });
     });
     app.get('/withdraw/:amount/:currency', auth.user, async (req, res) => {
@@ -164,8 +165,9 @@ runQuery(queryString).then( async (result) => {
         const apiCallPrice = 5000;
         const fundsAmount = parseInt(req.params.amount.split('=')[1]);
         const currencyId = req.params.currency.split('=')[1];
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
         const c01nsWithdrew = await withdrawUserFunds(
-            req.user.id, defaultHostingProvider.id, fundsAmount, apiCallPrice, currencyId, apiCallId);
+            req.user.id, fundsAmount, currencyId, apiCallId);
         res.status(200).json({ c01ns: c01nsWithdrew, message: 'withdrew successfully' });
     });
     app.get('/*', auth.public, (req, res) => {
