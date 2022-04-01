@@ -153,7 +153,7 @@ runQuery(queryString).then( async (result) => {
         const apiCallId = '95f40824-f51c-4a3c-85b4-c15d53b91df5';
         const apiCallPrice = 5000;
         const fundsAmount = parseInt(req.params.amount.split('=')[1]);
-        const currencyId = req.params.amount.split('=')[1];
+        const currencyId = req.params.currency.split('=')[1];
         const c01nsDepositted = await depositUserFunds(
             req.user.id, defaultHostingProvider.id, fundsAmount, apiCallPrice, currencyId, apiCallId);
         res.status(200).json({ c01ns: c01nsDepositted, message: 'depositted successfully' });
@@ -162,7 +162,7 @@ runQuery(queryString).then( async (result) => {
         const apiCallId = '95f40876-76a1-4399-90b9-143c3b9d5c52';
         const apiCallPrice = 5000;
         const fundsAmount = parseInt(req.params.amount.split('=')[1]);
-        const currencyId = req.params.amount.split('=')[1];
+        const currencyId = req.params.currency.split('=')[1];
         const c01nsWithdrew = await withdrawUserFunds(
             req.user.id, defaultHostingProvider.id, fundsAmount, apiCallPrice, currencyId, apiCallId);
         res.status(200).json({ c01ns: c01nsWithdrew, message: 'withdrew successfully' });
