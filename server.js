@@ -57,14 +57,20 @@ async function authorFeeTransfer(userId, authorId, amount, contentId, apiCallId)
         'UPDATE "public"."users" SET "balance" = "balance" + ' + amount + ' WHERE "id" = \'' + authorId + '\';';
     await runQuery(queryString);
 }
-function convertCurrencyToC01n(currencyAmount, currencyId)
+async function convertCurrencyToC01n(currencyAmount, currencyId)
 {
-    const c01nAmount = currencyAmount * 1000; // TODO: implement correct currency convertion
+    const queryString = 'SELECT * FROM "public"."exchange_rates";';
+    const rates = await runQuery(queryString);
+    let multiplier;
+    for (let i = 0; i < rates.length; ++i)
+        if (rates[i].currency_id === currencyId)
+            multiplier = parseInt(rates[i].c01n_amount);
+    const c01nAmount = currencyAmount * multiplier;
     return c01nAmount;
 }
 async function depositUserFunds(userId, hostingProviderId, fundsAmount, currencyId, apiCallId) {
     const transactionId = knit.generate();
-    const amount = convertCurrencyToC01n(fundsAmount, currencyId);
+    const amount = await convertCurrencyToC01n(fundsAmount, currencyId);
     const queryString = 'INSERT INTO "public"."transaction_log" ("id", "debited_account", "credited_account", "c01n_amount", "external_amount", "external_currency_id", "content_id", "api_call_id") ' +
         'VALUES (\'' + transactionId + '\', \'' + hostingProviderId + '\', \'' + userId + '\', ' + amount + ', ' + fundsAmount + ', \'' + currencyId + '\', NULL, \'' + apiCallId + '\');\n' +
         'UPDATE "public"."hosting_providers" SET "' + currencyId + '_balance" = "' + currencyId + '_balance" + ' + fundsAmount + ' WHERE "id" = \'' + hostingProviderId + '\';\n' +
@@ -90,7 +96,6 @@ function getReadableNumber(numberText) {
     return numberText.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 async function getExchangeRates() {
-    const result = [];
     const queryString = 'SELECT * FROM "public"."exchange_rates";';
     const rates = await runQuery(queryString);
     const currencies = [];
