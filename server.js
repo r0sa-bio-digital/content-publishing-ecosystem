@@ -195,7 +195,7 @@ runQuery(queryString).then( async (result) => {
             userId, defaultHostingProvider.id, fundsAmount, currencyId, apiCallId);
         res.status(200).json({ c01ns: c01nsWithdrew, message: 'withdrew successfully' });
     });
-    app.get('/currency/exchange/rates', auth.provider, async (req, res) => {
+    app.get('/currency/exchange/rates', auth.user, async (req, res) => {
         const apiCallId = '95f7d8c2-4dbb-4d10-b394-3143a2307866';
         const apiCallPrice = 7500;
         const userId = req.params.user.split('=')[1];
