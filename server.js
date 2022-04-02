@@ -93,7 +93,7 @@ async function getExchangeRates() {
     console.log(rates);
     const currencies = [];
     for (let i = 0; i < rates.length; ++i)
-        currencies.push({id: currencies[i].currency_id, name: '?', rate: currencies[i].c01n_amount});
+        currencies.push({id: rates[i].currency_id, name: '?', rate: rates[i].c01n_amount});
     return currencies;
 }
 const auth = {
