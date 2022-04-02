@@ -96,7 +96,13 @@ async function getExchangeRates() {
     console.log(rates);
     const currencies = [];
     for (let i = 0; i < rates.length; ++i)
-        currencies.push({id: rates[i].currency_id, name: '?', rate: parseInt(rates[i].c01n_amount), rateText: getReadableNumber(rates[i].c01n_amount)});
+    {
+        const id = rates[i].currency_id;
+        const queryString = 'SELECT "text" FROM "public"."content" WHERE "id" = \'' + id + '\';';
+        const name = await runQuery(queryString);
+        console.log(name);
+        currencies.push({id, name, rate: parseInt(rates[i].c01n_amount), rateText: getReadableNumber(rates[i].c01n_amount)});
+    }
     return currencies;
 }
 const auth = {
@@ -200,7 +206,7 @@ runQuery(queryString).then( async (result) => {
     });
     app.get('/currency/exchange/rates', auth.user, async (req, res) => {
         const apiCallId = '95f7d8c2-4dbb-4d10-b394-3143a2307866';
-        const apiCallPrice = 7500;
+        const apiCallPrice = 25000;
         await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
         const rates = await getExchangeRates();
         res.status(200).json(rates);
