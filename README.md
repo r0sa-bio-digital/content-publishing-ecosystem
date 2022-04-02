@@ -122,8 +122,12 @@ Content publishing ecosystem to organize content exchange between authors and co
 					* Count provider currenct amount for every currency
 					* Testing 2
 				* Migrate c0ntent.dao hosting to safe organisation
-				* `Correct currency conversion`
+				* Correct currency conversion
 					* Implementation
+						* Add content records for all main currencies: rub, inr, cny, usd, eur
+						* `Add conversion rate table`
+						* Implement conversion rate api
+						* Use conversion rates in convertCurrencyToC01n
 					* Testing
 		* Establish backup process
 			* db
