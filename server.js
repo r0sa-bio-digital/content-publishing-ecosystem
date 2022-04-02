@@ -93,14 +93,12 @@ async function getExchangeRates() {
     const result = [];
     const queryString = 'SELECT * FROM "public"."exchange_rates";';
     const rates = await runQuery(queryString);
-    console.log(rates);
     const currencies = [];
     for (let i = 0; i < rates.length; ++i)
     {
         const id = rates[i].currency_id;
         const queryString = 'SELECT "text" FROM "public"."content" WHERE "id" = \'' + id + '\';';
         const name = (await runQuery(queryString))[0].text;
-        console.log(name);
         currencies.push({id, name, rate: parseInt(rates[i].c01n_amount), rateText: getReadableNumber(rates[i].c01n_amount)});
     }
     return currencies;
