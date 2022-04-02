@@ -57,14 +57,20 @@ async function authorFeeTransfer(userId, authorId, amount, contentId, apiCallId)
         'UPDATE "public"."users" SET "balance" = "balance" + ' + amount + ' WHERE "id" = \'' + authorId + '\';';
     await runQuery(queryString);
 }
-function convertCurrencyToC01n(currencyAmount, currencyId)
+async function convertCurrencyToC01n(currencyAmount, currencyId)
 {
-    const c01nAmount = currencyAmount * 1000; // TODO: implement correct currency convertion
+    const queryString = 'SELECT * FROM "public"."exchange_rates";';
+    const rates = await runQuery(queryString);
+    let multiplier;
+    for (let i = 0; i < rates.length; ++i)
+        if (rates[i].currency_id === currencyId)
+            multiplier = parseInt(rates[i].c01n_amount);
+    const c01nAmount = currencyAmount * multiplier;
     return c01nAmount;
 }
 async function depositUserFunds(userId, hostingProviderId, fundsAmount, currencyId, apiCallId) {
     const transactionId = knit.generate();
-    const amount = convertCurrencyToC01n(fundsAmount, currencyId);
+    const amount = await convertCurrencyToC01n(fundsAmount, currencyId);
     const queryString = 'INSERT INTO "public"."transaction_log" ("id", "debited_account", "credited_account", "c01n_amount", "external_amount", "external_currency_id", "content_id", "api_call_id") ' +
         'VALUES (\'' + transactionId + '\', \'' + hostingProviderId + '\', \'' + userId + '\', ' + amount + ', ' + fundsAmount + ', \'' + currencyId + '\', NULL, \'' + apiCallId + '\');\n' +
         'UPDATE "public"."hosting_providers" SET "' + currencyId + '_balance" = "' + currencyId + '_balance" + ' + fundsAmount + ' WHERE "id" = \'' + hostingProviderId + '\';\n' +
@@ -74,7 +80,7 @@ async function depositUserFunds(userId, hostingProviderId, fundsAmount, currency
 }
 async function withdrawUserFunds(userId, hostingProviderId, fundsAmount, currencyId, apiCallId) {
     const transactionId = knit.generate();
-    const amount = convertCurrencyToC01n(fundsAmount, currencyId);
+    const amount = await convertCurrencyToC01n(fundsAmount, currencyId);
     const queryString = 'INSERT INTO "public"."transaction_log" ("id", "debited_account", "credited_account", "c01n_amount", "external_amount", "external_currency_id", "content_id", "api_call_id") ' +
         'VALUES (\'' + transactionId + '\', \'' + userId + '\', \'' + hostingProviderId + '\', ' + amount + ', ' + fundsAmount + ', \'' + currencyId + '\', NULL, \'' + apiCallId + '\');\n' +
         'UPDATE "public"."hosting_providers" SET "' + currencyId + '_balance" = "' + currencyId + '_balance" - ' + fundsAmount + ' WHERE "id" = \'' + hostingProviderId + '\';\n' +
@@ -85,6 +91,22 @@ async function withdrawUserFunds(userId, hostingProviderId, fundsAmount, currenc
 async function getContentRecord(contentId) {
     const queryString = 'SELECT * FROM "public"."content" WHERE "id" = \'' + contentId + '\';';
     return await runQuery(queryString);
+}
+function getReadableNumber(numberText) {
+    return numberText.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+async function getExchangeRates() {
+    const queryString = 'SELECT * FROM "public"."exchange_rates";';
+    const rates = await runQuery(queryString);
+    const currencies = [];
+    for (let i = 0; i < rates.length; ++i)
+    {
+        const id = rates[i].currency_id;
+        const queryString = 'SELECT "text" FROM "public"."content" WHERE "id" = \'' + id + '\';';
+        const name = (await runQuery(queryString))[0].text;
+        currencies.push({id, name, rate: parseInt(rates[i].c01n_amount), rateText: getReadableNumber(rates[i].c01n_amount)});
+    }
+    return currencies;
 }
 const auth = {
     public: (req, res, next) => next(),
@@ -184,6 +206,13 @@ runQuery(queryString).then( async (result) => {
         const c01nsWithdrew = await withdrawUserFunds(
             userId, defaultHostingProvider.id, fundsAmount, currencyId, apiCallId);
         res.status(200).json({ c01ns: c01nsWithdrew, message: 'withdrew successfully' });
+    });
+    app.get('/currency/exchange/rates', auth.user, async (req, res) => {
+        const apiCallId = '95f7d8c2-4dbb-4d10-b394-3143a2307866';
+        const apiCallPrice = 25000;
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
+        const rates = await getExchangeRates();
+        res.status(200).json(rates);
     });
     app.get('/*', auth.public, (req, res) => {
         res.status(404).end();

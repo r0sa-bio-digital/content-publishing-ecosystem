@@ -1,1 +1,0 @@
-ALTER TABLE "public"."hosting_providers" ADD COLUMN "95f5ebe7-c7a2-4283-bb48-96fcbe53a65c_balance" numeric NOT NULL DEFAULT 0;

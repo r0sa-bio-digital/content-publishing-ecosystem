@@ -1,0 +1,2 @@
+CREATE TABLE "public"."exchange_rates" ("id" uuid NOT NULL,"currency_id" uuid NOT NULL DEFAULT NULL,"c01n_amount" int8 NOT NULL DEFAULT 0, PRIMARY KEY ("id"));
+CREATE UNIQUE INDEX "currency_id_unique" ON "public"."exchange_rates" USING BTREE ("currency_id");
