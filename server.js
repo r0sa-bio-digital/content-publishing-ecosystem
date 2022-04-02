@@ -80,7 +80,7 @@ async function depositUserFunds(userId, hostingProviderId, fundsAmount, currency
 }
 async function withdrawUserFunds(userId, hostingProviderId, fundsAmount, currencyId, apiCallId) {
     const transactionId = knit.generate();
-    const amount = convertCurrencyToC01n(fundsAmount, currencyId);
+    const amount = await convertCurrencyToC01n(fundsAmount, currencyId);
     const queryString = 'INSERT INTO "public"."transaction_log" ("id", "debited_account", "credited_account", "c01n_amount", "external_amount", "external_currency_id", "content_id", "api_call_id") ' +
         'VALUES (\'' + transactionId + '\', \'' + userId + '\', \'' + hostingProviderId + '\', ' + amount + ', ' + fundsAmount + ', \'' + currencyId + '\', NULL, \'' + apiCallId + '\');\n' +
         'UPDATE "public"."hosting_providers" SET "' + currencyId + '_balance" = "' + currencyId + '_balance" - ' + fundsAmount + ' WHERE "id" = \'' + hostingProviderId + '\';\n' +
