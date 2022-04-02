@@ -86,6 +86,9 @@ async function getContentRecord(contentId) {
     const queryString = 'SELECT * FROM "public"."content" WHERE "id" = \'' + contentId + '\';';
     return await runQuery(queryString);
 }
+function getReadableNumber(numberText) {
+    return numberText.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 async function getExchangeRates() {
     const result = [];
     const queryString = 'SELECT * FROM "public"."exchange_rates";';
@@ -93,7 +96,7 @@ async function getExchangeRates() {
     console.log(rates);
     const currencies = [];
     for (let i = 0; i < rates.length; ++i)
-        currencies.push({id: rates[i].currency_id, name: '?', rate: rates[i].c01n_amount});
+        currencies.push({id: rates[i].currency_id, name: '?', rate: parseInt(rates[i].c01n_amount), rateText: getReadableNumber(rates[i].c01n_amount)});
     return currencies;
 }
 const auth = {
