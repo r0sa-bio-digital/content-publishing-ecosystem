@@ -99,7 +99,7 @@ async function getExchangeRates() {
     {
         const id = rates[i].currency_id;
         const queryString = 'SELECT "text" FROM "public"."content" WHERE "id" = \'' + id + '\';';
-        const name = await runQuery(queryString);
+        const name = (await runQuery(queryString))[0].text;
         console.log(name);
         currencies.push({id, name, rate: parseInt(rates[i].c01n_amount), rateText: getReadableNumber(rates[i].c01n_amount)});
     }
