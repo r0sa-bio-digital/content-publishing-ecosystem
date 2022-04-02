@@ -127,11 +127,12 @@ Content publishing ecosystem to organize content exchange between authors and co
 						* Add content records for all main currencies: rub, inr, cny, usd, eur
 						* Add exchange rate table
 						* Implement exchange rate api
-						* `Use exchange rates in convertCurrencyToC01n`
+						* Use exchange rates in convertCurrencyToC01n
 					* Testing
 		* Establish backup process
 			* db
 			* Insomnia collections
+		* `Migrate knyte.space hosting to safe organisation`
 		* User dashboard api calls to check balance and track transactions
 		* View content frontend
 			* html/css
@@ -141,8 +142,6 @@ Content publishing ecosystem to organize content exchange between authors and co
 		* User dashboard frontend
 		* Implement integrity check
 			* All tables' pks must be stored in knits, every knits entry must have a corresponding record in some other table
-	* Research best db for the transactions log, because postgresql is too much costly
-		* Check out ClickHouse first
 	* Post some exclusive content on the platform
 		* c0ntent
 		* r0sa
@@ -153,8 +152,9 @@ Content publishing ecosystem to organize content exchange between authors and co
 		* Add at least 5 interested members
 		* Make exclusive presentation of c0ntent by c0ntent itself
 		* Organize first c01n sale inside of the community
-* Migrate knyte.space hosting to safe organisation
 * Raise funds for the project development
+* Research best db for the transactions log, because postgresql is too much costly
+	* Check out ClickHouse first
 * Build semantic graph upon content storage.
 	* Visualisation
 	* Editor
