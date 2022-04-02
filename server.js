@@ -86,6 +86,16 @@ async function getContentRecord(contentId) {
     const queryString = 'SELECT * FROM "public"."content" WHERE "id" = \'' + contentId + '\';';
     return await runQuery(queryString);
 }
+async function getExchangeRates() {
+    const result = [];
+    const queryString = 'SELECT * FROM "public"."exchange_rates";';
+    const rates = await runQuery(queryString);
+    console.log(rates);
+    const currencies = [];
+    for (let i = 0; i < rates.length; ++i)
+        currencies.push({id: currencies[i].currency_id, name: '?', rate: currencies[i].c01n_amount});
+    return currencies;
+}
 const auth = {
     public: (req, res, next) => next(),
     user: (req, res, next) => {
@@ -184,6 +194,14 @@ runQuery(queryString).then( async (result) => {
         const c01nsWithdrew = await withdrawUserFunds(
             userId, defaultHostingProvider.id, fundsAmount, currencyId, apiCallId);
         res.status(200).json({ c01ns: c01nsWithdrew, message: 'withdrew successfully' });
+    });
+    app.get('/currency/exchange/rates', auth.provider, async (req, res) => {
+        const apiCallId = '95f7d8c2-4dbb-4d10-b394-3143a2307866';
+        const apiCallPrice = 7500;
+        const userId = req.params.user.split('=')[1];
+        await hostingFeeTransfer(userId, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
+        const rates = await getExchangeRates();
+        res.status(200).json(rates);
     });
     app.get('/*', auth.public, (req, res) => {
         res.status(404).end();

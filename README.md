@@ -125,9 +125,9 @@ Content publishing ecosystem to organize content exchange between authors and co
 				* Correct currency conversion
 					* Implementation
 						* Add content records for all main currencies: rub, inr, cny, usd, eur
-						* `Add conversion rate table`
-						* Implement conversion rate api
-						* Use conversion rates in convertCurrencyToC01n
+						* Add exchange rate table
+						* `Implement exchange rate api`
+						* Use exchange rates in convertCurrencyToC01n
 					* Testing
 		* Establish backup process
 			* db
