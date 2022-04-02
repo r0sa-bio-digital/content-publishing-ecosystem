@@ -198,8 +198,7 @@ runQuery(queryString).then( async (result) => {
     app.get('/currency/exchange/rates', auth.user, async (req, res) => {
         const apiCallId = '95f7d8c2-4dbb-4d10-b394-3143a2307866';
         const apiCallPrice = 7500;
-        const userId = req.params.user.split('=')[1];
-        await hostingFeeTransfer(userId, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
         const rates = await getExchangeRates();
         res.status(200).json(rates);
     });
