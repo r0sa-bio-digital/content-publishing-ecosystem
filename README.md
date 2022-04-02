@@ -121,9 +121,13 @@ Content publishing ecosystem to organize content exchange between authors and co
 					* Testing 1
 					* Count provider currenct amount for every currency
 					* Testing 2
+				* Migrate c0ntent.dao hosting to safe organisation
 				* `Correct currency conversion`
 					* Implementation
 					* Testing
+		* Establish backup process
+			* db
+			* Insomnia collections
 		* User dashboard api calls to check balance and track transactions
 		* View content frontend
 			* html/css
@@ -131,6 +135,8 @@ Content publishing ecosystem to organize content exchange between authors and co
 			* svg
 			* png/jpg
 		* User dashboard frontend
+		* Implement integrity check
+			* All tables' pks must be stored in knits, every knits entry must have a corresponding record in some other table
 	* Research best db for the transactions log, because postgresql is too much costly
 		* Check out ClickHouse first
 	* Post some exclusive content on the platform
@@ -143,13 +149,7 @@ Content publishing ecosystem to organize content exchange between authors and co
 		* Add at least 5 interested members
 		* Make exclusive presentation of c0ntent by c0ntent itself
 		* Organize first c01n sale inside of the community
-* Establish backup process
-	* All tables' pks must be stored in knits, every knits entry must have a corresponding record in some other table
-	* db
-	* Insomnia collections
-* Migrate hosting to safe organisation
-	* knyte.space
-	* c0ntent.dao
+* Migrate knyte.space hosting to safe organisation
 * Raise funds for the project development
 * Build semantic graph upon content storage.
 	* Visualisation
