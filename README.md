@@ -118,7 +118,9 @@ Content publishing ecosystem to organize content exchange between authors and co
 			* Add api calls for external transactions with logging
 				* Deposit and withdraw with placeholder currency conversion
 					* Implementation
-					* `Testing`
+					* Testing 1
+					* `Count provider currenct amount for every currency`
+					* Testing 2
 				* Correct currency conversion
 					* Implementation
 					* Testing
