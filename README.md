@@ -132,8 +132,10 @@ Content publishing ecosystem to organize content exchange between authors and co
 		* Establish backup process
 			* db
 			* Insomnia collections
-		* `Migrate knyte.space hosting to safe organisation`
-		* User dashboard api calls to check balance and track transactions
+		* Migrate knyte.space hosting to safe organisation
+			* Divide one payed db instance to 2 free instances
+			* Dispose payed db instance to save money
+		* `User dashboard api calls to check balance and track transactions`
 		* View content frontend
 			* html/css
 			* text
@@ -145,6 +147,9 @@ Content publishing ecosystem to organize content exchange between authors and co
 	* Post some exclusive content on the platform
 		* c0ntent
 		* r0sa
+			* Transfere all useful content
+				* from [https://r0sa.net/](https://r0sa.net/), [https://knyte.io/](https://knyte.io/), [https://organiq.dev/](https://organiq.dev/), [https://metalanguage.tech/](https://metalanguage.tech/) to [https://c0ntent.herokuapp.com/](https://c0ntent.herokuapp.com/)
+			* Dispose separated websites' public content, make links to c0ntent instead
 		* РОСА
 		* Jeet
 		* Balaji
@@ -161,5 +166,6 @@ Content publishing ecosystem to organize content exchange between authors and co
 	* Implementation
 	* Recursive content space with references
 	* Search Engine
-* Transfere all useful data from [https://knyte-space.herokuapp.com/](https://knyte-space.herokuapp.com/) to [https://c0ntent.herokuapp.com/](https://c0ntent.herokuapp.com/). Then dispose knyte-space DB instance in Heroku to save money.
-* Transfere all useful content from [https://r0sa.net/](https://r0sa.net/), [https://knyte.io/](https://knyte.io/), [https://organiq.dev/](https://organiq.dev/), [https://metalanguage.tech/](https://metalanguage.tech/) to [https://c0ntent.herokuapp.com/](https://c0ntent.herokuapp.com/). Then dispose separated websites' public content, make links to c0ntent instead.
+* Transfere all useful data/functionality from [https://knyte-space.herokuapp.com/](https://knyte-space.herokuapp.com/) to [https://c0ntent.herokuapp.com/](https://c0ntent.herokuapp.com/).
+	* Review and move
+	* Close knyte-space branch to have a single origin of truth
