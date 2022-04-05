@@ -111,8 +111,7 @@ async function getExchangeRates() {
 async function getUserBalance(userId) {
     const queryString = 'SELECT "balance" FROM "public"."users" WHERE "id" = \'' + userId + '\';';
     const balanceResponse = await runQuery(queryString);
-    console.log(balanceResponse);
-    return 100; //  TODO: fix it
+    return parseInt(balanceResponse[0].balance);
 }
 const auth = {
     public: (req, res, next) => next(),
@@ -162,7 +161,7 @@ runQuery(queryString).then( async (result) => {
         res.set('Content-Type', 'text/html');
         res.send(resultKnit);
     });
-    app.get('/:knit/extract/timestamp/', auth.user, async (req, res) => {
+    app.get('/:knit/extract/timestamp', auth.user, async (req, res) => {
         const apiCallId = '95f37a28-aa0e-4a73-a833-7a707144f5ce';
         const apiCallPrice = 1000;
         const id = req.params.knit.split('=')[1];
@@ -220,7 +219,7 @@ runQuery(queryString).then( async (result) => {
         const rates = await getExchangeRates();
         res.status(200).json(rates);
     });
-    app.get('/:user/balance', auth.user, async (req, res) => {
+    app.get('/user/balance', auth.user, async (req, res) => {
         const apiCallId = '95fd27c8-3a17-4aaa-a8ec-1c54741cff99';
         const apiCallPrice = 2000;
         await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
@@ -228,15 +227,15 @@ runQuery(queryString).then( async (result) => {
         res.status(200).json({currency: 'c01n', amount: userBalance});
     });
     /*
-    app.get('/:user/transactions/history', auth.user, async (req, res) => {
+    app.get('/user/transactions/history', auth.user, async (req, res) => {
         const apiCallId = '95fd2894-3408-4526-8a48-484aa86b13c1';
         const apiCallPrice = 10000;
     });
-    app.get('/:provider/balance', auth.user, async (req, res) => {
+    app.get('/provider/balance', auth.provider, async (req, res) => {
         const apiCallId = '95fd28ab-711d-4677-ac5e-63ff7acc6184';
         const apiCallPrice = 15000;
     });
-    app.get('/:provider/transactions/history', auth.user, async (req, res) => {
+    app.get('/provider/transactions/history', auth.provider, async (req, res) => {
         const apiCallId = '95fd2e32-b384-47de-8d73-a1007990cf3f';
         const apiCallPrice = 10000;
     });
