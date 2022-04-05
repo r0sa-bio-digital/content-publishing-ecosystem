@@ -108,6 +108,12 @@ async function getExchangeRates() {
     }
     return currencies;
 }
+async function getUserBalance(userId) {
+    const queryString = 'SELECT "balance" FROM "public"."users" WHERE "id" = \'' + userId + '\';';
+    const balanceResponse = await runQuery(queryString);
+    console.log(balanceResponse);
+    return 100; //  TODO: fix it
+}
 const auth = {
     public: (req, res, next) => next(),
     user: (req, res, next) => {
@@ -214,6 +220,27 @@ runQuery(queryString).then( async (result) => {
         const rates = await getExchangeRates();
         res.status(200).json(rates);
     });
+    app.get('/:user/balance', auth.user, async (req, res) => {
+        const apiCallId = '95fd27c8-3a17-4aaa-a8ec-1c54741cff99';
+        const apiCallPrice = 2000;
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
+        const userBalance = await getUserBalance(req.user.id);
+        res.status(200).json({currency: 'c01n', amount: userBalance});
+    });
+    /*
+    app.get('/:user/transactions/history', auth.user, async (req, res) => {
+        const apiCallId = '95fd2894-3408-4526-8a48-484aa86b13c1';
+        const apiCallPrice = 10000;
+    });
+    app.get('/:provider/balance', auth.user, async (req, res) => {
+        const apiCallId = '95fd28ab-711d-4677-ac5e-63ff7acc6184';
+        const apiCallPrice = 15000;
+    });
+    app.get('/:provider/transactions/history', auth.user, async (req, res) => {
+        const apiCallId = '95fd2e32-b384-47de-8d73-a1007990cf3f';
+        const apiCallPrice = 10000;
+    });
+    */
     app.get('/*', auth.public, (req, res) => {
         res.status(404).end();
     });
