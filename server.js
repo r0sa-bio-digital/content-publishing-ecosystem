@@ -114,7 +114,7 @@ async function getUserBalance(userId) {
     return parseInt(balanceResponse[0].balance);
 }
 async function getUserTransactions(userId) {
-    const queryString = 'SELECT * FROM "public"."transaction_log" WHERE "debited_account" = \'' + userId + '\' OR "debited_account" = \'' + credited_account + '\';';
+    const queryString = 'SELECT * FROM "public"."transaction_log" WHERE "debited_account" = \'' + userId + '\' OR "credited_account" = \'' + userId + '\';';
     const transactionsResponse = await runQuery(queryString);
     return transactionsResponse;
 }
