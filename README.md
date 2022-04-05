@@ -139,12 +139,14 @@ Content publishing ecosystem to organize content exchange between authors and co
 			* Get user balance (c01ns)
 			* Get user transaction history
 		* View content frontend
-			* text
-			* html/css
-			* svg
-			* `jpg`
-			* markdown
-			* png
+			* api calls
+				* text
+				* html/css
+				* svg
+				* jpg
+			* `browser-side auth`
+			* no limit for text content
+				* index md5 instead of full content
 		* User dashboard frontend
 		* Implement integrity check
 			* All tables' pks must be stored in knits, every knits entry must have a corresponding record in some other table
@@ -161,6 +163,10 @@ Content publishing ecosystem to organize content exchange between authors and co
 		* Add at least 5 interested members
 		* Make exclusive presentation of c0ntent by c0ntent itself
 		* Organize first c01n sale inside of the community
+	* View content frontend types extension
+			* markdown
+			* png
+			* gif
 * Raise funds for the project development
 * Research best db for the transactions log, because postgresql is too much costly
 	* Check out ClickHouse first
