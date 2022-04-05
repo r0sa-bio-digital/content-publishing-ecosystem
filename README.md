@@ -138,11 +138,13 @@ Content publishing ecosystem to organize content exchange between authors and co
 		* User dashboard api calls to check balance and track transactions
 			* Get user balance (c01ns)
 			* Get user transaction history
-		* `View content frontend`
-			* html/css
+		* View content frontend
 			* text
+			* html/css
 			* svg
-			* png/jpg
+			* `jpg`
+			* markdown
+			* png
 		* User dashboard frontend
 		* Implement integrity check
 			* All tables' pks must be stored in knits, every knits entry must have a corresponding record in some other table

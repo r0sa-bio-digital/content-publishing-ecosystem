@@ -175,6 +175,8 @@ runQuery(queryString).then( async (result) => {
         res.set('Content-Type', 'text/html');
         res.send(resultTimestamp.toISOString());
     });
+
+    // begin // TODO: avoid copy/paste
     app.get('/:knit', auth.user, async (req, res) => {
         const apiCallId = '95f37a3f-19ad-448e-bd56-04a8da5c0df4';
         const apiCallPrice = {base: 10000, perSymbol: 10};
@@ -195,6 +197,48 @@ runQuery(queryString).then( async (result) => {
             res.status(404).json({ message: 'Content not found' });
         }
     });
+    app.get('/:knit/jpeg', auth.user, async (req, res) => {
+        const apiCallId = '95fd28ab-711d-4677-ac5e-63ff7acc6184';
+        const apiCallPrice = {base: 10000, perSymbol: 10};
+        const id = req.params.knit.split('=')[1];
+        const contentRecord = (await getContentRecord(id))[0];
+        if (contentRecord)
+        {
+            const {text, author, author_fee} = contentRecord;
+            const apiCallTotalPrice = apiCallPrice.base + apiCallPrice.perSymbol * text.length;
+            await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallTotalPrice, id, apiCallId);
+            await authorFeeTransfer(req.user.id, author, author_fee, id, apiCallId);
+            res.set('Content-Type', 'image/jpeg');
+            res.send(text);
+        }
+        else
+        {
+            await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice.base, undefined, apiCallId);
+            res.status(404).json({ message: 'Content not found' });
+        }
+    });
+    app.get('/:knit/svg', auth.user, async (req, res) => {
+        const apiCallId = '95fd2e32-b384-47de-8d73-a1007990cf3f';
+        const apiCallPrice = {base: 10000, perSymbol: 10};
+        const id = req.params.knit.split('=')[1];
+        const contentRecord = (await getContentRecord(id))[0];
+        if (contentRecord)
+        {
+            const {text, author, author_fee} = contentRecord;
+            const apiCallTotalPrice = apiCallPrice.base + apiCallPrice.perSymbol * text.length;
+            await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallTotalPrice, id, apiCallId);
+            await authorFeeTransfer(req.user.id, author, author_fee, id, apiCallId);
+            res.set('Content-Type', 'image/svg+xml');
+            res.send(text);
+        }
+        else
+        {
+            await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice.base, undefined, apiCallId);
+            res.status(404).json({ message: 'Content not found' });
+        }
+    });
+    // end
+
     app.get('/deposit/:user/:amount/:currency', auth.provider, async (req, res) => {
         const apiCallId = '95f40824-f51c-4a3c-85b4-c15d53b91df5';
         const apiCallPrice = 5000;
@@ -238,11 +282,6 @@ runQuery(queryString).then( async (result) => {
         const userTransactions = await getUserTransactions(req.user.id);
         res.status(200).json(userTransactions);
     });
-    /*
-        const apiCallId = '95fd28ab-711d-4677-ac5e-63ff7acc6184';
-        const apiCallId = '95fd2e32-b384-47de-8d73-a1007990cf3f';
-    });
-    */
     app.get('/*', auth.public, (req, res) => {
         res.status(404).end();
     });
