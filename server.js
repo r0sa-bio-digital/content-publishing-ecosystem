@@ -208,8 +208,8 @@ runQuery(queryString).then( async (result) => {
             const apiCallTotalPrice = apiCallPrice.base + apiCallPrice.perSymbol * text.length;
             await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallTotalPrice, id, apiCallId);
             await authorFeeTransfer(req.user.id, author, author_fee, id, apiCallId);
-            res.set('Content-Type', 'image/jpeg');
-            res.send(atob(text));
+            res.set('Content-Type', 'text/html');
+            res.send(`<img src="data:image/jpeg;base64,${text}" />`);
         }
         else
         {
