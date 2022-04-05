@@ -136,10 +136,8 @@ Content publishing ecosystem to organize content exchange between authors and co
 			* Divide one payed db instance to 2 free instances
 			* Dispose payed db instance to save money
 		* User dashboard api calls to check balance and track transactions
-			* `Get user balance (c01ns)`
-			* Get user transaction history
-			* Get provider balance (c01ns and all currencies)
-			* Get provider transaction history
+			* Get user balance (c01ns)
+			* `Get user transaction history`
 		* View content frontend
 			* html/css
 			* text

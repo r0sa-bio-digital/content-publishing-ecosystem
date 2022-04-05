@@ -113,6 +113,11 @@ async function getUserBalance(userId) {
     const balanceResponse = await runQuery(queryString);
     return parseInt(balanceResponse[0].balance);
 }
+async function getUserTransactions(userId) {
+    const queryString = 'SELECT * FROM "public"."transaction_log" WHERE "debited_account" = \'' + userId + '\' OR "debited_account" = \'' + credited_account + '\';';
+    const transactionsResponse = await runQuery(queryString);
+    return transactionsResponse;
+}
 const auth = {
     public: (req, res, next) => next(),
     user: (req, res, next) => {
@@ -226,18 +231,16 @@ runQuery(queryString).then( async (result) => {
         const userBalance = await getUserBalance(req.user.id);
         res.status(200).json({currency: 'c01n', amount: userBalance});
     });
-    /*
     app.get('/user/transactions/history', auth.user, async (req, res) => {
         const apiCallId = '95fd2894-3408-4526-8a48-484aa86b13c1';
         const apiCallPrice = 10000;
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
+        const userTransactions = await getUserTransactions(req.user.id);
+        res.status(200).json(userTransactions);
     });
-    app.get('/provider/balance', auth.provider, async (req, res) => {
+    /*
         const apiCallId = '95fd28ab-711d-4677-ac5e-63ff7acc6184';
-        const apiCallPrice = 15000;
-    });
-    app.get('/provider/transactions/history', auth.provider, async (req, res) => {
         const apiCallId = '95fd2e32-b384-47de-8d73-a1007990cf3f';
-        const apiCallPrice = 10000;
     });
     */
     app.get('/*', auth.public, (req, res) => {
