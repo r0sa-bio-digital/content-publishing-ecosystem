@@ -209,7 +209,7 @@ runQuery(queryString).then( async (result) => {
             await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallTotalPrice, id, apiCallId);
             await authorFeeTransfer(req.user.id, author, author_fee, id, apiCallId);
             res.set('Content-Type', 'image/jpeg');
-            res.send(text);
+            res.send(atob(text));
         }
         else
         {
