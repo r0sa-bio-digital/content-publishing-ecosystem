@@ -118,6 +118,11 @@ async function getUserTransactions(userId) {
     const transactionsResponse = await runQuery(queryString);
     return transactionsResponse;
 }
+async function getUserName(userId) {
+    const queryString = 'SELECT "name" FROM "public"."users" WHERE "id" = \'' + userId + '\';';
+    const nameResponse = await runQuery(queryString);
+    return nameResponse[0].name;
+}
 const auth = {
     public: (req, res, next) => next(),
     user: (req, res, next) => {
