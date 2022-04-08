@@ -164,7 +164,7 @@ runQuery(queryString).then( async (result) => {
         users[user.id] = user;
     }
     // define api calls
-    app.get('/favicon.ico', (req, res) => {
+    app.get('/favicon.ico', auth.public, (req, res) => {
         console.log('--> /favicon.ico');
         res.sendFile(__dirname + '/favicon.ico');
     });    
