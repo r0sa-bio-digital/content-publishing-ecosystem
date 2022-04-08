@@ -147,6 +147,7 @@ Content publishing ecosystem to organize content exchange between authors and co
 			* browser-side auth
 				* login
 				* `favicon`
+					* debug why 404 doesn't work, why favicon rout doesn't work if it placed in the bottom of the declaration
 				* balance
 				* history
 				* rates

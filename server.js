@@ -125,6 +125,20 @@ async function getUserName(userId) {
 }
 const auth = {
     public: (req, res, next) => next(),
+    user0: (req, res, next) => {
+        console.trace();
+        if (!req.headers.authorization || req.headers.authorization.indexOf('Basic ') === -1) {
+            return res.status(401).json({ message: 'Missing Authorization Header 0' });
+        }
+        const base64Credentials =  req.headers.authorization.split(' ')[1];
+        const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
+        const userId = credentials.split(':')[0];
+        const user = users[userId];
+        if (!user)
+            return res.status(401).json({ message: 'Invalid Authentication Credentials' });
+        req.user = user
+        next();
+    },
     user: (req, res, next) => {
         console.trace();
         if (!req.headers.authorization || req.headers.authorization.indexOf('Basic ') === -1) {
@@ -187,7 +201,7 @@ runQuery(queryString).then( async (result) => {
     });
 
     // begin // TODO: avoid copy/paste
-    app.get('/:knit', auth.user, async (req, res) => {
+    app.get('/:knit', auth.user0, async (req, res) => {
         const apiCallId = '95f37a3f-19ad-448e-bd56-04a8da5c0df4';
         const apiCallPrice = {base: 10000, perSymbol: 10};
         const id = req.params.knit.split('=')[1];
