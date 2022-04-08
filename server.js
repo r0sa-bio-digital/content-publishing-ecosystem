@@ -126,7 +126,7 @@ async function getUserName(userId) {
 const auth = {
     public: (req, res, next) => next(),
     user: (req, res, next) => {
-        console.log(req);
+        console.trace();
         if (!req.headers.authorization || req.headers.authorization.indexOf('Basic ') === -1) {
             return res.status(401).json({ message: 'Missing Authorization Header 1' });
         }
@@ -298,7 +298,7 @@ runQuery(queryString).then( async (result) => {
         await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
         const userName = await getUserName(req.user.id);
         res.status(200).json({id: req.user.id, name: userName});
-    });    
+    });
     app.get('/', auth.public, (req, res) => {
         res.sendFile(__dirname + '/index.html');
     });
