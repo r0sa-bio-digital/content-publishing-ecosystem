@@ -35,18 +35,22 @@
 
                 }
             }
-            function onButtonClick()
+            function onLoginClick()
             {
                 localStorage.setItem('accessToken', document.getElementById('accessTokenInput').value);
                 document.getElementById('login').style.display = 'none';
                 onLoad();
+            }
+            function onResetClick()
+            {
+                localStorage.deleteItem('accessToken');
             }
         </script>
     </head>
     <body onload="onLoad();">
         <div id="login" style="display: none;">
             <label for="accessTokenInput">access token: </label><input id="accessTokenInput" type="text">
-            <button onclick="onButtonClick();">login</button>
+            <button onclick="onLoginClick();">login</button>
         </div>
         <div id="loading" style="display: none;">
             loading...
@@ -60,7 +64,8 @@
             </div>
         </div>
         <div id="failed" style="display: none;">
-            login failed
+            <span>login failed </span>
+            <button onclick="onResetClick();">reset</button>
         </div>
     </body>
 </html>
