@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/r0sa-bio-digital/meslo@1.0.0/meslo.css">
+        <script>
+            console.info('welcome to c0ntent');
+            const apiUrl = 'https://c0ntent.herokuapp.com/';
+            function onLoad()
+            {
+                const accessToken = localStorage.getItem('accessToken');
+                if (!accessToken)
+                    document.getElementById('login').style.display = 'block';
+                else
+                {
+                    document.getElementById('loading').style.display = 'block';
+                    const loginResponse = await fetch(
+                        apiUrl + 'user/login',
+                        {
+                            method: 'GET',
+                            headers: {
+                                Authorization: `Basic ${btoa(accessToken + ':')}`
+                            }
+                        }
+                    );
+                    if (loginResponse.status === 200)
+                    {
+                        const userData = await loginResponse.json();
+                        document.getElementById('accountId').textContent = userData.id;
+                        document.getElementById('accountName').textContent = userData.name;
+                        document.getElementById('account').style.display = 'block';
+                    }
+                    else
+                        document.getElementById('failed').style.display = 'block';
+
+                }
+            }
+            function onButtonClick()
+            {
+                localStorage.setItem('accessToken', document.getElementById('accessTokenInput').value);
+                document.getElementById('login').style.display = 'none';
+                onLoad();
+            }
+        </script>
+    </head>
+    <body onload="onLoad();">
+        <div id="login" style="display: none;">
+            <label for="accessTokenInput">access token: </label><input id="accessTokenInput" type="text">
+            <button onclick="onButtonClick();">login</button>
+        </div>
+        <div id="loading" style="display: none;">
+            loading...
+        </div>
+        <div id="account" style="display: none;">
+            <div>
+                <span>id: </span><span id="accountId"></span>
+            </div>
+            <div>
+                <span>name: </span><span id="accountName"></span>
+            </div>
+        </div>
+        <div id="failed" style="display: none;">
+            login failed
+        </div>
+    </body>
+</html>
