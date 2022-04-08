@@ -287,18 +287,21 @@ runQuery(queryString).then( async (result) => {
         const userTransactions = await getUserTransactions(req.user.id);
         res.status(200).json(userTransactions);
     });
-    app.get('/', auth.public, (req, res) => {
-        res.sendFile(__dirname + '/index.html');
-    });
-    app.get('/index.html', auth.public, (req, res) => {
-        res.sendFile(__dirname + '/index.html');
-    });
     app.get('/user/login', auth.user, async (req, res) => {
         const apiCallId = '96032d7a-dab0-4713-886c-94215bf3b916';
         const apiCallPrice = 2000;
         await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
         const userName = await getUserName(req.user.id);
         res.status(200).json({id: req.user.id, name: userName});
+    });    
+    app.get('/', auth.public, (req, res) => {
+        res.sendFile(__dirname + '/index.html');
+    });
+    app.get('/index.html', auth.public, (req, res) => {
+        res.sendFile(__dirname + '/index.html');
+    });
+    app.get('/favicon.ico', auth.public, (req, res) => {
+        res.sendFile(__dirname + '/favicon.ico');
     });    
     app.get('/*', auth.public, (req, res) => {
         res.status(404).end();

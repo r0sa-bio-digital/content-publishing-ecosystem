@@ -144,7 +144,12 @@ Content publishing ecosystem to organize content exchange between authors and co
 				* html/css
 				* svg
 				* jpg
-			* `browser-side auth`
+			* browser-side auth
+				* login
+				* `favicon`
+				* balance
+				* history
+				* rates
 			* no limit for text content
 				* index md5 instead of full content
 		* User dashboard frontend
