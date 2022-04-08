@@ -301,6 +301,7 @@ runQuery(queryString).then( async (result) => {
         res.sendFile(__dirname + '/index.html');
     });
     app.get('/favicon.ico', auth.public, (req, res) => {
+        console.log('--> /favicon.ico');
         res.sendFile(__dirname + '/favicon.ico');
     });    
     app.get('/*', auth.public, (req, res) => {
