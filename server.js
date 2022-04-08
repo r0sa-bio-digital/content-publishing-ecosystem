@@ -164,6 +164,10 @@ runQuery(queryString).then( async (result) => {
         users[user.id] = user;
     }
     // define api calls
+    app.get('/favicon.ico', (req, res) => {
+        console.log('--> /favicon.ico');
+        res.sendFile(__dirname + '/favicon.ico');
+    });    
     app.get('/knit/generate', auth.user, async (req, res) => {
         const apiCallId = '95f37a03-c1c7-41fe-bead-33c4536b0a2b';
         const apiCallPrice = 1000;
@@ -301,10 +305,6 @@ runQuery(queryString).then( async (result) => {
     app.get('/index.html', auth.public, (req, res) => {
         res.sendFile(__dirname + '/index.html');
     });
-    app.get('/favicon.ico', auth.public, (req, res) => {
-        console.log('--> /favicon.ico');
-        res.sendFile(__dirname + '/favicon.ico');
-    });    
     app.get('/*', auth.public, (req, res) => {
         res.status(404).end();
     });
