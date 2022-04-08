@@ -126,6 +126,7 @@ async function getUserName(userId) {
 const auth = {
     public: (req, res, next) => next(),
     user: (req, res, next) => {
+        console.log(req);
         if (!req.headers.authorization || req.headers.authorization.indexOf('Basic ') === -1) {
             return res.status(401).json({ message: 'Missing Authorization Header 1' });
         }
