@@ -127,7 +127,7 @@ const auth = {
     public: (req, res, next) => next(),
     user: (req, res, next) => {
         if (!req.headers.authorization || req.headers.authorization.indexOf('Basic ') === -1) {
-            return res.status(401).json({ message: 'Missing Authorization Header' });
+            return res.status(401).json({ message: 'Missing Authorization Header 1' });
         }
         const base64Credentials =  req.headers.authorization.split(' ')[1];
         const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
@@ -140,7 +140,7 @@ const auth = {
     },
     provider: (req, res, next) => {
         if (!req.headers.authorization || req.headers.authorization.indexOf('Basic ') === -1) {
-            return res.status(401).json({ message: 'Missing Authorization Header' });
+            return res.status(401).json({ message: 'Missing Authorization Header 2' });
         }
         const base64Credentials =  req.headers.authorization.split(' ')[1];
         const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
