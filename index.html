@@ -53,25 +53,53 @@
             {
                 const balanceElement = document.getElementById('accountBalance');
                 balanceElement.textContent = '...';
-
                 const accessToken = localStorage.getItem('accessToken');
-
                 const balanceResponse = await fetch(
-                        apiUrl + 'user/balance',
-                        {
-                            method: 'GET',
-                            headers: {
-                                Authorization: `Basic ${btoa(accessToken + ':')}`
-                            }
-                        }
-                    );
-                    if (balanceResponse.status === 200)
+                    apiUrl + 'user/balance',
                     {
-                        const balanceData = await balanceResponse.json();
-                        balanceElement.textContent = balanceData.readableAmount + ' ' + balanceData.currency;
+                        method: 'GET',
+                        headers: {
+                            Authorization: `Basic ${btoa(accessToken + ':')}`
+                        }
                     }
-                    else
-                        balanceElement.textContent = 'failed';
+                );
+                if (balanceResponse.status === 200)
+                {
+                    const balanceData = await balanceResponse.json();
+                    balanceElement.textContent = balanceData.amountText + ' ' + balanceData.currency;
+                }
+                else
+                    balanceElement.textContent = 'failed';
+            }
+            async function onRefreshExchangeRatesClick()
+            {
+                const ratesElement = document.getElementById('exchangeRatesTableBody');
+                ratesElement.innerHtml = '<tr><td>...</td><td>...</td></tr>';
+                const accessToken = localStorage.getItem('accessToken');
+                const ratesResponse = await fetch(
+                    apiUrl + 'currency/exchange/rates',
+                    {
+                        method: 'GET',
+                        headers: {
+                            Authorization: `Basic ${btoa(accessToken + ':')}`
+                        }
+                    }
+                );
+
+                if (ratesResponse.status === 200)
+                {
+                    const ratesData = await ratesResponse.json();
+                    let html = '';
+                    for (let = 0; i < ratesData.length; ++i)
+                        html += `<tr><td>${ratesData[i].name}</td><td>${ratesData[i].rateText}</td></tr>`;
+                    ratesElement.innerHtml = html;
+                }
+                else
+                    ratesElement.innerHtml = '<tr><td>failed</td><td>failed</td></tr>';
+            }
+            async function onRefreshTransactionHistoryClick()
+            {
+                ;
             }
         </script>
     </head>
@@ -94,6 +122,24 @@
             <div>
                 <span>balance: </span><span id="accountBalance">?</span>
                 <button onclick="onRefreshBalanceClick();">refresh</button>
+            </div>
+            <div>
+                <span>exchange rates: </span>
+                <button onclick="onRefreshExchangeRatesClick();">refresh</button>
+                <table id="exchangeRatesTable">
+                    <thead>
+                        <td>currency</td>
+                        <td>value in c01ns</td>
+                    </thead>
+                    <tbody id="exchangeRatesTableBody">
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <span>transaction history: </span>
+                <button onclick="onRefreshTransactionHistoryClick();">refresh</button>
+                <table id="transactionHistoryTable">
+                </table>
             </div>
         </div>
         <div id="failed" style="display: none;">

@@ -151,9 +151,9 @@ Content publishing ecosystem to organize content exchange between authors and co
 					* fix app.get('/:knit', ...) api call rout
 					* check correct work for all other calls
 				* remove split('=') code from all api calls
-				* `balance`
+				* balance
+				* `exchange rates`
 				* history
-				* exchange rates
 			* no limit for text content
 				* index md5 instead of full content
 		* User dashboard frontend
