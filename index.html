@@ -68,7 +68,7 @@
                     if (balanceResponse.status === 200)
                     {
                         const balanceData = await balanceResponse.json();
-                        balanceElement.textContent = balanceData.amount + ' ' + balanceData.currency;
+                        balanceElement.textContent = balanceData.readableAmount + ' ' + balanceData.currency;
                     }
                     else
                         balanceElement.textContent = 'failed';
@@ -92,7 +92,7 @@
                 <button onclick="onResetClick();">logout</button>
             </div>
             <div>
-                <span>Balance</span><span id="accountBalance">?</span>
+                <span>balance: </span><span id="accountBalance">?</span>
                 <button onclick="onRefreshBalanceClick();">refresh</button>
             </div>
         </div>
