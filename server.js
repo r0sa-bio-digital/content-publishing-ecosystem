@@ -210,7 +210,7 @@ runQuery(queryString).then( async (result) => {
                 res.set('Content-Type', 'text/html');
                 res.send(`<img src="data:image/jpeg;base64,${text}" />`);
             }
-            if (contentType === 'svg')
+            else if (contentType === 'svg')
             {
                 res.set('Content-Type', 'image/svg+xml');
                 res.send(text);
