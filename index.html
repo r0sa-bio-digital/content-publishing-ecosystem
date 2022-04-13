@@ -127,7 +127,7 @@
                             sign === '+' ? '<<' :
                                 '..';
                         const external = historyData[i].external_amount && historyData[i].external_currency_id ?
-                            externalDirection + ' ' historyData[i].external_amount + ' ' + historyData[i].external_currency_id : '';
+                            externalDirection + ' ' + historyData[i].external_amount + ' ' + historyData[i].external_currency_id : '';
                         html += `<tr><td>${historyData[i].creation}</td><td style="text-align: center; color: ${color}">${sign}</td><td style="text-align: right; color: ${color}">${historyData[i].c01n_amount}</td><td>${external}</td></tr>`;
                     }
                     historyData.innerHTML = html;
