@@ -130,10 +130,10 @@
                             externalDirection + ' ' + historyData[i].external_amount + ' ' + historyData[i].external_currency_id : '';
                         html += `<tr><td>${historyData[i].creation}</td><td style="text-align: center; color: ${color}">${sign}</td><td style="text-align: right; color: ${color}">${historyData[i].c01n_amount}</td><td>${external}</td></tr>`;
                     }
-                    historyData.innerHTML = html;
+                    historyElement.innerHTML = html;
                 }
                 else
-                    historyData.innerHTML = '<tr><td>failed</td><td></td><td></td><td></td></tr>';
+                    historyElement.innerHTML = '<tr><td>failed</td><td></td><td></td><td></td></tr>';
             }
         </script>
     </head>
