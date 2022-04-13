@@ -135,7 +135,7 @@
                         );
                         if (knitResponse.status === 200)
                         {
-                            const knitData = await knitResponse.json();
+                            const knitData = await knitResponse.text();
                             currencyNames[knitId] = knitData;
                         }
                     }
