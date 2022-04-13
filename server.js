@@ -126,9 +126,8 @@ async function getUserName(userId) {
 const auth = {
     public: (req, res, next) => next(),
     user0: (req, res, next) => {
-        console.trace();
         if (!req.headers.authorization || req.headers.authorization.indexOf('Basic ') === -1) {
-            return res.status(401).json({ message: 'Missing Authorization Header 0' });
+            return res.status(401).json({ message: 'Missing Authorization Header' });
         }
         const base64Credentials =  req.headers.authorization.split(' ')[1];
         const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
@@ -140,9 +139,8 @@ const auth = {
         next();
     },
     user: (req, res, next) => {
-        console.trace();
         if (!req.headers.authorization || req.headers.authorization.indexOf('Basic ') === -1) {
-            return res.status(401).json({ message: 'Missing Authorization Header 1' });
+            return res.status(401).json({ message: 'Missing Authorization Header' });
         }
         const base64Credentials =  req.headers.authorization.split(' ')[1];
         const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
@@ -155,7 +153,7 @@ const auth = {
     },
     provider: (req, res, next) => {
         if (!req.headers.authorization || req.headers.authorization.indexOf('Basic ') === -1) {
-            return res.status(401).json({ message: 'Missing Authorization Header 2' });
+            return res.status(401).json({ message: 'Missing Authorization Header' });
         }
         const base64Credentials =  req.headers.authorization.split(' ')[1];
         const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
@@ -178,10 +176,6 @@ runQuery(queryString).then( async (result) => {
         users[user.id] = user;
     }
     // define api calls
-    app.get('/favicon.ico', auth.public, (req, res) => {
-        console.log('--> /favicon.ico');
-        res.sendFile(__dirname + '/favicon.ico');
-    });    
     app.get('/knit/generate', auth.user, async (req, res) => {
         const apiCallId = '95f37a03-c1c7-41fe-bead-33c4536b0a2b';
         const apiCallPrice = 1000;
@@ -199,12 +193,11 @@ runQuery(queryString).then( async (result) => {
         res.set('Content-Type', 'text/html');
         res.send(resultTimestamp.toISOString());
     });
-
-    // begin // TODO: avoid copy/paste
-    app.get('/:knit', auth.user0, async (req, res) => {
-        const apiCallId = '95f37a3f-19ad-448e-bd56-04a8da5c0df4';
+    app.get('/:knit/read/:type', auth.user0, async (req, res) => {
+        const apiCallId = '960d90b0-d6c1-4d47-9ac5-923439d583fd';
         const apiCallPrice = {base: 10000, perSymbol: 10};
-        const id = req.params.knit.split('=')[1];
+        const id = req.params.knit;
+        const contentType = req.params.type;
         const contentRecord = (await getContentRecord(id))[0];
         if (contentRecord)
         {
@@ -212,8 +205,21 @@ runQuery(queryString).then( async (result) => {
             const apiCallTotalPrice = apiCallPrice.base + apiCallPrice.perSymbol * text.length;
             await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallTotalPrice, id, apiCallId);
             await authorFeeTransfer(req.user.id, author, author_fee, id, apiCallId);
-            res.set('Content-Type', 'text/html');
-            res.send(text);
+            if (contentType === 'jpeg')
+            {
+                res.set('Content-Type', 'text/html');
+                res.send(`<img src="data:image/jpeg;base64,${text}" />`);
+            }
+            if (contentType === 'svg')
+            {
+                res.set('Content-Type', 'image/svg+xml');
+                res.send(text);
+            }
+            else
+            {
+                res.set('Content-Type', 'text/html');
+                res.send(text);
+            }
         }
         else
         {
@@ -221,48 +227,6 @@ runQuery(queryString).then( async (result) => {
             res.status(404).json({ message: 'Content not found' });
         }
     });
-    app.get('/:knit/jpeg', auth.user, async (req, res) => {
-        const apiCallId = '95fd28ab-711d-4677-ac5e-63ff7acc6184';
-        const apiCallPrice = {base: 10000, perSymbol: 10};
-        const id = req.params.knit.split('=')[1];
-        const contentRecord = (await getContentRecord(id))[0];
-        if (contentRecord)
-        {
-            const {text, author, author_fee} = contentRecord;
-            const apiCallTotalPrice = apiCallPrice.base + apiCallPrice.perSymbol * text.length;
-            await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallTotalPrice, id, apiCallId);
-            await authorFeeTransfer(req.user.id, author, author_fee, id, apiCallId);
-            res.set('Content-Type', 'text/html');
-            res.send(`<img src="data:image/jpeg;base64,${text}" />`);
-        }
-        else
-        {
-            await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice.base, undefined, apiCallId);
-            res.status(404).json({ message: 'Content not found' });
-        }
-    });
-    app.get('/:knit/svg', auth.user, async (req, res) => {
-        const apiCallId = '95fd2e32-b384-47de-8d73-a1007990cf3f';
-        const apiCallPrice = {base: 10000, perSymbol: 10};
-        const id = req.params.knit.split('=')[1];
-        const contentRecord = (await getContentRecord(id))[0];
-        if (contentRecord)
-        {
-            const {text, author, author_fee} = contentRecord;
-            const apiCallTotalPrice = apiCallPrice.base + apiCallPrice.perSymbol * text.length;
-            await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallTotalPrice, id, apiCallId);
-            await authorFeeTransfer(req.user.id, author, author_fee, id, apiCallId);
-            res.set('Content-Type', 'image/svg+xml');
-            res.send(text);
-        }
-        else
-        {
-            await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice.base, undefined, apiCallId);
-            res.status(404).json({ message: 'Content not found' });
-        }
-    });
-    // end
-
     app.get('/deposit/:user/:amount/:currency', auth.provider, async (req, res) => {
         const apiCallId = '95f40824-f51c-4a3c-85b4-c15d53b91df5';
         const apiCallPrice = 5000;
@@ -318,6 +282,9 @@ runQuery(queryString).then( async (result) => {
     });
     app.get('/index.html', auth.public, (req, res) => {
         res.sendFile(__dirname + '/index.html');
+    });
+    app.get('/favicon.ico', auth.public, (req, res) => {
+        res.sendFile(__dirname + '/favicon.ico');
     });
     app.get('/*', auth.public, (req, res) => {
         res.status(404).end();

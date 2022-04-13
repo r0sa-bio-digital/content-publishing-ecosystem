@@ -149,7 +149,7 @@ Content publishing ecosystem to organize content exchange between authors and co
 				* favicon
 					* debug why 404 doesn't work, why favicon rout doesn't work if it placed in the bottom of the declaration
 					* `fix app.get('/:knit', ...) api call rout`
-					* check correct work gor all other calls
+					* check correct work for all other calls
 				* balance
 				* history
 				* rates
