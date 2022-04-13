@@ -91,7 +91,7 @@
                     const ratesData = await ratesResponse.json();
                     let html = '';
                     for (let i = 0; i < ratesData.length; ++i)
-                        html += `<tr><td>${ratesData[i].name}</td><td>${ratesData[i].rateText}</td></tr>`;
+                        html += `<tr><td>${ratesData[i].name}</td><td style="text-align: right;">${ratesData[i].rateText}</td></tr>`;
                     ratesElement.innerHTML = html;
                 }
                 else
