@@ -65,9 +65,9 @@
                             }
                         }
                     );
-                    if (loginResponse.status === 200)
+                    if (balanceResponse.status === 200)
                     {
-                        const balanceData = await loginResponse.json();
+                        const balanceData = await balanceResponse.json();
                         balanceElement.textContent = balanceData.amount + ' ' + balanceData.currency;
                     }
                     else
