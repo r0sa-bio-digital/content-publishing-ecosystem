@@ -114,6 +114,31 @@
                 if (historyResponse.status === 200)
                 {
                     const historyData = await historyResponse.json();
+                    const external_currency_ids = {};
+                    for (let i = 0; i < historyData.length; ++i)
+                    {
+                        const id = historyData[i].external_currency_id;
+                        if (id)
+                            external_currency_ids[id] = true;
+                    }
+                    const currencyNames = {};
+                    for (let knitId in currencyNames)
+                    {
+                        const knitResponse = await fetch(
+                            apiUrl + knitId + '/read/text',
+                            {
+                                method: 'GET',
+                                headers: {
+                                    Authorization: `Basic ${btoa(accessToken + ':')}`
+                                }
+                            }
+                        );
+                        if (knitResponse.status === 200)
+                        {
+                            const knitData = await knitResponse.json();
+                            currencyNames[knitId] = knitData;
+                        }
+                    }
                     let html = '';
                     for (let i = 0; i < historyData.length; ++i)
                     {
@@ -127,7 +152,7 @@
                             sign === '+' ? '<<' :
                                 '..';
                         const external = historyData[i].external_amount && historyData[i].external_currency_id ?
-                            externalDirection + ' ' + historyData[i].external_amount + ' ' + historyData[i].external_currency_id : '';
+                            externalDirection + ' ' + historyData[i].external_amount + ' ' + currencyNames[historyData[i].external_currency_id] : '';
                         html += `<tr><td>${historyData[i].creation}</td><td style="text-align: center; color: ${color}">${sign}</td><td style="text-align: right; color: ${color}">${historyData[i].c01n_amount}</td><td>${external}</td></tr>`;
                     }
                     historyElement.innerHTML = html;
