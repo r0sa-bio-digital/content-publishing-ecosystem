@@ -153,12 +153,26 @@ Content publishing ecosystem to organize content exchange between authors and co
 				* remove split('=') code from all api calls
 				* balance
 				* exchange rates
-				* `history`
-			* no limit for text content
-				* index md5 instead of full content
-		* User dashboard frontend
+				* history
+			* `show content in browser by direct links`
 		* Implement integrity check
 			* All tables' pks must be stored in knits, every knits entry must have a corresponding record in some other table
+		* No limit for text content
+			* now text content is limited by 8191 bytes cause of indexing mechanism
+			* as a solution: index md5 of the content instead of full content
+				* but only if content is too large for indexer
+	* Make handy tools for content exchange
+		* Add new content frontend
+		* User dashboard frontend
+		* View content frontend types extension
+			* markdown
+			* png
+			* gif
+	* Balance economics
+		* understand complete currency cycle
+		* understand situation when user and provider is a same person
+		* reset all users/providers balances/transactions and start well-balanced accounting from zero
+			* instead of random numbers on balances
 	* Post some exclusive content on the platform
 		* c0ntent
 		* r0sa
@@ -172,10 +186,6 @@ Content publishing ecosystem to organize content exchange between authors and co
 		* Add at least 5 interested members
 		* Make exclusive presentation of c0ntent by c0ntent itself
 		* Organize first c01n sale inside of the community
-	* View content frontend types extension
-			* markdown
-			* png
-			* gif
 * Raise funds for the project development
 * Research best db for the transactions log, because postgresql is too much costly
 	* Check out ClickHouse first
