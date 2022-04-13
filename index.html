@@ -74,7 +74,7 @@
             async function onRefreshExchangeRatesClick()
             {
                 const ratesElement = document.getElementById('exchangeRatesTableBody');
-                ratesElement.innerHTML = '<tr><td>...</td><td>...</td></tr>';
+                ratesElement.innerHTML = '<tr><td>...</td><td></td></tr>';
                 const accessToken = localStorage.getItem('accessToken');
                 const ratesResponse = await fetch(
                     apiUrl + 'currency/exchange/rates',
@@ -95,11 +95,45 @@
                     ratesElement.innerHTML = html;
                 }
                 else
-                    ratesElement.innerHTML = '<tr><td>failed</td><td>failed</td></tr>';
+                    ratesElement.innerHTML = '<tr><td>failed</td><td></td></tr>';
             }
             async function onRefreshTransactionHistoryClick()
             {
-                ;
+                const historyElement = document.getElementById('transactionHistoryTableBody');
+                historyElement.innerHTML = '<tr><td>...</td><td></td><td></td><td></td></tr>';
+                const accessToken = localStorage.getItem('accessToken');
+                const historyResponse = await fetch(
+                    apiUrl + 'user/transactions/history',
+                    {
+                        method: 'GET',
+                        headers: {
+                            Authorization: `Basic ${btoa(accessToken + ':')}`
+                        }
+                    }
+                );
+                if (historyResponse.status === 200)
+                {
+                    const historyData = await historyResponse.json();
+                    let html = '';
+                    for (let i = 0; i < historyData.length; ++i)
+                    {
+                        const sign = historyData[i].debited_account === accessToken ? '-' :
+                            historyData[i].credited_account === accessToken ? '+' :
+                                '?';
+                        const color = sign === '-' ? 'red' :
+                            sign === '+' ? 'green' :
+                                'black';
+                        const externalDirection = sign === '-' ? '>>' :
+                            sign === '+' ? '<<' :
+                                '..';
+                        const external = historyData[i].external_amount && historyData[i].external_currency_id ?
+                            externalDirection + ' ' historyData[i].external_amount + ' ' + historyData[i].external_currency_id : '';
+                        html += `<tr><td>${historyData[i].creation}</td><td style="text-align: center; color: ${color}">${sign}</td><td style="text-align: right; color: ${color}">${historyData[i].c01n_amount}</td><td>${external}</td></tr>`;
+                    }
+                    historyData.innerHTML = html;
+                }
+                else
+                    historyData.innerHTML = '<tr><td>failed</td><td></td><td></td><td></td></tr>';
             }
         </script>
     </head>
@@ -139,6 +173,14 @@
                 <span>transaction history: </span>
                 <button onclick="onRefreshTransactionHistoryClick();">refresh</button>
                 <table id="transactionHistoryTable">
+                    <thead>
+                        <td>date</td>
+                        <td>±</td>
+                        <td>amount</td>
+                        <td>external</td>
+                    </thead>
+                    <tbody id="transactionHistoryTableBody">
+                    </tbody>
                 </table>
             </div>
         </div>

@@ -152,8 +152,8 @@ Content publishing ecosystem to organize content exchange between authors and co
 					* check correct work for all other calls
 				* remove split('=') code from all api calls
 				* balance
-				* `exchange rates`
-				* history
+				* exchange rates
+				* `history`
 			* no limit for text content
 				* index md5 instead of full content
 		* User dashboard frontend
