@@ -74,7 +74,7 @@
             async function onRefreshExchangeRatesClick()
             {
                 const ratesElement = document.getElementById('exchangeRatesTableBody');
-                ratesElement.innerHtml = '<tr><td>...</td><td>...</td></tr>';
+                ratesElement.innerHTML = '<tr><td>...</td><td>...</td></tr>';
                 const accessToken = localStorage.getItem('accessToken');
                 const ratesResponse = await fetch(
                     apiUrl + 'currency/exchange/rates',
@@ -92,10 +92,10 @@
                     let html = '';
                     for (let i = 0; i < ratesData.length; ++i)
                         html += `<tr><td>${ratesData[i].name}</td><td>${ratesData[i].rateText}</td></tr>`;
-                    ratesElement.innerHtml = html;
+                    ratesElement.innerHTML = html;
                 }
                 else
-                    ratesElement.innerHtml = '<tr><td>failed</td><td>failed</td></tr>';
+                    ratesElement.innerHTML = '<tr><td>failed</td><td>failed</td></tr>';
             }
             async function onRefreshTransactionHistoryClick()
             {
