@@ -150,8 +150,8 @@ Content publishing ecosystem to organize content exchange between authors and co
 					* debug why 404 doesn't work, why favicon rout doesn't work if it placed in the bottom of the declaration
 					* fix app.get('/:knit', ...) api call rout
 					* check correct work for all other calls
-				* `remove split('=') code from all api calls`
-				* balance
+				* remove split('=') code from all api calls
+				* `balance`
 				* history
 				* exchange rates
 			* no limit for text content

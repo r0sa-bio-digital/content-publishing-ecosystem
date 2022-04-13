@@ -49,6 +49,30 @@
                 document.getElementById('account').style.display = 'none';
                 onLoad();
             }
+            async function onRefreshBalanceClick()
+            {
+                const balanceElement = document.getElementById('accountBalance');
+                balanceElement.textContent = '...';
+
+                const accessToken = localStorage.getItem('accessToken');
+
+                const balanceResponse = await fetch(
+                        apiUrl + 'user/balance',
+                        {
+                            method: 'GET',
+                            headers: {
+                                Authorization: `Basic ${btoa(accessToken + ':')}`
+                            }
+                        }
+                    );
+                    if (loginResponse.status === 200)
+                    {
+                        const balanceData = await loginResponse.json();
+                        balanceElement.textContent = balanceData.amount + ' ' + balanceData.currency;
+                    }
+                    else
+                        balanceElement.textContent = 'failed';
+            }
         </script>
     </head>
     <body onload="onLoad();">
@@ -66,6 +90,10 @@
             <div>
                 <span>name: </span><span id="accountName"></span>
                 <button onclick="onResetClick();">logout</button>
+            </div>
+            <div>
+                <span>Balance</span><span id="accountBalance">?</span>
+                <button onclick="onRefreshBalanceClick();">refresh</button>
             </div>
         </div>
         <div id="failed" style="display: none;">
