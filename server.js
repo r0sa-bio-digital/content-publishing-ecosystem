@@ -187,7 +187,7 @@ runQuery(queryString).then( async (result) => {
     app.get('/:knit/extract/timestamp', auth.user, async (req, res) => {
         const apiCallId = '95f37a28-aa0e-4a73-a833-7a707144f5ce';
         const apiCallPrice = 1000;
-        const id = req.params.knit.split('=')[1];
+        const id = req.params.knit;
         const resultTimestamp = knit.convertTime(id, 'date-object');
         await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
         res.set('Content-Type', 'text/html');
@@ -230,9 +230,9 @@ runQuery(queryString).then( async (result) => {
     app.get('/deposit/:user/:amount/:currency', auth.provider, async (req, res) => {
         const apiCallId = '95f40824-f51c-4a3c-85b4-c15d53b91df5';
         const apiCallPrice = 5000;
-        const userId = req.params.user.split('=')[1];
-        const fundsAmount = parseInt(req.params.amount.split('=')[1]);
-        const currencyId = req.params.currency.split('=')[1];
+        const userId = req.params.user;
+        const fundsAmount = parseInt(req.params.amount);
+        const currencyId = req.params.currency;
         await hostingFeeTransfer(userId, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
         const c01nsDepositted = await depositUserFunds(
             userId, defaultHostingProvider.id, fundsAmount, currencyId, apiCallId);
@@ -241,9 +241,9 @@ runQuery(queryString).then( async (result) => {
     app.get('/withdraw/:user/:amount/:currency', auth.provider, async (req, res) => {
         const apiCallId = '95f40876-76a1-4399-90b9-143c3b9d5c52';
         const apiCallPrice = 5000;
-        const userId = req.params.user.split('=')[1];
-        const fundsAmount = parseInt(req.params.amount.split('=')[1]);
-        const currencyId = req.params.currency.split('=')[1];
+        const userId = req.params.user;
+        const fundsAmount = parseInt(req.params.amount);
+        const currencyId = req.params.currency;
         await hostingFeeTransfer(userId, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
         const c01nsWithdrew = await withdrawUserFunds(
             userId, defaultHostingProvider.id, fundsAmount, currencyId, apiCallId);
