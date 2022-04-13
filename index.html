@@ -122,7 +122,7 @@
                             external_currency_ids[id] = true;
                     }
                     const currencyNames = {};
-                    for (let knitId in currencyNames)
+                    for (let knitId in external_currency_ids)
                     {
                         const knitResponse = await fetch(
                             apiUrl + knitId + '/read/text',
