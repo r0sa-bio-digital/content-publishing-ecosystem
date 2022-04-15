@@ -6,6 +6,19 @@
         <script>
             console.info('welcome to c0ntent');
             const apiUrl = 'https://c0ntent.herokuapp.com/';
+
+            function getContentDescription()
+            {
+                const showRequest = location.search.split('?')[1];
+                if (!showRequest)
+                    return null;
+                const showRequestParts = showRequest.split('&');
+                const knit = showRequestParts[0], type = showRequestParts[1];
+                if (knit && type)
+                    return {knit, type};
+                return null;
+            }
+
             async function onLoad()
             {
                 const accessToken = localStorage.getItem('accessToken');
@@ -14,25 +27,48 @@
                 else
                 {
                     document.getElementById('loading').style.display = 'block';
-                    const loginResponse = await fetch(
-                        apiUrl + 'user/login',
-                        {
-                            method: 'GET',
-                            headers: {
-                                Authorization: `Basic ${btoa(accessToken + ':')}`
-                            }
-                        }
-                    );
-                    if (loginResponse.status === 200)
+                    const showContentDescription = getContentDescription();
+                    if (showContentDescription)
                     {
-                        const userData = await loginResponse.json();
-                        document.getElementById('accountId').textContent = userData.id;
-                        document.getElementById('accountName').textContent = userData.name;
-                        document.getElementById('account').style.display = 'block';
+                        const readResponse = await fetch(
+                            apiUrl + `${showContentDescription.knit}/read/${showContentDescription.type}`,
+                            {
+                                method: 'GET',
+                                headers: {
+                                    Authorization: `Basic ${btoa(accessToken + ':')}`
+                                }
+                            }
+                        );
+                        if (readResponse.status === 200)
+                        {
+                            const content = await readResponse.text();
+                            document.getElementById('show').innerHTML = content;
+                            document.getElementById('show').style.display = 'block';
+                        }
+                        else
+                            document.getElementById('failed').style.display = 'block';
                     }
                     else
-                        document.getElementById('failed').style.display = 'block';
-
+                    {
+                        const loginResponse = await fetch(
+                            apiUrl + 'user/login',
+                            {
+                                method: 'GET',
+                                headers: {
+                                    Authorization: `Basic ${btoa(accessToken + ':')}`
+                                }
+                            }
+                        );
+                        if (loginResponse.status === 200)
+                        {
+                            const userData = await loginResponse.json();
+                            document.getElementById('accountId').textContent = userData.id;
+                            document.getElementById('accountName').textContent = userData.name;
+                            document.getElementById('account').style.display = 'block';
+                        }
+                        else
+                            document.getElementById('failed').style.display = 'block';
+                    }
                 }
             }
             function onLoginClick()
@@ -208,6 +244,8 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+        <div id="show" style="display: none;">
         </div>
         <div id="failed" style="display: none;">
             <span>login failed</span>
