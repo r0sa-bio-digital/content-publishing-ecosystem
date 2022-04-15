@@ -154,8 +154,8 @@ Content publishing ecosystem to organize content exchange between authors and co
 				* balance
 				* exchange rates
 				* history
-			* `show content in browser by direct links`
-		* Implement integrity check
+			* show content in browser by direct links
+		* `Implement integrity check`
 			* All tables' pks must be stored in knits, every knits entry must have a corresponding record in some other table
 		* No limit for text content
 			* now text content is limited by 8191 bytes cause of indexing mechanism
