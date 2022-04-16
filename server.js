@@ -125,19 +125,6 @@ async function getUserName(userId) {
 }
 const auth = {
     public: (req, res, next) => next(),
-    user0: (req, res, next) => {
-        if (!req.headers.authorization || req.headers.authorization.indexOf('Basic ') === -1) {
-            return res.status(401).json({ message: 'Missing Authorization Header' });
-        }
-        const base64Credentials =  req.headers.authorization.split(' ')[1];
-        const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
-        const userId = credentials.split(':')[0];
-        const user = users[userId];
-        if (!user)
-            return res.status(401).json({ message: 'Invalid Authentication Credentials' });
-        req.user = user
-        next();
-    },
     user: (req, res, next) => {
         if (!req.headers.authorization || req.headers.authorization.indexOf('Basic ') === -1) {
             return res.status(401).json({ message: 'Missing Authorization Header' });
@@ -193,7 +180,7 @@ runQuery(queryString).then( async (result) => {
         res.set('Content-Type', 'text/html');
         res.send(resultTimestamp.toISOString());
     });
-    app.get('/:knit/read/:type', auth.user0, async (req, res) => {
+    app.get('/:knit/read/:type', auth.user, async (req, res) => {
         const apiCallId = '960d90b0-d6c1-4d47-9ac5-923439d583fd';
         const apiCallPrice = {base: 10000, perSymbol: 10};
         const id = req.params.knit;
