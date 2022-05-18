@@ -164,6 +164,8 @@ runQuery(queryString).then( async (result) => {
     }
     // define api calls
     app.get('/knit/generate', auth.user, async (req, res) => {
+        console.log(req);
+        console.log(res);
         const apiCallId = '95f37a03-c1c7-41fe-bead-33c4536b0a2b';
         const apiCallPrice = 1000;
         const resultKnit = knit.generate();
