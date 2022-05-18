@@ -174,7 +174,7 @@ runQuery(queryString).then( async (result) => {
     // cache api call ids list
     const queryString2 = 'SELECT * FROM "public"."api_calls" ORDER BY "id" LIMIT 5000 OFFSET 0;';
     const apiCallsTable = await runQuery(queryString2);
-    for (let i = 0; i < result.length; ++i)
+    for (let i = 0; i < apiCallsTable.length; ++i)
     {
         const apiCall = apiCallsTable[i];
         apiCallIds[apiCall.name] = apiCall.id;
