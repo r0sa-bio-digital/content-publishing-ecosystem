@@ -164,9 +164,7 @@ runQuery(queryString).then( async (result) => {
         users[user.id] = user;
     }
     // cache api call ids list
-    apiCallIds = {
-        '/knit/generate': '95f37a03-c1c7-41fe-bead-33c4536b0a2b'
-    }
+    apiCallIds['/knit/generate'] = '95f37a03-c1c7-41fe-bead-33c4536b0a2b';
     // define api calls
     app.get('/knit/generate', auth.user, async (req, res) => {
         const apiCallId = apiCallIds[req.originalUrl];
