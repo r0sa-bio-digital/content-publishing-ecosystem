@@ -157,11 +157,14 @@ Content publishing ecosystem to organize content exchange between authors and co
 			* show content in browser by direct links
 		* Implement integrity check
  			* remove useless debug auth.user0
-			* `restore heroku autobuild on github push`
+			* restore heroku autobuild on github push
 				* use github actions as described here: https://github.com/marketplace/actions/deploy-to-heroku
 			* add table for api call entities
+				* `hardcode table`
+				* move table to db
 			* check api calls in server code vs api calls table from db
 			* all tables' pks must be stored in knits, every knits entry must have a corresponding record in some other table
+		* Move all api call prices from code to api call entities table
 		* No limit for text content
 			* now text content is limited by 8191 bytes cause of indexing mechanism
 			* as a solution: index md5 of the content instead of full content

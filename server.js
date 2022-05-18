@@ -152,6 +152,15 @@ const auth = {
         next();
     }
 };
+const setApiCallId = (req, res, next) => {
+    const apiCallName = req.originalUrl;
+    const apiCallId = apiCallIds[apiCallName];
+    console.log(apiCallName);
+    console.log(apiCallId);
+    if (!knit.validate(apiCallId))
+        return res.status(500).json({ message: `Invalid API Call Id for ${apiCallName}` });
+    else req.apiCallId = apiCallId;
+};
 // boot the system
 console.info('\tserver booting started');
 
@@ -166,15 +175,10 @@ runQuery(queryString).then( async (result) => {
     // cache api call ids list
     apiCallIds['/knit/generate'] = '95f37a03-c1c7-41fe-bead-33c4536b0a2b';
     // define api calls
-    app.get('/knit/generate', auth.user, async (req, res) => {
-        console.log(req.originalUrl);
-        console.log(req.url);
-        const apiCallId = apiCallIds[req.originalUrl];
-        console.log(apiCallId);
-
+    app.get('/knit/generate', auth.user, setApiCallId, async (req, res) => {
         const apiCallPrice = 1000;
         const resultKnit = knit.generate();
-        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, req.apiCallId);
         res.set('Content-Type', 'text/html');
         res.send(resultKnit);
     });
@@ -250,15 +254,9 @@ runQuery(queryString).then( async (result) => {
         const rates = await getExchangeRates();
         res.status(200).json(rates);
     });
-    app.get('/user/balance', auth.user, async (req, res) => {
-        //const apiCallId = '95fd27c8-3a17-4aaa-a8ec-1c54741cff99';
-        console.log(req.originalUrl);
-        console.log(req.url);
-        const apiCallId = apiCallIds[req.originalUrl];
-        console.log(apiCallId);
-
+    app.get('/user/balance', auth.user, setApiCallId, async (req, res) => {
         const apiCallPrice = 2000;
-        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, req.apiCallId);
         const userBalance = await getUserBalance(req.user.id);
         res.status(200).json({currency: 'c01n', amount: userBalance, amountText: getReadableNumber(userBalance)});
     });
