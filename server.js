@@ -153,6 +153,7 @@ const auth = {
     }
 };
 const setApiCallId = (req, res, next) => {
+    console.log(req);
     const apiCallName = req.originalUrl;
     const apiCallId = apiCallIds[apiCallName];
     if (!knit.validate(apiCallId))
@@ -179,18 +180,6 @@ runQuery(queryString).then( async (result) => {
         const apiCall = apiCallsTable[i];
         apiCallIds[apiCall.name] = apiCall.id;
     }
-    /*
-    apiCallIds['/knit/generate'] = '95f37a03-c1c7-41fe-bead-33c4536b0a2b';
-    apiCallIds['/:knit/extract/timestamp'] = '95f37a28-aa0e-4a73-a833-7a707144f5ce';
-    apiCallIds['/:knit/read/:type'] = '960d90b0-d6c1-4d47-9ac5-923439d583fd';
-    apiCallIds['/deposit/:user/:amount/:currency'] = '95f40824-f51c-4a3c-85b4-c15d53b91df5';
-    apiCallIds['/withdraw/:user/:amount/:currency'] = '95f40876-76a1-4399-90b9-143c3b9d5c52';
-    apiCallIds['/currency/exchange/rates'] = '95f7d8c2-4dbb-4d10-b394-3143a2307866';
-    apiCallIds['/user/balance'] = '95fd27c8-3a17-4aaa-a8ec-1c54741cff99';
-    apiCallIds['/user/transactions/history'] = '95fd2894-3408-4526-8a48-484aa86b13c1';
-    apiCallIds['/user/login'] = '96032d7a-dab0-4713-886c-94215bf3b916';
-    */
-    console.log(apiCallIds);
     // define api calls
     app.get('/knit/generate', auth.user, setApiCallId, async (req, res) => {
         const apiCallPrice = 1000;
