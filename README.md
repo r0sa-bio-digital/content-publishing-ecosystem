@@ -161,9 +161,11 @@ Content publishing ecosystem to organize content exchange between authors and co
 				* use github actions as described here: https://github.com/marketplace/actions/deploy-to-heroku
 			* add table for api call entities
 				* hardcode table
-				* `move table to db`
+				* move table to db
 			* check api calls in server code vs api calls table from db
-			* all tables' pks must be stored in knits, every knits entry must have a corresponding record in some other table
+				* if api call described in code but not described in db, then 500 error will be generated in run-time
+				* if api call described in db but not described in code, then 404 error will be generated in run-time
+			* `all tables' pks must be stored in knits, every knits entry must have a corresponding record in some other table`
 		* Move all api call prices from code to api call entities table
 		* No limit for text content
 			* now text content is limited by 8191 bytes cause of indexing mechanism
