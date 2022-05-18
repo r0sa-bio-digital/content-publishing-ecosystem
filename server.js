@@ -251,7 +251,12 @@ runQuery(queryString).then( async (result) => {
         res.status(200).json(rates);
     });
     app.get('/user/balance', auth.user, async (req, res) => {
-        const apiCallId = '95fd27c8-3a17-4aaa-a8ec-1c54741cff99';
+        //const apiCallId = '95fd27c8-3a17-4aaa-a8ec-1c54741cff99';
+        console.log(req.originalUrl);
+        console.log(req.url);
+        const apiCallId = apiCallIds[req.originalUrl];
+        console.log(apiCallId);
+
         const apiCallPrice = 2000;
         await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
         const userBalance = await getUserBalance(req.user.id);
