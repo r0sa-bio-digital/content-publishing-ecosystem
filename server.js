@@ -167,7 +167,11 @@ runQuery(queryString).then( async (result) => {
     apiCallIds['/knit/generate'] = '95f37a03-c1c7-41fe-bead-33c4536b0a2b';
     // define api calls
     app.get('/knit/generate', auth.user, async (req, res) => {
+        console.log(req.originalUrl);
+        console.log(req.url);
         const apiCallId = apiCallIds[req.originalUrl];
+        console.log(apiCallId);
+
         const apiCallPrice = 1000;
         const resultKnit = knit.generate();
         await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
