@@ -153,8 +153,10 @@ const auth = {
     }
 };
 const setApiCallId = (req, res, next) => {
-    console.log(req);
-    const apiCallName = req.originalUrl;
+    //console.log(req);
+    console.log(req.originalUrl);
+    console.log(req.route.path);
+    const apiCallName = req.route.path;
     const apiCallId = apiCallIds[apiCallName];
     if (!knit.validate(apiCallId))
         return res.status(500).json({ message: `Invalid API Call Id for ${apiCallName}` });
