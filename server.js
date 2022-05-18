@@ -159,7 +159,8 @@ const setApiCallId = (req, res, next) => {
     console.log(apiCallId);
     if (!knit.validate(apiCallId))
         return res.status(500).json({ message: `Invalid API Call Id for ${apiCallName}` });
-    else req.apiCallId = apiCallId;
+    req.apiCallId = apiCallId;
+    next();
 };
 // boot the system
 console.info('\tserver booting started');
