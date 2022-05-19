@@ -176,7 +176,7 @@ runQuery(queryString).then( async (result) => {
         const user = result[i];
         users[user.id] = user;
     }
-    // cache default hosting provider // TODO: implement multiprovider concept
+    // cache default hosting provider // TODO: implement multiprovider concept // update hosting_providers list every db update or read it dynamically
     const queryString1 = 'SELECT * FROM "public"."hosting_providers" ORDER BY "id" LIMIT 5000 OFFSET 0;';
     const hostingProvidersTable = await runQuery(queryString1);
     {
@@ -193,7 +193,6 @@ runQuery(queryString).then( async (result) => {
         const apiCall = apiCallsTable[i];
         apiCallIds[apiCall.name] = {id: apiCall.id, price: apiCall.price};
     }
-    console.log(apiCallIds);
     // define api calls
     app.get('/knit/generate', auth.user, setApiCallId, async (req, res) => {
         const resultKnit = knit.generate();
