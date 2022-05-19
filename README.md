@@ -197,9 +197,9 @@ Content publishing ecosystem to organize content exchange between authors and co
 				* choose and connect sha-3 npm module
 				* implement hashsum api call
 					* simple get+param
-					* `universal post+body`
+					* universal post+body
 				* add hashsum field to db and use it for automated control of content uniqueness
-				* check matching text and hashsum on /:knit/read/:type
+				* `check matching text and hashsum on /:knit/read/:type`
 					* implement
 					* check all content records
 				* implement api call to add new content with text and hashsum
