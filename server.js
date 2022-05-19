@@ -7,7 +7,7 @@ const http = require('http').Server(app);
 const pg = require('pg');
 const connectionString = process.env.DATABASE_URL;
 const port = process.env.PORT || 3000;
-const defaultHostingProvider = { id: process.env.HOSTER_ID, name: process.env.HOSTER_NAME }; // TODO: implement proper hosting provider detection
+const defaultHostingProvider = { id: process.env.HOSTER_ID, name: process.env.HOSTER_NAME, byte_price: parseFloat(process.env.HOSTER_BYTE_PRICE) }; // TODO: implement proper hosting provider detection
 const users = {};
 const apiCallIds = {};
 app.use(express.json({limit: '10mb'}));
@@ -200,14 +200,14 @@ runQuery(queryString).then( async (result) => {
         res.send(resultTimestamp.toISOString());
     });
     app.get('/:knit/read/:type', auth.user, setApiCallId, async (req, res) => {
-        const apiCallPrice = {base: req.apiCallPrice, perSymbol: 10}; // TODO: avoid hardcode of perSymbol and make correct name for it
         const id = req.params.knit;
         const contentType = req.params.type;
         const contentRecord = (await getContentRecord(id))[0];
         if (contentRecord)
         {
             const {text, author, author_fee} = contentRecord;
-            const apiCallTotalPrice = apiCallPrice.base + apiCallPrice.perSymbol * text.length;
+            const trafficPrice = Math.ceil(defaultHostingProvider.byte_price * text.length);
+            const apiCallTotalPrice = req.apiCallPrice + trafficPrice;
             await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallTotalPrice, id, req.apiCallId);
             await authorFeeTransfer(req.user.id, author, author_fee, id, req.apiCallId);
             if (contentType === 'jpeg')
@@ -228,7 +228,7 @@ runQuery(queryString).then( async (result) => {
         }
         else
         {
-            await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice.base, undefined, req.apiCallId);
+            await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, req.apiCallPrice, undefined, req.apiCallId);
             res.status(404).json({ message: 'Content not found' });
         }
     });
