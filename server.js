@@ -154,10 +154,15 @@ const auth = {
 };
 const setApiCallId = (req, res, next) => {
     const apiCallName = req.route.path;
-    const apiCallId = apiCallIds[apiCallName];
+    const apiCallDesc = apiCallIds[apiCallName];
+    const apiCallId = apiCallDesc.id;
+    const apiCallPrice = apiCallDesc.price;
     if (!knit.validate(apiCallId))
         return res.status(500).json({ message: `Invalid API Call Id for ${apiCallName}` });
+    if (typeof apiCallPrice !== 'number')
+        return res.status(500).json({ message: `Invalid API Call Price for ${apiCallName}` });
     req.apiCallId = apiCallId;
+    req.apiCallPrice = apiCallPrice;
     next();
 };
 // boot the system
@@ -177,26 +182,24 @@ runQuery(queryString).then( async (result) => {
     for (let i = 0; i < apiCallsTable.length; ++i)
     {
         const apiCall = apiCallsTable[i];
-        apiCallIds[apiCall.name] = apiCall.id;
+        apiCallIds[apiCall.name] = {id: apiCall.id, price: apiCall.price};
     }
     // define api calls
     app.get('/knit/generate', auth.user, setApiCallId, async (req, res) => {
-        const apiCallPrice = 1000;
         const resultKnit = knit.generate();
-        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, req.apiCallId);
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, req.apiCallPrice, undefined, req.apiCallId);
         res.set('Content-Type', 'text/html');
         res.send(resultKnit);
     });
     app.get('/:knit/extract/timestamp', auth.user, setApiCallId, async (req, res) => {
-        const apiCallPrice = 1000;
         const id = req.params.knit;
         const resultTimestamp = knit.convertTime(id, 'date-object');
-        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, req.apiCallId);
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, req.apiCallPrice, undefined, req.apiCallId);
         res.set('Content-Type', 'text/html');
         res.send(resultTimestamp.toISOString());
     });
     app.get('/:knit/read/:type', auth.user, setApiCallId, async (req, res) => {
-        const apiCallPrice = {base: 10000, perSymbol: 10};
+        const apiCallPrice = {base: req.apiCallPrice, perSymbol: 10}; // TODO: avoid hardcode of perSymbol and make correct name for it
         const id = req.params.knit;
         const contentType = req.params.type;
         const contentRecord = (await getContentRecord(id))[0];
@@ -229,46 +232,40 @@ runQuery(queryString).then( async (result) => {
         }
     });
     app.get('/deposit/:user/:amount/:currency', auth.provider, setApiCallId, async (req, res) => {
-        const apiCallPrice = 5000;
         const userId = req.params.user;
         const fundsAmount = parseInt(req.params.amount);
         const currencyId = req.params.currency;
-        await hostingFeeTransfer(userId, defaultHostingProvider.id, apiCallPrice, undefined, req.apiCallId);
+        await hostingFeeTransfer(userId, defaultHostingProvider.id, req.apiCallPrice, undefined, req.apiCallId);
         const c01nsDepositted = await depositUserFunds(
             userId, defaultHostingProvider.id, fundsAmount, currencyId, req.apiCallId);
         res.status(200).json({ c01ns: c01nsDepositted, message: 'depositted successfully' });
     });
     app.get('/withdraw/:user/:amount/:currency', auth.provider, setApiCallId, async (req, res) => {
-        const apiCallPrice = 5000;
         const userId = req.params.user;
         const fundsAmount = parseInt(req.params.amount);
         const currencyId = req.params.currency;
-        await hostingFeeTransfer(userId, defaultHostingProvider.id, apiCallPrice, undefined, req.apiCallId);
+        await hostingFeeTransfer(userId, defaultHostingProvider.id, req.apiCallPrice, undefined, req.apiCallId);
         const c01nsWithdrew = await withdrawUserFunds(
             userId, defaultHostingProvider.id, fundsAmount, currencyId, req.apiCallId);
         res.status(200).json({ c01ns: c01nsWithdrew, message: 'withdrew successfully' });
     });
     app.get('/currency/exchange/rates', auth.user, setApiCallId, async (req, res) => {
-        const apiCallPrice = 25000;
-        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, req.apiCallId);
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, req.apiCallPrice, undefined, req.apiCallId);
         const rates = await getExchangeRates();
         res.status(200).json(rates);
     });
     app.get('/user/balance', auth.user, setApiCallId, async (req, res) => {
-        const apiCallPrice = 2000;
-        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, req.apiCallId);
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, req.apiCallPrice, undefined, req.apiCallId);
         const userBalance = await getUserBalance(req.user.id);
         res.status(200).json({currency: 'c01n', amount: userBalance, amountText: getReadableNumber(userBalance)});
     });
     app.get('/user/transactions/history', auth.user, setApiCallId, async (req, res) => {
-        const apiCallPrice = 10000;
-        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, req.apiCallId);
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, req.apiCallPrice, undefined, req.apiCallId);
         const userTransactions = await getUserTransactions(req.user.id);
         res.status(200).json(userTransactions);
     });
     app.get('/user/login', auth.user, setApiCallId, async (req, res) => {
-        const apiCallPrice = 2000;
-        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, req.apiCallId);
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, req.apiCallPrice, undefined, req.apiCallId);
         const userName = await getUserName(req.user.id);
         res.status(200).json({id: req.user.id, name: userName});
     });
