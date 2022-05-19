@@ -125,6 +125,12 @@ async function getUserName(userId) {
     const nameResponse = await runQuery(queryString);
     return nameResponse[0].name;
 }
+function computeTextHashsum(text)
+{
+    const primaryHash = hash(text);
+    const secondaryHash = hash(primaryHash + text);
+    return primaryHash + '+' + secondaryHash;
+}
 const auth = {
     public: (req, res, next) => next(),
     user: (req, res, next) => {
@@ -209,13 +215,10 @@ runQuery(queryString).then( async (result) => {
         res.send(resultTimestamp.toISOString());
     });
     app.post('/hashsum/compute', auth.user, setApiCallId, async (req, res) => {
-        const text = req.body.text;
-        const primaryHash = hash(text);
-        const secondaryHash = hash(primaryHash + text);
-        const finalHash = primaryHash + '+' + secondaryHash;
+        const hashsum = computeTextHashsum(req.body.text);
         await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, req.apiCallPrice, undefined, req.apiCallId);
         res.set('Content-Type', 'text/html');
-        res.send(finalHash);
+        res.send(hashsum);
     });
     app.get('/:knit/read/:type', auth.user, setApiCallId, async (req, res) => {
         const id = req.params.knit;
@@ -223,26 +226,31 @@ runQuery(queryString).then( async (result) => {
         const contentRecord = (await getContentRecord(id))[0];
         if (contentRecord)
         {
-            const {text, author, author_fee} = contentRecord;
+            const {text, hashsum, author, author_fee} = contentRecord;
             const trafficPrice = Math.ceil(defaultHostingProvider.byte_price * text.length);
             const apiCallTotalPrice = req.apiCallPrice + trafficPrice;
             await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallTotalPrice, id, req.apiCallId);
             await authorFeeTransfer(req.user.id, author, author_fee, id, req.apiCallId);
-            console.log(hash(text));
-            if (contentType === 'jpeg')
-            {
-                res.set('Content-Type', 'text/html');
-                res.send(`<img src="data:image/jpeg;base64,${text}" />`);
-            }
-            else if (contentType === 'svg')
-            {
-                res.set('Content-Type', 'image/svg+xml');
-                res.send(text);
-            }
+            const actualHashsum = computeTextHashsum(text);
+            if (actualHashsum !== hashsum)
+                res.status(500).json({ message: 'Invalid content hashsum' });
             else
             {
-                res.set('Content-Type', 'text/html');
-                res.send(text);
+                if (contentType === 'jpeg')
+                {
+                    res.set('Content-Type', 'text/html');
+                    res.send(`<img src="data:image/jpeg;base64,${text}" />`);
+                }
+                else if (contentType === 'svg')
+                {
+                    res.set('Content-Type', 'image/svg+xml');
+                    res.send(text);
+                }
+                else
+                {
+                    res.set('Content-Type', 'text/html');
+                    res.send(text);
+                }
             }
         }
         else
