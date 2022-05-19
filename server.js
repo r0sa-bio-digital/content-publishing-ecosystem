@@ -159,10 +159,10 @@ const setApiCallId = (req, res, next) => {
     const apiCallPrice = apiCallDesc.price;
     if (!knit.validate(apiCallId))
         return res.status(500).json({ message: `Invalid API Call Id for ${apiCallName}` });
-    if (typeof apiCallPrice !== 'number')
+    if (!isNaN(apiCallPrice))
         return res.status(500).json({ message: `Invalid API Call Price for ${apiCallName}` });
     req.apiCallId = apiCallId;
-    req.apiCallPrice = apiCallPrice;
+    req.apiCallPrice = parseInt(apiCallPrice);
     next();
 };
 // boot the system
@@ -184,6 +184,7 @@ runQuery(queryString).then( async (result) => {
         const apiCall = apiCallsTable[i];
         apiCallIds[apiCall.name] = {id: apiCall.id, price: apiCall.price};
     }
+    console.log(apiCallIds);
     // define api calls
     app.get('/knit/generate', auth.user, setApiCallId, async (req, res) => {
         const resultKnit = knit.generate();
