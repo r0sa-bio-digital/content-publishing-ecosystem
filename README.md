@@ -184,10 +184,25 @@ Content publishing ecosystem to organize content exchange between authors and co
 			* base api call price to api_calls
 			* byte price to hosting_providers
 			* read defaultHostingProvider from db and remove it from env
-		* `No limit for text content`
+		* No limit for text content
 			* now text content is limited by 8191 bytes cause of indexing mechanism
-			* as a solution: index md5 of the content instead of full content
+			* as a possible solution: index md5 of the content instead of full content
 				* but only if content is too large for indexer
+			* real solution:
+				* learn all modern hashing algorithms
+				* choose best one and sum technics avoiding collisions
+					* hash function is sha-3 512
+					* content hashsum = hash(content.text) + '+' + hash(hash(content.text)+content.text)
+					* I think this approach will give minimal possible chance of collision, when diferent content will have the same hashsum
+				* choose and connect sha-3 npm module
+				* implement hashsum api call
+					* simple get+param
+					* `universal post+body`
+				* add hashsum field to db and use it for automated control of content uniqueness
+				* check matching text and hashsum on /:knit/read/:type
+					* implement
+					* check all content records
+				* implement api call to add new content with text and hashsum
 	* Make handy tools for content exchange
 		* Add new content frontend
 		* User dashboard frontend
