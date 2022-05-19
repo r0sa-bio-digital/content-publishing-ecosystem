@@ -201,10 +201,11 @@ Content publishing ecosystem to organize content exchange between authors and co
 				* add hashsum field to db and use it for automated control of content uniqueness
 				* check matching text and hashsum on /:knit/read/:type
 					* implement
-					* `check all content records`
-				* implement api call to add new content with text and hashsum
+					* check all content records
 	* Make handy tools for content exchange
 		* Add new content frontend
+			* `implement api call to add new content with text and hashsum`
+			* design and implement page to add content
 		* User dashboard frontend
 		* View content frontend types extension
 			* markdown
