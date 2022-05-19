@@ -61,7 +61,14 @@ Content publishing ecosystem to organize content exchange between authors and co
 
 ## How to check knits integrity
 
-* Required to be done...
+1. total count of records in knits table must be equal to total count of records in knits_unite_all view
+	1. otherwise there are some errors in tables structure
+1. total count of records in knits_check_integrity view must be 0
+	1. if there are some records, it means there are errors in tables structure
+	1. id_knits != null && id_unite == null && source == null - unused record in knits table. 
+		1. solution: delete record or use it for creating entity
+	1. id_knits == null && id_unite != null && source != null - unregistered record with id_unite from source table
+		1. solution: add id_unite to knits table
 
 ## c0ntent c01n exchange rates
 
@@ -172,8 +179,8 @@ Content publishing ecosystem to organize content exchange between authors and co
 			* all tables' pks must be stored in knits, every knits entry must have a corresponding record in some other table
 				* implement
 				* find and fix all integrity issues
-				* `write documentation how to check integrity`
-		* Move all api call prices from code to api call entities table
+				* write documentation how to check integrity
+		* `Move all api call prices from code to api call entities table`
 		* No limit for text content
 			* now text content is limited by 8191 bytes cause of indexing mechanism
 			* as a solution: index md5 of the content instead of full content
