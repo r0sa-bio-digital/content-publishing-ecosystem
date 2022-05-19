@@ -7,7 +7,7 @@ const http = require('http').Server(app);
 const pg = require('pg');
 const connectionString = process.env.DATABASE_URL;
 const port = process.env.PORT || 3000;
-const defaultHostingProvider = { id: process.env.HOSTER_ID, name: process.env.HOSTER_NAME, byte_price: parseFloat(process.env.HOSTER_BYTE_PRICE) }; // TODO: implement proper hosting provider detection
+const defaultHostingProvider = {};
 const users = {};
 const apiCallIds = {};
 app.use(express.json({limit: '10mb'}));
@@ -175,6 +175,15 @@ runQuery(queryString).then( async (result) => {
     {
         const user = result[i];
         users[user.id] = user;
+    }
+    // cache default hosting provider // TODO: implement multiprovider concept
+    const queryString1 = 'SELECT * FROM "public"."hosting_providers" ORDER BY "id" LIMIT 5000 OFFSET 0;';
+    const hostingProvidersTable = await runQuery(queryString1);
+    {
+        const r = hostingProvidersTable[0];
+        defaultHostingProvider.id = r.id;
+        defaultHostingProvider.name = r.name;
+        defaultHostingProvider.byte_price = parseFloat(r.byte_price);
     }
     // cache api call ids list
     const queryString2 = 'SELECT * FROM "public"."api_calls" ORDER BY "id" LIMIT 5000 OFFSET 0;';
