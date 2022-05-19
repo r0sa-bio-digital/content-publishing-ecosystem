@@ -208,6 +208,15 @@ runQuery(queryString).then( async (result) => {
         res.set('Content-Type', 'text/html');
         res.send(resultTimestamp.toISOString());
     });
+    app.get('/:text/hashsum/compute', auth.user, setApiCallId, async (req, res) => { // TODO: convert to post and send text in body to avoid text size limitation
+        const text = req.params.text;
+        const primaryHash = hash(text);
+        const secondaryHash = hash(primaryHash + text);
+        const finalHash = primaryHash + '+' + secondaryHash;
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, req.apiCallPrice, undefined, req.apiCallId);
+        res.set('Content-Type', 'text/html');
+        res.send(finalHash);
+    });
     app.get('/:knit/read/:type', auth.user, setApiCallId, async (req, res) => {
         const id = req.params.knit;
         const contentType = req.params.type;
