@@ -180,7 +180,10 @@ Content publishing ecosystem to organize content exchange between authors and co
 				* implement
 				* find and fix all integrity issues
 				* write documentation how to check integrity
-		* `Move all api call prices from code to api call entities table`
+		* Move all api call prices from code to api call entities table
+			* base api call price to api_calls
+			* byte price to hosting_providers
+			* `read defaultHostingProvider from db and remove it from env`
 		* No limit for text content
 			* now text content is limited by 8191 bytes cause of indexing mechanism
 			* as a solution: index md5 of the content instead of full content
