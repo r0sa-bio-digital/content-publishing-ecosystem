@@ -208,8 +208,8 @@ runQuery(queryString).then( async (result) => {
         res.set('Content-Type', 'text/html');
         res.send(resultTimestamp.toISOString());
     });
-    app.get('/:text/hashsum/compute', auth.user, setApiCallId, async (req, res) => { // TODO: convert to post and send text in body to avoid text size limitation
-        const text = req.params.text;
+    app.post('/hashsum/compute', auth.user, setApiCallId, async (req, res) => {
+        const text = req.body.text;
         const primaryHash = hash(text);
         const secondaryHash = hash(primaryHash + text);
         const finalHash = primaryHash + '+' + secondaryHash;
