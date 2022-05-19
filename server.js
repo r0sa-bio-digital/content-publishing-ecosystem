@@ -159,7 +159,7 @@ const setApiCallId = (req, res, next) => {
     const apiCallPrice = apiCallDesc.price;
     if (!knit.validate(apiCallId))
         return res.status(500).json({ message: `Invalid API Call Id for ${apiCallName}` });
-    if (!isNaN(apiCallPrice))
+    if (isNaN(apiCallPrice))
         return res.status(500).json({ message: `Invalid API Call Price for ${apiCallName}` });
     req.apiCallId = apiCallId;
     req.apiCallPrice = parseInt(apiCallPrice);
