@@ -10,6 +10,7 @@
     "dependencies": {
         "ordered-uuid-v4": "^0.2.1",
         "express": "^4.17.1",
-        "pg": "^8.6.0"
+        "pg": "^8.6.0",
+        "js-sha3": "^0.8.0"
     }
 }

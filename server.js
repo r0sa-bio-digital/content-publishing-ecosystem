@@ -5,6 +5,7 @@ const express = require('express');
 const app = express();
 const http = require('http').Server(app);
 const pg = require('pg');
+const hash = require('js-sha3').sha3_512;
 const connectionString = process.env.DATABASE_URL;
 const port = process.env.PORT || 3000;
 const defaultHostingProvider = {};
@@ -218,6 +219,7 @@ runQuery(queryString).then( async (result) => {
             const apiCallTotalPrice = req.apiCallPrice + trafficPrice;
             await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallTotalPrice, id, req.apiCallId);
             await authorFeeTransfer(req.user.id, author, author_fee, id, req.apiCallId);
+            console.log(hash(text));
             if (contentType === 'jpeg')
             {
                 res.set('Content-Type', 'text/html');
