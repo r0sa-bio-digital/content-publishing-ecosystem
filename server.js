@@ -96,7 +96,8 @@ async function getContentRecord(contentId) {
 }
 async function addContentRecord(contentDesc) {
     const {id, text, hashsum, author, author_fee} = contentDesc;
-    const queryString = `INSERT INTO "public"."content" ("id", "text", "author", "author_fee", "hashsum") VALUES ('${id}', '${text}', '${author}', ${author_fee}, '${hashsum}');`;
+    const queryString = `INSERT INTO "public"."knits" ("id") VALUES ('${id}');\n` +
+        `INSERT INTO "public"."content" ("id", "text", "author", "author_fee", "hashsum") VALUES ('${id}', '${text}', '${author}', ${author_fee}, '${hashsum}');\n`;
     return await runQuery(queryString);
 }
 function getReadableNumber(numberText) {

@@ -204,7 +204,13 @@ Content publishing ecosystem to organize content exchange between authors and co
 					* check all content records
 	* Make handy tools for content exchange
 		* Add new content frontend
-			* `implement api call to add new content with text and hashsum`
+			* implement api call to add new content with text and hashsum
+				* `implement bast case`
+				* handle errors
+					* knit already occupied
+					* hashsum already occupied
+					* in case "knits insert success, content insert failed" don't create useless records in knits
+					* other problem
 			* design and implement page to add content
 		* User dashboard frontend
 		* View content frontend types extension
