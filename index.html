@@ -216,6 +216,7 @@
                     return;
                 }
                 stateElem.textContent = ' loading...';
+                const accessToken = localStorage.getItem('accessToken');
                 const response1 = await fetch(
                     apiUrl + 'knit/generate',
                     {
