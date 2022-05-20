@@ -206,12 +206,12 @@ Content publishing ecosystem to organize content exchange between authors and co
 		* Add new content frontend
 			* implement api call to add new content with text and hashsum
 				* implement best case
-				* `handle errors`
+				* handle errors
 					* knit already occupied
 					* hashsum already occupied
 					* in case "knits insert success, content insert failed" don't create useless records in knits
 					* other problem
-			* design and implement page to add content
+			* `design and implement page to add content`
 		* User dashboard frontend
 		* View content frontend types extension
 			* markdown

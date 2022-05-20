@@ -276,7 +276,13 @@ runQuery(queryString).then( async (result) => {
         await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallTotalPrice, id, req.apiCallId);
         const result = await addContentRecord({id, text, hashsum, author, author_fee});
         if (result && result.error)
-            res.status(500).json({ id, message: result.error });
+        {
+            const message = (result.error.code === '23505' && result.error.table === 'knits' && result.error.constraint === 'knytes_pkey') ? `knit ${id} already added to the system`
+                :  (result.error.code === '23505' && result.error.table === 'content' && result.error.constraint === 'content_uniquetext') ? `given content already was added to the system`
+                    : result.error.code === '22P02' ? `${id} is not a correct knit`
+                        : 'unexpected error';
+            res.status(500).json({ id, message, details: result.error });
+        }
         else
             res.status(200).json({ id, message: 'content added successfully' });
     });
