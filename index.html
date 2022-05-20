@@ -216,20 +216,37 @@
                     return;
                 }
                 stateElem.textContent = ' loading...';
-                const response = await fetch(apiUrl + 'knit/generate');
-                if (response.status !== 200)
+                const response1 = await fetch(
+                    apiUrl + 'knit/generate',
+                    {
+                        method: 'POST', 
+                        headers: {
+                            Authorization: `Basic ${btoa(accessToken + ':')}`
+                        }
+                    }
+                );
+                if (response1.status !== 200)
                 {
                     stateElem.textContent = ' failed to generate new knit';
                     return;
                 }
-                const newKnit = await response.text();
+                const newKnit = await response1.text();
                 const body = {text, author_fee};
-                const response = await fetch(apiUrl + `${newKnit}/add`);
-                if (response.status !== 200)
+                const response2 = await fetch(
+                    apiUrl + `${newKnit}/add`,
+                    {
+                        method: 'POST', 
+                        headers: {
+                            Authorization: `Basic ${btoa(accessToken + ':')}`
+                        }, 
+                        body: JSON.stringify(body),
+                    }
+                );
+                if (response2.status !== 200)
                     stateElem.textContent = ' failed to add new content';
                 else
                 {
-                    stateElem.textContent = newKnit + ': ' + (await response.json()).message;
+                    stateElem.textContent = newKnit + ': ' + (await response2.json()).message;
                     document.getElementById('newContentSubmitButton').disabled = true;
                 }
             }
