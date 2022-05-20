@@ -276,8 +276,10 @@ runQuery(queryString).then( async (result) => {
         await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallTotalPrice, id, req.apiCallId);
         // TODO: handle errors
         const result = await addContentRecord({id, text, hashsum, author, author_fee});
-        console.log(result);
-        res.status(200).json({ id, message: 'content added successfully' });
+        if (result && result.error)
+            res.status(500).json({ id, message: JSON.stringify(result.error) });
+        else
+            res.status(200).json({ id, message: 'content added successfully' });
     });
     //app.post('/:knit/update/', auth.user, setApiCallId, async (req, res) => { // TODO: implement
     app.get('/deposit/:user/:amount/:currency', auth.provider, setApiCallId, async (req, res) => {

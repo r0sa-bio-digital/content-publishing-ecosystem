@@ -205,7 +205,7 @@ Content publishing ecosystem to organize content exchange between authors and co
 	* Make handy tools for content exchange
 		* Add new content frontend
 			* implement api call to add new content with text and hashsum
-				* implement bast case
+				* implement best case
 				* `handle errors`
 					* knit already occupied
 					* hashsum already occupied
