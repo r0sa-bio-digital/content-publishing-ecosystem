@@ -151,7 +151,6 @@ Content publishing ecosystem to organize content exchange between authors and co
 			* Get user transaction history
 		* View content frontend
 			* api calls
-				* text
 				* html/css
 				* svg
 				* jpg
@@ -214,9 +213,12 @@ Content publishing ecosystem to organize content exchange between authors and co
 			* `design and implement page to add content`
 		* User dashboard frontend
 		* View content frontend types extension
+			* plain text
+				* for example, to see html page as a source code, but without highlight
 			* markdown
 			* png
 			* gif
+			* html/css/js/json source code
 		* Review content delivery usability in real content oriented communication
 	* Balance economics
 		* understand complete currency cycle

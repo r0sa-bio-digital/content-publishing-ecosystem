@@ -9,10 +9,12 @@
 
             function getContentDescription()
             {
-                const showRequest = location.search.split('?')[1];
-                if (!showRequest)
+                const mainRequest = location.search.split('?')[1];
+                if (!mainRequest)
                     return null;
-                const showRequestParts = showRequest.split('&');
+                if (mainRequest === 'add')
+                    return {add: true};
+                const showRequestParts = mainRequest.split('&');
                 const knit = showRequestParts[0], type = showRequestParts[1];
                 if (knit && type)
                     return {knit, type};
@@ -27,11 +29,16 @@
                 else
                 {
                     document.getElementById('loading').style.display = 'block';
-                    const showContentDescription = getContentDescription();
-                    if (showContentDescription)
+                    const contentDescription = getContentDescription();
+                    if (contentDescription.add)
+                    {
+                        document.getElementById('addContent').style.display = 'block';
+                        document.getElementById('loading').style.display = 'none';
+                    }
+                    else if (contentDescription.knit && contentDescription.type)
                     {
                         const readResponse = await fetch(
-                            apiUrl + `${showContentDescription.knit}/read/${showContentDescription.type}`,
+                            apiUrl + `${contentDescription.knit}/read/${contentDescription.type}`,
                             {
                                 method: 'GET',
                                 headers: {
@@ -247,6 +254,9 @@
             </div>
         </div>
         <div id="show" style="display: none;">
+        </div>
+        <div id="addContent" style="display: none;">
+            TODO: implement addition of new content here
         </div>
         <div id="failed" style="display: none;">
             <span>login failed</span>
