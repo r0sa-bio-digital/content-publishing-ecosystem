@@ -204,6 +204,35 @@
                 else
                     historyElement.innerHTML = '<tr><td>failed</td><td></td><td></td><td></td></tr>';
             }
+            function onNewContentSubmitClick()
+            {
+                const stateElem = document.getElementById('newContentSubmitResult');
+                const text = document.getElementById('newContentText').value;
+                const author_fee_string = document.getElementById('newContentAuthorFee').value;
+                const author_fee = parseInt(author_fee_string);
+                if (isNaN(author_fee) || author_fee_string !== String(author_fee))
+                {
+                    stateElem.textContent = ' author fee must be integer';
+                    return;
+                }
+                stateElem.textContent = ' loading...';
+                const response = await fetch(apiUrl + 'knit/generate');
+                if (response.status !== 200)
+                {
+                    stateElem.textContent = ' failed to generate new knit';
+                    return;
+                }
+                const newKnit = await response.text();
+                const body = {text, author_fee};
+                const response = await fetch(apiUrl + `${newKnit}/add`);
+                if (response.status !== 200)
+                    stateElem.textContent = ' failed to add new content';
+                else
+                {
+                    stateElem.textContent = newKnit + ': ' + (await response.json()).message;
+                    document.getElementById('newContentSubmitButton').disabled = true;
+                }
+            }
         </script>
     </head>
     <body onload="onLoad();">
@@ -256,7 +285,15 @@
         <div id="show" style="display: none;">
         </div>
         <div id="addContent" style="display: none;">
-            TODO: implement addition of new content here
+            <h2>Add new content</h2>
+            <h3>text</h3>
+            <textarea id="newContentText"></textarea>
+            <h3>author fee</h3>
+            <input id="newContentAuthorFee" type="text">
+            <div>
+                <button id="newContentSubmitButton" onclick="onNewContentSubmitClick();">submit</button>
+                <span id="newContentSubmitState"></span>
+            </div>
         </div>
         <div id="failed" style="display: none;">
             <span>login failed</span>
