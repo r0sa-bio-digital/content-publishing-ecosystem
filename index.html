@@ -238,7 +238,8 @@
                     {
                         method: 'POST',
                         headers: {
-                            Authorization: `Basic ${btoa(accessToken + ':')}`
+                            Authorization: `Basic ${btoa(accessToken + ':')}`,
+                            'Content-Type': 'application/json',
                         }, 
                         body: JSON.stringify(body),
                     }
