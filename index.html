@@ -250,10 +250,14 @@
                     }
                 );
                 if (response2.status !== 200)
-                    stateElem.textContent = ' failed to add new content';
+                {
+                    const report = await response2.json();
+                    stateElem.textContent = ' failed to add new content. ' + report.message;
+                    console.warn(report.details);
+                }
                 else
                 {
-                    stateElem.textContent = newKnit + ': ' + (await response2.json()).message;
+                    stateElem.textContent = (await response2.json()).message + '. Knit: ' + newKnit;
                     document.getElementById('newContentSubmitButton').disabled = true;
                 }
             }
