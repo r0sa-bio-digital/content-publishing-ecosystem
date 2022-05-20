@@ -94,6 +94,11 @@ async function getContentRecord(contentId) {
     const queryString = 'SELECT * FROM "public"."content" WHERE "id" = \'' + contentId + '\';';
     return await runQuery(queryString);
 }
+async function addContentRecord(contentDesc) {
+    const {id, text, hashsum, author, author_fee} = contentDesc;
+    const queryString = `INSERT INTO "public"."content" ("id", "text", "author", "author_fee", "hashsum") VALUES ('${id}', '${text}', '${author}', ${author_fee}, '${hashsum}');`;
+    return await runQuery(queryString);
+}
 function getReadableNumber(numberText) {
     return numberText.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
@@ -259,6 +264,21 @@ runQuery(queryString).then( async (result) => {
             res.status(404).json({ message: 'Content not found' });
         }
     });
+    app.post('/:knit/add/', auth.user, setApiCallId, async (req, res) => {
+        const id = req.params.knit;
+        const text = req.body.text;
+        const hashsum = computeTextHashsum(text);
+        const author = req.user.id;
+        const author_fee = req.body.author_fee;
+        const trafficPrice = Math.ceil(defaultHostingProvider.byte_price * text.length);
+        const apiCallTotalPrice = req.apiCallPrice + trafficPrice;
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallTotalPrice, id, req.apiCallId);
+        // TODO: handle errors
+        const result = await addContentRecord({id, text, hashsum, author, author_fee});
+        console.log(result);
+        res.status(200).json({ id, message: 'content added successfully' });
+    });
+    //app.post('/:knit/update/', auth.user, setApiCallId, async (req, res) => { // TODO: implement
     app.get('/deposit/:user/:amount/:currency', auth.provider, setApiCallId, async (req, res) => {
         const userId = req.params.user;
         const fundsAmount = parseInt(req.params.amount);

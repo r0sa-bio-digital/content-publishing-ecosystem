@@ -211,6 +211,7 @@ Content publishing ecosystem to organize content exchange between authors and co
 			* markdown
 			* png
 			* gif
+		* Review content delivery usability in real content oriented communication
 	* Balance economics
 		* understand complete currency cycle
 		* understand situation when user and provider is a same person
