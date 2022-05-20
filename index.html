@@ -220,7 +220,7 @@
                 const response1 = await fetch(
                     apiUrl + 'knit/generate',
                     {
-                        method: 'POST', 
+                        method: 'GET',
                         headers: {
                             Authorization: `Basic ${btoa(accessToken + ':')}`
                         }
@@ -236,7 +236,7 @@
                 const response2 = await fetch(
                     apiUrl + `${newKnit}/add`,
                     {
-                        method: 'POST', 
+                        method: 'POST',
                         headers: {
                             Authorization: `Basic ${btoa(accessToken + ':')}`
                         }, 
