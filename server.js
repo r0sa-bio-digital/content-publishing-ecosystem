@@ -274,10 +274,9 @@ runQuery(queryString).then( async (result) => {
         const trafficPrice = Math.ceil(defaultHostingProvider.byte_price * text.length);
         const apiCallTotalPrice = req.apiCallPrice + trafficPrice;
         await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallTotalPrice, id, req.apiCallId);
-        // TODO: handle errors
         const result = await addContentRecord({id, text, hashsum, author, author_fee});
         if (result && result.error)
-            res.status(500).json({ id, message: JSON.stringify(result.error) });
+            res.status(500).json({ id, message: result.error });
         else
             res.status(200).json({ id, message: 'content added successfully' });
     });
