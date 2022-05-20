@@ -205,8 +205,8 @@ Content publishing ecosystem to organize content exchange between authors and co
 	* Make handy tools for content exchange
 		* Add new content frontend
 			* implement api call to add new content with text and hashsum
-				* `implement bast case`
-				* handle errors
+				* implement bast case
+				* `handle errors`
 					* knit already occupied
 					* hashsum already occupied
 					* in case "knits insert success, content insert failed" don't create useless records in knits
@@ -236,6 +236,7 @@ Content publishing ecosystem to organize content exchange between authors and co
 		* Add at least 5 interested members
 		* Make exclusive presentation of c0ntent by c0ntent itself
 		* Organize first c01n sale inside of the community
+	* Think about tools for deleting content from the system
 * Raise funds for the project development
 * Research best db for the transactions log, because postgresql is too much costly
 	* Check out ClickHouse first
