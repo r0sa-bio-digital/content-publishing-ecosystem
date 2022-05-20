@@ -30,12 +30,12 @@
                 {
                     document.getElementById('loading').style.display = 'block';
                     const contentDescription = getContentDescription();
-                    if (contentDescription.add)
+                    if (contentDescription && contentDescription.add)
                     {
                         document.getElementById('addContent').style.display = 'block';
                         document.getElementById('loading').style.display = 'none';
                     }
-                    else if (contentDescription.knit && contentDescription.type)
+                    else if (contentDescription && contentDescription.knit && contentDescription.type)
                     {
                         const readResponse = await fetch(
                             apiUrl + `${contentDescription.knit}/read/${contentDescription.type}`,
