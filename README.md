@@ -224,7 +224,7 @@ Content publishing ecosystem to organize content exchange between authors and co
 		* Fix 404 state for content
 			* test case: c0ntent.herokuapp.com/?0&0
 				* it must show 'content not found', n=but shows "login failed [reset]"
-		* `Add/view content frontend extension`
+		* Add/view content frontend extension
 			* ideas
 				* think about adding 'data:image/jpeg;base64,' part to text content for all jpegs
 				* then it will be possible to use png, gif etc. types as well
@@ -232,8 +232,7 @@ Content publishing ecosystem to organize content exchange between authors and co
 			* formats
 				* png
 				* gif
-		* Review content delivery usability in real content oriented communication
-		* View content frontend types extension
+		* `View content frontend types extension`
 			* plain text
 				* for example, to see html page as a source code, but without highlight
 			* markdown
@@ -242,6 +241,7 @@ Content publishing ecosystem to organize content exchange between authors and co
 		* Add update content functionality
 			* api call
 			* frontend
+		* Review content delivery usability in real content oriented communication
 		* Rework readme
 			* move work plan to content typed as markdown
 			* replace exchange rates table by page link/api call
