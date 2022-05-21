@@ -252,18 +252,19 @@ Content publishing ecosystem to organize content exchange between authors and co
 				* bank keeps fiat/crypto money in all possible currencies to provide exchange: money to c01n and c01n to money
 					* think about hosting provider and bank - is it one entity or they could be separated
 				* investor puts big amount of fiat/crypto money (more than he needs for normal usage) into the system to get profit in future
+		* User dashboard frontend
+			* limit transactions list by default by last N operations
+			* add list of all owned content records
+			* update layout outfit and overall ux
 		* Add content frontend extension - code editor with preview
 			* html/css/js
 			* css
 			* js
 			* json
 			* svg
-		* User dashboard frontend
-			* limit transactions list by default by last N operations
-			* add list of all owned content records
-			* update layout outfit and overall ux
 		* View content frontend types extension
 			* source code html/css/js/json
+		* Review and adapt all frantend layout for mobile web
 	* Balance economics
 		* understand complete currency cycle
 		* understand situation when user and provider is a same person
