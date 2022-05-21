@@ -242,10 +242,10 @@ runQuery(queryString).then( async (result) => {
                 res.status(500).json({ message: 'Invalid content hashsum' });
             else
             {
-                if (contentType === 'jpeg')
+                if (contentType === 'image')
                 {
                     res.set('Content-Type', 'text/html');
-                    res.send(`<img src="data:image/jpeg;base64,${text}" />`);
+                    res.send(`<img src="${text}" />`);
                 }
                 else if (contentType === 'svg')
                 {
