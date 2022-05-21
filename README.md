@@ -6,6 +6,7 @@ Content publishing ecosystem to organize content exchange between authors and co
 
 * c0ntent.dao
 * c0ntent.nft
+* c0ntent.coin
 
 ## Possible domains for web2 entry point
 
@@ -30,6 +31,11 @@ Content publishing ecosystem to organize content exchange between authors and co
 * Heroku
 * PostgreSQL
 * Node.js
+* Sublime Text 3
+* Table Plus
+* Insomnia
+* Opera
+* Telegram
 
 ## Roles
 
@@ -210,16 +216,42 @@ Content publishing ecosystem to organize content exchange between authors and co
 					* hashsum already occupied
 					* in case "knits insert success, content insert failed" don't create useless records in knits
 					* other problem
-			* `design and implement page to add content`
-		* User dashboard frontend
+			* design and implement page to add content
+				* basic plain text editor
+				* `jpeg uploader`
+		* Review content delivery usability in real content oriented communication
 		* View content frontend types extension
 			* plain text
 				* for example, to see html page as a source code, but without highlight
 			* markdown
 			* png
 			* gif
-			* html/css/js/json source code
-		* Review content delivery usability in real content oriented communication
+		* Add content frontend extension
+			* markdown code editor with preview
+			* png uploader with preview
+			* gif uploader with preview
+		* Add update content functionality
+			* api call
+			* frontend
+		* Rework readme
+			* move work plan to content typed as markdown
+			* replace exchange rates table by page link/api call
+			* update exchange rates with actual official rates
+			* review anf update all how-to
+			* move all how-tos to content
+			* think about adding roles for banks and investors
+				* bank keeps fiat/crypto money in all possible currencies to provide exchange: money to c01n and c01n to money
+					* think about hosting provider and bank - is it one entity or they could be separated
+				* investor puts big amount of fiat/crypto money (more than he needs for normal usage) into the system to get profit in future
+		* Add content frontend extension - code editor with preview
+			* html/css/js
+			* css
+			* js
+			* json
+			* svg
+		* User dashboard frontend
+		* View content frontend types extension
+			* source code html/css/js/json
 	* Balance economics
 		* understand complete currency cycle
 		* understand situation when user and provider is a same person
