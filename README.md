@@ -250,6 +250,9 @@ Content publishing ecosystem to organize content exchange between authors and co
 			* json
 			* svg
 		* User dashboard frontend
+			* limit transactions list by default by last N operations
+			* add list of all owned content records
+			* update layout outfit and overall ux
 		* View content frontend types extension
 			* source code html/css/js/json
 	* Balance economics
