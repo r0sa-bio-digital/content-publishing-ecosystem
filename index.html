@@ -44,7 +44,7 @@
                         if (loginResponse.status === 200)
                         {
                             const userData = await loginResponse.json();
-                            document.getElementById('creatorAccountName').textContent = userData.name;
+                            document.getElementById('authorAccountName').textContent = userData.name;
                             document.getElementById('addContent').style.display = 'block';
                         }
                         else
@@ -336,7 +336,7 @@
         <div id="addContent" style="display: none;">
             <h3>Add new content</h3>
             <div>
-                <span>name: </span><span id="creatorAccountName"></span>
+                <span>author: </span><span id="authorAccountName"></span>
                 <button onclick="onResetClick();">logout</button>
             </div>
             <textarea id="newContentText"></textarea>
