@@ -315,7 +315,10 @@
         <div id="addContent" style="display: none;">
             <h3>Add new content</h3>
             <textarea id="newContentText"></textarea>
-            <label for="newContentAuthorFee">author fee </label><input id="newContentAuthorFee" type="text">
+            <div>
+                <label for="newContentAuthorFee">author fee </label>
+                <input id="newContentAuthorFee" type="number">                
+            </div>
             <div style="margin-top: 1em;">
                 <button id="newContentSubmitButton" onclick="onNewContentSubmitClick();">submit</button>
                 <span id="newContentSubmitState"></span>
