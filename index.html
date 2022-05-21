@@ -53,7 +53,7 @@
                             document.getElementById('show').style.display = 'block';
                         }
                         else
-                            document.getElementById('failed').style.display = 'block';
+                            document.getElementById('notFound').style.display = 'block';
                     }
                     else
                     {
@@ -74,7 +74,7 @@
                             document.getElementById('account').style.display = 'block';
                         }
                         else
-                            document.getElementById('failed').style.display = 'block';
+                            document.getElementById('loginFailed').style.display = 'block';
                     }
                     document.getElementById('loading').style.display = 'none';
                 }
@@ -89,7 +89,8 @@
             {
                 localStorage.removeItem('accessToken');
                 document.getElementById('loading').style.display = 'none';
-                document.getElementById('failed').style.display = 'none';
+                document.getElementById('notFound').style.display = 'none';
+                document.getElementById('loginFailed').style.display = 'none';
                 document.getElementById('account').style.display = 'none';
                 onLoad();
             }
@@ -333,7 +334,10 @@
                 <span id="newContentSubmitState"></span>
             </div>
         </div>
-        <div id="failed" style="display: none;">
+        <div id="notFound" style="display: none;">
+            <span>content not found</span>
+        </div>
+        <div id="loginFailed" style="display: none;">
             <span>login failed</span>
             <button onclick="onResetClick();">reset</button>
         </div>
