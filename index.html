@@ -261,6 +261,12 @@
                     document.getElementById('newContentSubmitButton').disabled = true;
                 }
             }
+            function encodeImageFileAsURL(element) {
+                const file = element.files[0];
+                const reader = new FileReader();
+                reader.onloadend = () => document.getElementById('newContentText').value = reader.result;
+                reader.readAsDataURL(file);
+            }
         </script>
     </head>
     <body onload="onLoad();">
@@ -315,6 +321,9 @@
         <div id="addContent" style="display: none;">
             <h3>Add new content</h3>
             <textarea id="newContentText"></textarea>
+            <div>
+                <input type="file" accept=".jpg,.jpeg" onchange="encodeImageFileAsURL(this);" /> // TODO: add ,.png,.gif to accept as well
+            </div>
             <div>
                 <label for="newContentAuthorFee">author fee </label>
                 <input id="newContentAuthorFee" type="number">                
