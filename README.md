@@ -218,23 +218,27 @@ Content publishing ecosystem to organize content exchange between authors and co
 					* other problem
 			* design and implement page to add content
 				* basic plain text editor
-				* `jpeg uploader`
+				* jpeg uploader
 					* https://stackoverflow.com/questions/6150289/how-can-i-convert-an-image-into-base64-string-using-javascript
 						* 3. Approach: Images from the local file system
-					* think about adding 'data:image/jpeg;base64,' part to text content for all jpegs
-					* then it will be possible to use png, gif etc. types as well
-					* think about moving from &jpeg type to &image type to render jpeg/png/gif in unified way
+		* `Fix 404 state for content`
+			* test case: c0ntent.herokuapp.com/?0&0
+				* it must show 'content not found', n=but shows "login failed [reset]"
+		* Add/view content frontend extension
+			* ideas
+				* think about adding 'data:image/jpeg;base64,' part to text content for all jpegs
+				* then it will be possible to use png, gif etc. types as well
+				* think about moving from &jpeg type to &image type to render jpeg/png/gif in unified way
+			* formats
+				* png
+				* gif
 		* Review content delivery usability in real content oriented communication
 		* View content frontend types extension
 			* plain text
 				* for example, to see html page as a source code, but without highlight
 			* markdown
-			* png
-			* gif
 		* Add content frontend extension
 			* markdown code editor with preview
-			* png uploader with preview
-			* gif uploader with preview
 		* Add update content functionality
 			* api call
 			* frontend
