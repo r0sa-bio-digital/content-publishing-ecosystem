@@ -32,7 +32,23 @@
                     const contentDescription = getContentDescription();
                     if (contentDescription && contentDescription.add)
                     {
-                        document.getElementById('addContent').style.display = 'block';
+                        const loginResponse = await fetch(
+                            apiUrl + 'user/login',
+                            {
+                                method: 'GET',
+                                headers: {
+                                    Authorization: `Basic ${btoa(accessToken + ':')}`
+                                }
+                            }
+                        );
+                        if (loginResponse.status === 200)
+                        {
+                            const userData = await loginResponse.json();
+                            document.getElementById('creatorAccountName').textContent = userData.name;
+                            document.getElementById('addContent').style.display = 'block';
+                        }
+                        else
+                            document.getElementById('loginFailed').style.display = 'block';
                         document.getElementById('loading').style.display = 'none';
                     }
                     else if (contentDescription && contentDescription.knit && contentDescription.type)
@@ -52,8 +68,10 @@
                             document.getElementById('show').innerHTML = content;
                             document.getElementById('show').style.display = 'block';
                         }
-                        else
+                        else if (readResponse.status === 404)
                             document.getElementById('notFound').style.display = 'block';
+                        else
+                            document.getElementById('loginFailed').style.display = 'block';
                     }
                     else
                     {
@@ -69,7 +87,6 @@
                         if (loginResponse.status === 200)
                         {
                             const userData = await loginResponse.json();
-                            document.getElementById('accountId').textContent = userData.id;
                             document.getElementById('accountName').textContent = userData.name;
                             document.getElementById('account').style.display = 'block';
                         }
@@ -280,9 +297,6 @@
         </div>
         <div id="account" style="display: none;">
             <div>
-                <span>id: </span><span id="accountId"></span>
-            </div>
-            <div>
                 <span>name: </span><span id="accountName"></span>
                 <button onclick="onResetClick();">logout</button>
             </div>
@@ -321,6 +335,10 @@
         </div>
         <div id="addContent" style="display: none;">
             <h3>Add new content</h3>
+            <div>
+                <span>name: </span><span id="creatorAccountName"></span>
+                <button onclick="onResetClick();">logout</button>
+            </div>
             <textarea id="newContentText"></textarea>
             <div>
                 <input type="file" accept=".jpg,.jpeg" onchange="encodeImageFileAsURL(this);" /> // TODO: add ,.png,.gif to accept as well
