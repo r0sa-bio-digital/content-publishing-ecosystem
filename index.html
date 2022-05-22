@@ -65,7 +65,10 @@
                         if (readResponse.status === 200)
                         {
                             const content = await readResponse.text();
-                            document.getElementById('show').innerHTML = content;
+                            if (contentDescription.type === 'plaintext')
+                                document.getElementById('show').textContent = content;
+                            else
+                                document.getElementById('show').innerHTML = content;
                             document.getElementById('show').style.display = 'block';
                         }
                         else if (readResponse.status === 404)

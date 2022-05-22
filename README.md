@@ -236,8 +236,8 @@ Content publishing ecosystem to organize content exchange between authors and co
 			* `plain text`
 				* for example, to see html page as a source code, but without highlight
 			* markdown
-		* Add content frontend extension
-			* markdown code editor with preview
+		* Refactoring for content show
+			* to use one concept to show typed content everywhere
 		* Add update content functionality
 			* api call
 			* frontend
@@ -262,6 +262,7 @@ Content publishing ecosystem to organize content exchange between authors and co
 			* js
 			* json
 			* svg
+			* markdown
 		* View content frontend types extension
 			* source code html/css/js/json
 		* Review and adapt all frantend layout for mobile web
