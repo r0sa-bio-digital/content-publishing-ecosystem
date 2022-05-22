@@ -235,6 +235,7 @@ Content publishing ecosystem to organize content exchange between authors and co
 		* View content frontend types extension
 			* `plain text`
 				* for example, to see html page as a source code, but without highlight
+				* fix 500 error handler for content show
 			* markdown
 		* Refactoring for content show
 			* to use one concept to show typed content everywhere
