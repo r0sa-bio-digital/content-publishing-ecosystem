@@ -6,6 +6,7 @@ const app = express();
 const http = require('http').Server(app);
 const pg = require('pg');
 const hash = require('js-sha3').sha3_512;
+const markdown = require('marked').marked;
 const connectionString = process.env.DATABASE_URL;
 const port = process.env.PORT || 3000;
 const defaultHostingProvider = {};
@@ -256,6 +257,11 @@ runQuery(queryString).then( async (result) => {
                 {
                     res.set('Content-Type', 'text/html');
                     res.send(text);
+                }
+                else if (contentType === 'markdown')
+                {
+                    res.set('Content-Type', 'text/html');
+                    res.send(markdown.parse(text));
                 }
                 else if (contentType === 'plaintext')
                 {
