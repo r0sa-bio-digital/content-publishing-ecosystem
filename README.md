@@ -232,8 +232,8 @@ Content publishing ecosystem to organize content exchange between authors and co
 			* formats
 				* png
 				* gif
-		* `View content frontend types extension`
-			* plain text
+		* View content frontend types extension
+			* `plain text`
 				* for example, to see html page as a source code, but without highlight
 			* markdown
 		* Add content frontend extension

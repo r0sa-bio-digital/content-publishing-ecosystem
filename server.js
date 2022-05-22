@@ -252,11 +252,18 @@ runQuery(queryString).then( async (result) => {
                     res.set('Content-Type', 'image/svg+xml');
                     res.send(text);
                 }
-                else
+                else if (contentType === 'html')
                 {
                     res.set('Content-Type', 'text/html');
                     res.send(text);
                 }
+                else if (contentType === 'plaintext')
+                {
+                    res.set('Content-Type', 'text/plain');
+                    res.send(text);
+                }
+                else
+                    res.status(500).json({ message: 'Invalid content type "' + contentType + '"' });
             }
         }
         else
