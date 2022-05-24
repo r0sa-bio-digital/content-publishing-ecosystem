@@ -237,8 +237,12 @@ Content publishing ecosystem to organize content exchange between authors and co
 				* for example, to see html page as a source code, but without highlight
 			* fix 500 error handler for content show
 			* markdown
-		* `Refactoring for content show`
+		* Refactoring for content show
 			* to use one concept to show typed content everywhere
+			* the idea is to show "naked" content by given read url
+				* but redirect to login/error pages in case of login failure or server side errors
+			* `bugfix: add page logout`
+			* implement prototype of page with naked resource view
 		* Add update content functionality
 			* api call
 			* frontend
