@@ -76,6 +76,16 @@ Content publishing ecosystem to organize content exchange between authors and co
 	1. id_knits == null && id_unite != null && source != null - unregistered record with id_unite from source table
 		1. solution: add id_unite to knits table
 
+## Content storage, processing and showing rules
+
+* store content in db as unicode utf-8 text (binary -> base64)
+* return from server content type text/html for all types of read requests
+* use read requests for showing content in browser without any additional transformations
+	* all needed transformations must be done by server, browser expects to always get html content
+* be ready to implement additional api method to return specific type of content
+	* text/html, text/plain, text/markdown, image/jpeg, image/gif, image/png, image/svg+xml
+	* do it only in case of real need
+
 ## c0ntent c01n exchange rates
 
 * 1 RUB = ... 1,000,000 C10N
