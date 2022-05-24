@@ -249,12 +249,12 @@ runQuery(queryString).then( async (result) => {
                     res.set('Content-Type', 'image/jpeg');
                     res.send(text);
                 }
-                if (contentType === 'png')
+                else if (contentType === 'png')
                 {
                     res.set('Content-Type', 'image/png');
                     res.send(text);
                 }
-                if (contentType === 'gif')
+                else if (contentType === 'gif')
                 {
                     res.set('Content-Type', 'image/gif');
                     res.send(text);
