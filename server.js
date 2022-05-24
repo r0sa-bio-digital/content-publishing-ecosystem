@@ -6,7 +6,8 @@ const app = express();
 const http = require('http').Server(app);
 const pg = require('pg');
 const hash = require('js-sha3').sha3_512;
-const markdown = require('marked').marked;
+//const markdown = require('marked').marked;
+//const htmlEntitiesEncode = require('html-entities').encode;
 const connectionString = process.env.DATABASE_URL;
 const port = process.env.PORT || 3000;
 const defaultHostingProvider = {};
@@ -243,10 +244,20 @@ runQuery(queryString).then( async (result) => {
                 res.status(500).json({ message: 'Invalid content hashsum' });
             else
             {
-                if (contentType === 'image')
+                if (contentType === 'jpeg')
                 {
-                    res.set('Content-Type', 'text/html');
-                    res.send(`<img src="${text}" />`);
+                    res.set('Content-Type', 'image/jpeg');
+                    res.send(text);
+                }
+                if (contentType === 'png')
+                {
+                    res.set('Content-Type', 'image/png');
+                    res.send(text);
+                }
+                if (contentType === 'gif')
+                {
+                    res.set('Content-Type', 'image/gif');
+                    res.send(text);
                 }
                 else if (contentType === 'svg')
                 {
@@ -260,8 +271,10 @@ runQuery(queryString).then( async (result) => {
                 }
                 else if (contentType === 'markdown')
                 {
-                    res.set('Content-Type', 'text/html');
-                    res.send(markdown.parse(text));
+                    //res.set('Content-Type', 'text/html');
+                    //res.send(markdown.parse(text));
+                    res.set('Content-Type', 'text/markdown');
+                    res.send(text);
                 }
                 else if (contentType === 'plaintext')
                 {
