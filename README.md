@@ -246,8 +246,8 @@ Content publishing ecosystem to organize content exchange between authors and co
 				* naked show page implemented
 				* types content could be implemented, but it is useless for now
 				* better way is to implement universal text/html server output format for any type of content read
-			* `show content as naked text/html`
-		* Add update content functionality
+			* show content as naked text/html
+		* `Add update content functionality`
 			* api call
 			* frontend
 		* Review content delivery usability in real content oriented communication
