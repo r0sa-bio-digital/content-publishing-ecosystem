@@ -65,18 +65,12 @@
                         if (readResponse.status === 200)
                         {
                             const content = await readResponse.text();
-                            if (contentDescription.type === 'plaintext')
-                            {
-                                document.getElementById('show').style = 'font-family: monospace; white-space: pre;';
-                                document.getElementById('show').textContent = content;
-                            }
+                            const type = readResponse.headers.get('Content-Type');
+                            if (type.indexOf('text/plain;') > -1)
+                                document.documentElement.textContent = content;
                             else
-                            {
-                                //document.getElementById('show').innerHTML = content;
                                 document.documentElement.innerHTML = content;
-                                return;
-                            }
-                            document.getElementById('show').style.display = 'block';
+                            return;
                         }
                         else if (readResponse.status === 404)
                             document.getElementById('notFound').style.display = 'block';
@@ -348,8 +342,6 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-        <div id="show" style="display: none;">
         </div>
         <div id="addContent" style="display: none;">
             <h3>Add new content</h3>
