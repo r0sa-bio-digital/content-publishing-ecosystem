@@ -65,11 +65,7 @@
                         if (readResponse.status === 200)
                         {
                             const content = await readResponse.text();
-                            const type = readResponse.headers.get('Content-Type');
-                            if (type.indexOf('text/plain;') > -1)
-                                document.documentElement.textContent = content;
-                            else
-                                document.documentElement.innerHTML = content;
+                            document.documentElement.innerHTML = content;
                             return;
                         }
                         else if (readResponse.status === 404)

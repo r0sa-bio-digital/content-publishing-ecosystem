@@ -6,8 +6,8 @@ const app = express();
 const http = require('http').Server(app);
 const pg = require('pg');
 const hash = require('js-sha3').sha3_512;
-//const markdown = require('marked').marked;
-//const htmlEntitiesEncode = require('html-entities').encode;
+const markdown = require('marked').marked;
+const htmlEntitiesEncode = require('html-entities').encode;
 const connectionString = process.env.DATABASE_URL;
 const port = process.env.PORT || 3000;
 const defaultHostingProvider = {};
@@ -244,44 +244,17 @@ runQuery(queryString).then( async (result) => {
                 res.status(500).json({ message: 'Invalid content hashsum' });
             else
             {
-                if (contentType === 'jpeg')
-                {
-                    res.set('Content-Type', 'image/jpeg');
-                    res.send(text);
-                }
-                else if (contentType === 'png')
-                {
-                    res.set('Content-Type', 'image/png');
-                    res.send(text);
-                }
-                else if (contentType === 'gif')
-                {
-                    res.set('Content-Type', 'image/gif');
-                    res.send(text);
-                }
+                res.set('Content-Type', 'text/html');
+                if (contentType === 'rasterimage')
+                    res.send(`<img src="${text}" />`);
                 else if (contentType === 'svg')
-                {
-                    //res.set('Content-Type', 'image/svg+xml');
-                    res.set('Content-Type', 'text/html');
                     res.send(text);
-                }
                 else if (contentType === 'html')
-                {
-                    res.set('Content-Type', 'text/html');
                     res.send(text);
-                }
                 else if (contentType === 'markdown')
-                {
-                    //res.set('Content-Type', 'text/html');
-                    //res.send(markdown.parse(text));
-                    res.set('Content-Type', 'text/markdown');
-                    res.send(text);
-                }
+                    res.send(markdown.parse(text));
                 else if (contentType === 'plaintext')
-                {
-                    res.set('Content-Type', 'text/plain');
-                    res.send(text);
-                }
+                    res.send(`<pre>${htmlEntitiesEncode(text)}</pre>`);
                 else
                     res.status(500).json({ message: 'Invalid content type "' + contentType + '"' });
             }

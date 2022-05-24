@@ -242,7 +242,11 @@ Content publishing ecosystem to organize content exchange between authors and co
 			* the idea is to show "naked" content by given read url
 				* but redirect to login/error pages in case of login failure or server side errors
 			* bugfix: add page logout
-			* `implement prototype of page with naked resource view`
+			* implement prototype of page with naked resource view
+				* naked show page implemented
+				* types content could be implemented, but it is useless for now
+				* better way is to implement universal text/html server output format for any type of content read
+			* `show content as naked text/html`
 		* Add update content functionality
 			* api call
 			* frontend
