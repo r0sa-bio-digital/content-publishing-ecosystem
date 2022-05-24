@@ -261,7 +261,8 @@ runQuery(queryString).then( async (result) => {
                 }
                 else if (contentType === 'svg')
                 {
-                    res.set('Content-Type', 'image/svg+xml');
+                    //res.set('Content-Type', 'image/svg+xml');
+                    res.set('Content-Type', 'text/html');
                     res.send(text);
                 }
                 else if (contentType === 'html')
