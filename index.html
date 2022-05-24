@@ -71,7 +71,11 @@
                                 document.getElementById('show').textContent = content;
                             }
                             else
-                                document.getElementById('show').innerHTML = content;
+                            {
+                                //document.getElementById('show').innerHTML = content;
+                                document.documentElement.innerHTML = content;
+                                return;
+                            }
                             document.getElementById('show').style.display = 'block';
                         }
                         else if (readResponse.status === 404)
