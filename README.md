@@ -260,10 +260,14 @@ Content publishing ecosystem to organize content exchange between authors and co
 		* Build b2c business model
 			* ecosystem model for developer, provider, authors, consumers and investors
 				* if we make more than 1 provider, all of them will pay the same investor fee
-			* `draw currency-c01n flow with provider-as-a-bank`
-			* add business roadmap: funds = cost (no income) -> funds = cost - income -> income = cost (no funds) -> income - cost = fund returns
-			* add technical roadmap: github based syntetic web2 -> self-hosted syntetic web2 (developer becomes author) -> semantic web2 -> semantic web3
-				* think is it really good idea to transform developers to authors
+			* draw currency-c01n flow with provider-as-a-bank
+			* `add business roadmap`
+				* funds = cost (no income) -> funds = cost - income -> income = cost (no funds) -> income - cost = fund returns
+					* to answer questions "how much money do you need?", "when we will get return of the investment?", "how much profit will we get?"
+			* add technical roadmap
+				* github based syntetic web2 -> self-hosted syntetic web2 (developer becomes author) -> semantic web2 -> semantic web3
+					* think is it really good idea to transform developers to authors
+					* technical roadmap must support business roadmap
 		* Add update content functionality
 			* api call
 			* frontend
