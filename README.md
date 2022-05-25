@@ -257,20 +257,33 @@ Content publishing ecosystem to organize content exchange between authors and co
 				* types content could be implemented, but it is useless for now
 				* better way is to implement universal text/html server output format for any type of content read
 			* show content as naked text/html
-		* `Add update content functionality`
+		* Build b2c business model
+			* ecosystem model for developer, provider, authors, consumers and investors
+				* if we make more than 1 provider, all of them will pay the same investor fee
+			* `draw currency-c01n flow with provider-as-a-bank`
+			* add business roadmap: funds = cost (no income) -> funds = cost - income -> income = cost (no funds) -> income - cost = fund returns
+			* add technical roadmap: github based syntetic web2 -> self-hosted syntetic web2 (developer becomes author) -> semantic web2 -> semantic web3
+				* think is it really good idea to transform developers to authors
+		* Add update content functionality
 			* api call
 			* frontend
-		* Review content delivery usability in real content oriented communication
 		* Rework readme
 			* move work plan to content typed as markdown
+				* become first user of your system and first real author of content in it
 			* replace exchange rates table by page link/api call
 			* update exchange rates with actual official rates
-			* review anf update all how-to
+			* review and update all how-to
 			* move all how-tos to content
 			* think about adding roles for banks and investors
 				* bank keeps fiat/crypto money in all possible currencies to provide exchange: money to c01n and c01n to money
 					* think about hosting provider and bank - is it one entity or they could be separated
+						* at this stage of ecosystem development hosting provider is a bank
 				* investor puts big amount of fiat/crypto money (more than he needs for normal usage) into the system to get profit in future
+					* investor can fund provider and authors
+						* in return for investment provider will pay some percent from technical fee to investor
+						* in return for investment authors will pay some percent from author fee to investor
+							* applyed only to content records funded by investor
+						* automatically computed and payed ammount from provider/author to investor is called investor fee
 		* User dashboard frontend
 			* limit transactions list by default by last N operations
 			* add list of all owned content records
@@ -284,7 +297,7 @@ Content publishing ecosystem to organize content exchange between authors and co
 			* markdown
 		* View content frontend types extension
 			* source code html/css/js/json
-		* Review and adapt all frantend layout for mobile web
+		* Review and adapt all frontend layout for mobile web
 	* Balance economics
 		* understand complete currency cycle
 		* understand situation when user and provider is a same person
@@ -294,7 +307,7 @@ Content publishing ecosystem to organize content exchange between authors and co
 		* c0ntent
 		* r0sa
 			* Transfere all useful content
-				* from [https://r0sa.net/](https://r0sa.net/), [https://knyte.io/](https://knyte.io/), [https://organiq.dev/](https://organiq.dev/), [https://metalanguage.tech/](https://metalanguage.tech/) to [https://c0ntent.herokuapp.com/](https://c0ntent.herokuapp.com/)
+				* from [https://r0sa.net/](https://r0sa.net/), [https://knyte.io/](https://knyte.io/), [https://organiq.dev/](https://organiq.dev/), [https://metalanguage.tech/](https://metalanguage.tech/), [https://r0sa.net/c0ntent/](https://r0sa.net/c0ntent/) to [https://c0ntent.herokuapp.com/](https://c0ntent.herokuapp.com/)
 			* Dispose separated websites' public content, make links to c0ntent instead
 		* РОСА
 		* Jeet
@@ -303,8 +316,13 @@ Content publishing ecosystem to organize content exchange between authors and co
 		* Add at least 5 interested members
 		* Make exclusive presentation of c0ntent by c0ntent itself
 		* Organize first c01n sale inside of the community
-	* Think about tools for deleting content from the system
 * Raise funds for the project development
+* Implement investor role
+	* investors db table
+	* investor percent determination mechanism
+	* automated investor fee for provider
+	* fixate all funds and returns in transactions log
+* Think about tools for deleting content from the system
 * Research best db for the transactions log, because postgresql is too much costly
 	* Check out ClickHouse first
 * Build semantic graph upon content storage.
@@ -316,3 +334,7 @@ Content publishing ecosystem to organize content exchange between authors and co
 * Transfere all useful data/functionality from [https://knyte-space.herokuapp.com/](https://knyte-space.herokuapp.com/) to [https://c0ntent.herokuapp.com/](https://c0ntent.herokuapp.com/).
 	* Review and move
 	* Close knyte-space branch to have a single origin of truth
+* Implement full functional prototype of the system ready for demos for wide audience
+* Engage enough users to the ecosystem to make it profittable
+* Formalise complete specification of content publishing ecosystem
+	* Research blockchain, crypto currency, NFT and other web3 techs for migration service from web2 to web3
