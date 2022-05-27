@@ -296,10 +296,6 @@ Content publishing ecosystem to organize content exchange between authors and co
 						* in return for investment authors will pay some percent from author fee to investor
 							* applyed only to content records funded by investor
 						* automatically computed and payed ammount from provider/author to investor is called investor fee
-		* User dashboard frontend
-			* limit transactions list by default by last N operations
-			* add list of all owned content records
-			* update layout outfit and overall ux
 		* Add content frontend extension - code editor with preview
 			* html/css/js
 			* css
@@ -307,28 +303,39 @@ Content publishing ecosystem to organize content exchange between authors and co
 			* json
 			* svg
 			* markdown
+			* knyte.io/space graph
 		* View content frontend types extension
 			* source code html/css/js/json
+			* knyte.io/space graph
+		* Move all investors oriented materials to c0ntent
+			* presentation
+			* business model graph
+			* ecosystem description
+		* User dashboard frontend
+			* limit transactions list by default by last N operations
+			* add list of all owned content records
+			* update layout outfit and overall ux
 		* Review and adapt all frontend layout for mobile web
 	* Balance economics
 		* understand complete currency cycle
 		* understand situation when user and provider is a same person
 		* reset all users/providers balances/transactions and start well-balanced accounting from zero
 			* instead of random numbers on balances
-	* Post some exclusive content on the platform
+	* Post exclusive content on the platform
 		* c0ntent
 		* r0sa
 			* Transfere all useful content
 				* from [https://r0sa.net/](https://r0sa.net/), [https://knyte.io/](https://knyte.io/), [https://organiq.dev/](https://organiq.dev/), [https://metalanguage.tech/](https://metalanguage.tech/), [https://r0sa.net/c0ntent/](https://r0sa.net/c0ntent/) to [https://c0ntent.herokuapp.com/](https://c0ntent.herokuapp.com/)
 			* Dispose separated websites' public content, make links to c0ntent instead
-		* РОСА
-		* Jeet
-		* Balaji
 	* Organize c0ntent community
 		* Add at least 5 interested members
-		* Make exclusive presentation of c0ntent by c0ntent itself
 		* Organize first c01n sale inside of the community
+		* Make exclusive presentation of c0ntent by c0ntent itself
 * Raise funds for the project development
+* Post exclusive content on the platform
+	* РОСА
+	* Jeet
+	* Balaji
 * Implement investor role
 	* investors db table
 	* investor percent determination mechanism
