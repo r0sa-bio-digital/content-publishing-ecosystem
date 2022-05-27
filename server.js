@@ -31,7 +31,9 @@ async function runQuery(queryString) {
     }
     let result = {};
     try {
-        result = (await client.query(queryString)).rows;
+        const response = await client.query(queryString);
+        console.log(response);
+        result = response.rows;
     } catch (e) {
         console.warn(e);
         result = {error: e, step: 'client query'};
