@@ -306,7 +306,10 @@ runQuery(queryString).then( async (result) => {
             res.status(500).json({ id, message, details: result.error });
         }
         else
+        {
+            console.log(result);
             res.status(200).json({ id, message: 'content updated successfully' });
+        }
     });
     //app.post('/:knit/update/author_fee', auth.user, setApiCallId, async (req, res) => { // TODO: implement
     app.get('/deposit/:user/:amount/:currency', auth.provider, setApiCallId, async (req, res) => {
