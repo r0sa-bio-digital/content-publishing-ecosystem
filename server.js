@@ -32,8 +32,10 @@ async function runQuery(queryString) {
     let result = {};
     try {
         const response = await client.query(queryString);
-        console.log(response);
-        result = response.rows;
+        if (response.command === 'SELECT')
+            result = response.rows;
+        else
+            result = response.rowCount;
     } catch (e) {
         console.warn(e);
         result = {error: e, step: 'client query'};
@@ -106,7 +108,8 @@ async function addContentRecord(contentDesc) {
 }
 async function updateContentRecordText(contentDesc) {
     const {id, text, hashsum, author} = contentDesc;
-    const queryString = `UPDATE "public"."content" SET "text" = '${text}', "hashsum" = '${hashsum}' WHERE "id" = '${id}' AND "author" = '${author}';`;
+    const queryString = `UPDATE "public"."content" SET "text" = '${text}', "hashsum" = '${hashsum}' ` +
+        `WHERE "id" = '${id}' AND "author" = '${author}' AND ("text" != '${text}' OR "hashsum" != '${hashsum}');`;
     return await runQuery(queryString);
 }
 function getReadableNumber(numberText) {
@@ -305,6 +308,11 @@ runQuery(queryString).then( async (result) => {
         if (result && result.error)
         {
             const message = 'unexpected error';
+            res.status(500).json({ id, message, details: result.error });
+        }
+        else if (result !== 1)
+        {
+            const message = 'input data error: knit not found or author mismatch or text+hash was not changed';
             res.status(500).json({ id, message, details: result.error });
         }
         else
