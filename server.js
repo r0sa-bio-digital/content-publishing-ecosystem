@@ -102,6 +102,11 @@ async function addContentRecord(contentDesc) {
         `INSERT INTO "public"."content" ("id", "text", "author", "author_fee", "hashsum") VALUES ('${id}', '${text}', '${author}', ${author_fee}, '${hashsum}');\n`;
     return await runQuery(queryString);
 }
+async function updateContentRecordText(contentDesc) {
+    const {id, text, hashsum, author} = contentDesc;
+    const queryString = `UPDATE "public"."content" SET "text" = '${text}', "hashsum" = '${hashsum}' WHERE "id" = '${id}' AND "author" = '${author}';`;
+    return await runQuery(queryString);
+}
 function getReadableNumber(numberText) {
     return numberText.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
@@ -286,7 +291,24 @@ runQuery(queryString).then( async (result) => {
         else
             res.status(200).json({ id, message: 'content added successfully' });
     });
-    //app.post('/:knit/update/', auth.user, setApiCallId, async (req, res) => { // TODO: implement
+    app.post('/:knit/update/text', auth.user, setApiCallId, async (req, res) => {
+        const id = req.params.knit;
+        const text = req.body.text;
+        const hashsum = computeTextHashsum(text);
+        const author = req.user.id;
+        const trafficPrice = Math.ceil(defaultHostingProvider.byte_price * text.length);
+        const apiCallTotalPrice = req.apiCallPrice + trafficPrice;
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallTotalPrice, id, req.apiCallId);
+        const result = await updateContentRecordText({id, text, hashsum, author});
+        if (result && result.error)
+        {
+            const message = 'unexpected error';
+            res.status(500).json({ id, message, details: result.error });
+        }
+        else
+            res.status(200).json({ id, message: 'content updated successfully' });
+    });
+    //app.post('/:knit/update/author_fee', auth.user, setApiCallId, async (req, res) => { // TODO: implement
     app.get('/deposit/:user/:amount/:currency', auth.provider, setApiCallId, async (req, res) => {
         const userId = req.params.user;
         const fundsAmount = parseInt(req.params.amount);

@@ -276,9 +276,13 @@ Content publishing ecosystem to organize content exchange between authors and co
 					* think is it really good idea to transform developers to authors
 						* yes, it is good way to motivate developers do better core features
 					* technical roadmap must support business roadmap
-		* Add update content functionality
-			* api call
-			* frontend
+		* Add update content record functionality
+			* update text
+				* api call
+				* frontend
+			* update author fee
+				* api call
+				* frontend
 		* Rework readme
 			* move work plan to content typed as markdown
 				* become first user of your system and first real author of content in it
@@ -336,6 +340,10 @@ Content publishing ecosystem to organize content exchange between authors and co
 	* РОСА
 	* Jeet
 	* Balaji
+* Refactoring: make technical/author fee db operation in the same transaction with main db operation
+	* to don't charge user for failed calls as for successful calls
+	* think how we should charge for failed calls
+	* make all calls more optimal in terms of computation, db transactions and fees
 * Implement investor role
 	* investors db table
 	* investor percent determination mechanism
