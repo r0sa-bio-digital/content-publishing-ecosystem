@@ -267,8 +267,16 @@ Content publishing ecosystem to organize content exchange between authors and co
 					* to answer questions "how much money do you need?", "when we will get return of the investment?", "how much profit will we get?"
 			* for every stage add description how investor's funds will be protected in case of project failure
 			* add description how provider's service will be protected in case of investor stops funding
+		* Add update content record functionality
+			* api call
+				* update text
+				* `update author fee`
+			* frontend
+				* update text
+				* update author fee
+		* Extend b2c business model
 			* formalise motivation for all roles
-				* `for all roles add list of reasons to create conceptually new content ecosystem`
+				* for all roles add list of reasons to create conceptually new content ecosystem
 					* use Daniel Pink "Drive" theory to motivate authors and investors
 			* add technical roadmap
 				* github based syntetic web2 -> self-hosted syntetic web2 (developer becomes author) -> semantic web2 -> semantic web3
@@ -276,13 +284,6 @@ Content publishing ecosystem to organize content exchange between authors and co
 					* think is it really good idea to transform developers to authors
 						* yes, it is good way to motivate developers do better core features
 					* technical roadmap must support business roadmap
-		* Add update content record functionality
-			* update text
-				* api call
-				* frontend
-			* update author fee
-				* api call
-				* frontend
 		* Rework readme
 			* move work plan to content typed as markdown
 				* become first user of your system and first real author of content in it
