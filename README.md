@@ -265,11 +265,16 @@ Content publishing ecosystem to organize content exchange between authors and co
 			* add business roadmap
 				* funds = cost (no income) -> funds = cost - income -> income = cost (no funds) -> income - cost = fund returns
 					* to answer questions "how much money do you need?", "when we will get return of the investment?", "how much profit will we get?"
-			* `add description how investors funds will be protected in case of project failure for every stage`
-			* use Daniel Pink "Drive" theory to motivate investors as well as authors
+			* for every stage add description how investor's funds will be protected in case of project failure
+			* add description how provider's service will be protected in case of investor stops funding
+			* formalise motivation for all roles
+				* `for all roles add list of reasons to create conceptually new content ecosystem`
+					* use Daniel Pink "Drive" theory to motivate authors and investors
 			* add technical roadmap
 				* github based syntetic web2 -> self-hosted syntetic web2 (developer becomes author) -> semantic web2 -> semantic web3
+					* main goal is to make proof of feasibility of the described system
 					* think is it really good idea to transform developers to authors
+						* yes, it is good way to motivate developers do better core features
 					* technical roadmap must support business roadmap
 		* Add update content functionality
 			* api call
