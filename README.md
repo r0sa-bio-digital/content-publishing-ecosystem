@@ -275,10 +275,10 @@ Content publishing ecosystem to organize content exchange between authors and co
 				* update text
 				* update author fee
 		* Extend b2c business model
-			* `formalise needs for all roles`
+			* formalise needs for all roles
 				* for all roles add list of reasons to create conceptually new content ecosystem
 					* use Daniel Pink "Drive" theory to motivate authors and investors
-			* add technical roadmap
+			* `add technical roadmap`
 				* github based syntetic web2 -> self-hosted syntetic web2 (developer becomes author) -> semantic web2 -> semantic web3
 					* main goal is to make proof of feasibility of the described system
 					* think is it really good idea to transform developers to authors
