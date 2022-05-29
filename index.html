@@ -12,8 +12,12 @@
                 const mainRequest = location.search.split('?')[1];
                 if (!mainRequest)
                     return null;
-                if (mainRequest === 'add')
-                    return {add: true};
+                if (mainRequest === 'add/content')
+                    return {addContent: true};
+                if (mainRequest === 'update/content/text')
+                    return {updateContentText: true};
+                if (mainRequest === 'update/content/author_fee')
+                    return {updateContentAuthorFee: true};
                 const showRequestParts = mainRequest.split('&');
                 const knit = showRequestParts[0], type = showRequestParts[1];
                 if (knit && type)
@@ -30,7 +34,7 @@
                 {
                     document.getElementById('loading').style.display = 'block';
                     const contentDescription = getContentDescription();
-                    if (contentDescription && contentDescription.add)
+                    if (contentDescription && contentDescription.addContent)
                     {
                         const loginResponse = await fetch(
                             apiUrl + 'user/login',
@@ -44,8 +48,50 @@
                         if (loginResponse.status === 200)
                         {
                             const userData = await loginResponse.json();
-                            document.getElementById('authorAccountName').textContent = userData.name;
+                            document.getElementById('addContent_authorAccountName').textContent = userData.name;
                             document.getElementById('addContent').style.display = 'block';
+                        }
+                        else
+                            document.getElementById('loginFailed').style.display = 'block';
+                        document.getElementById('loading').style.display = 'none';
+                    }
+                    else if (contentDescription && contentDescription.updateContentText)
+                    {
+                        const loginResponse = await fetch(
+                            apiUrl + 'user/login',
+                            {
+                                method: 'GET',
+                                headers: {
+                                    Authorization: `Basic ${btoa(accessToken + ':')}`
+                                }
+                            }
+                        );
+                        if (loginResponse.status === 200)
+                        {
+                            const userData = await loginResponse.json();
+                            document.getElementById('updateContentText_authorAccountName').textContent = userData.name;
+                            document.getElementById('updateContentText').style.display = 'block';
+                        }
+                        else
+                            document.getElementById('loginFailed').style.display = 'block';
+                        document.getElementById('loading').style.display = 'none';
+                    }
+                    else if (contentDescription && contentDescription.updateContentAuthorFee)
+                    {
+                        const loginResponse = await fetch(
+                            apiUrl + 'user/login',
+                            {
+                                method: 'GET',
+                                headers: {
+                                    Authorization: `Basic ${btoa(accessToken + ':')}`
+                                }
+                            }
+                        );
+                        if (loginResponse.status === 200)
+                        {
+                            const userData = await loginResponse.json();
+                            document.getElementById('updateContentAuthorFee_authorAccountName').textContent = userData.name;
+                            document.getElementById('updateContentAuthorFee').style.display = 'block';
                         }
                         else
                             document.getElementById('loginFailed').style.display = 'block';
@@ -117,6 +163,8 @@
                 document.getElementById('loginFailed').style.display = 'none';
                 document.getElementById('account').style.display = 'none';
                 document.getElementById('addContent').style.display = 'none';
+                document.getElementById('updateContentText').style.display = 'none';
+                document.getElementById('updateContentAuthorFee').style.display = 'none';
                 onLoad();
             }
             async function onRefreshBalanceClick()
@@ -287,11 +335,44 @@
                     document.getElementById('newContentSubmitButton').disabled = true;
                 }
             }
-            function encodeImageFileAsURL(element) {
+            function encodeImageFileAsURL(element, targetElemId) {
                 const file = element.files[0];
                 const reader = new FileReader();
-                reader.onloadend = () => document.getElementById('newContentText').value = reader.result;
+                reader.onloadend = () => document.getElementById(targetElemId).value = reader.result;
                 reader.readAsDataURL(file);
+            }
+            async function onNewContentSubmitClick2()
+            {
+                const stateElem = document.getElementById('newContentSubmitState2');
+                const text = document.getElementById('newContentText2').value;
+                const updateKnit = document.getElementById('updateKnit').value;
+                if (!text)
+                {
+                    stateElem.textContent = ' text must not be empty';
+                    return;
+                }
+                stateElem.textContent = ' loading...';
+                const accessToken = localStorage.getItem('accessToken');
+                const body = {text};
+                const response = await fetch(
+                    apiUrl + `${updateKnit}/update/text`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            Authorization: `Basic ${btoa(accessToken + ':')}`,
+                            'Content-Type': 'application/json',
+                        }, 
+                        body: JSON.stringify(body),
+                    }
+                );
+                if (response.status !== 200)
+                {
+                    const report = await response.json();
+                    stateElem.textContent = ' failed to update content. ' + report.message;
+                    console.warn(report.details);
+                }
+                else
+                    stateElem.textContent = (await response.json()).message + '. Knit: ' + newKnit;
             }
         </script>
     </head>
@@ -342,12 +423,12 @@
         <div id="addContent" style="display: none;">
             <h3>Add new content</h3>
             <div>
-                <span>author: </span><span id="authorAccountName"></span>
+                <span>author: </span><span id="addContent_authorAccountName"></span>
                 <button onclick="onResetClick();">logout</button>
             </div>
             <textarea id="newContentText"></textarea>
             <div>
-                <input type="file" accept=".jpg,.jpeg,.png,.gif" onchange="encodeImageFileAsURL(this);" />
+                <input type="file" accept=".jpg,.jpeg,.png,.gif" onchange="encodeImageFileAsURL(this, 'newContentText');" />
             </div>
             <div>
                 <label for="newContentAuthorFee">author fee </label>
@@ -358,6 +439,42 @@
                 <span id="newContentSubmitState"></span>
             </div>
         </div>
+
+        <div id="updateContentText" style="display: none;">
+            <h3>Update content text</h3>
+            <div>
+                <span>author: </span><span id="updateContentText_authorAccountName"></span>
+                <button onclick="onResetClick();">logout</button>
+            </div>
+            <div>
+                <span>target knit: </span><input id="updateKnit" type="text"/>
+            </div>
+            <textarea id="newContentText2"></textarea>
+            <div>
+                <input type="file" accept=".jpg,.jpeg,.png,.gif" onchange="encodeImageFileAsURL(this, 'newContentText2');" />
+            </div>
+            <div style="margin-top: 1em;">
+                <button id="newContentSubmitButton2" onclick="onNewContentSubmitClick2();">submit</button>
+                <span id="newContentSubmitState2"></span>
+            </div>
+        </div>
+
+        <div id="updateContentAuthorFee" style="display: none;">
+            <h3>Update content author fee</h3>
+            <div>
+                <span>author: </span><span id="updateContentAuthorFee_authorAccountName"></span>
+                <button onclick="onResetClick();">logout</button>
+            </div>
+            <div>
+                <label for="newContentAuthorFee2">author fee </label>
+                <input id="newContentAuthorFee2" type="number">                
+            </div>
+            <div style="margin-top: 1em;">
+                <button id="newContentSubmitButton3" onclick="onNewContentSubmitClick3();">submit</button>
+                <span id="newContentSubmitState3"></span>
+            </div>
+        </div>
+
         <div id="notFound" style="display: none;">
             <span>content not found</span>
         </div>

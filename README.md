@@ -270,8 +270,8 @@ Content publishing ecosystem to organize content exchange between authors and co
 		* Add update content record functionality
 			* api call
 				* update text
-				* `update author fee`
-			* frontend
+				* update author fee
+			* `frontend`
 				* update text
 				* update author fee
 		* Extend b2c business model
