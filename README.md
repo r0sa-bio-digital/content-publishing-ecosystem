@@ -274,8 +274,8 @@ Content publishing ecosystem to organize content exchange between authors and co
 			* frontend
 				* update text
 				* update author fee
-		* `Extend b2c business model`
-			* formalise motivation for all roles
+		* Extend b2c business model
+			* `formalise needs for all roles`
 				* for all roles add list of reasons to create conceptually new content ecosystem
 					* use Daniel Pink "Drive" theory to motivate authors and investors
 			* add technical roadmap
@@ -284,6 +284,12 @@ Content publishing ecosystem to organize content exchange between authors and co
 					* think is it really good idea to transform developers to authors
 						* yes, it is good way to motivate developers do better core features
 					* technical roadmap must support business roadmap
+			* add crypto currency block
+				* using crypto currency for buying/selling c01ns
+				* idea of selling ownership for content records via NFT
+				* crypto platform growth through high demanded service implementation
+			* add search engine block
+				* how semantic search of content in semantic web could stimulate market of niche information goods and services 
 		* Improve content management functionality
 			* the goal: allow user to perform complete content creation/distribution cycle using web frontend only
 			* user dashboard frontend
