@@ -292,6 +292,7 @@ Content publishing ecosystem to organize content exchange between authors and co
 				* how semantic search of content in semantic web could stimulate market of niche information goods and services 
 		* Perform first pitch for investors
 			* make crypto-oriented pitch scenario
+			* unify and align all materials to the scenario
 			* organise conference call with all interested participants
 		* Improve content management functionality
 			* the goal: allow user to perform complete content creation/distribution cycle using web frontend only
