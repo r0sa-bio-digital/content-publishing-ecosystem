@@ -112,6 +112,11 @@ async function updateContentRecordText(contentDesc) {
         `WHERE "id" = '${id}' AND "author" = '${author}' AND ("text" != '${text}' OR "hashsum" != '${hashsum}');`;
     return await runQuery(queryString);
 }
+async function updateContentAuthorFee(contentDesc) {
+    const {id, author_fee, author} = contentDesc;
+    const queryString = `UPDATE "public"."content" SET "author_fee" = '${author_fee}' WHERE "id" = '${id}' AND "author" = '${author}' AND "author_fee" != '${author_fee}';`;
+    return await runQuery(queryString);
+}
 function getReadableNumber(numberText) {
     return numberText.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
@@ -318,7 +323,25 @@ runQuery(queryString).then( async (result) => {
         else
             res.status(200).json({ id, message: 'content updated successfully' });
     });
-    //app.post('/:knit/update/author_fee', auth.user, setApiCallId, async (req, res) => { // TODO: implement
+    app.post('/:knit/update/author_fee', auth.user, setApiCallId, async (req, res) => {
+        const id = req.params.knit;
+        const author = req.user.id;
+        const author_fee = req.body.author_fee;
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, req.apiCallPrice, id, req.apiCallId);
+        const result = await updateContentAuthorFee({id, author_fee, author});
+        if (result && result.error)
+        {
+            const message = 'unexpected error';
+            res.status(500).json({ id, message, details: result.error });
+        }
+        else if (result !== 1)
+        {
+            const message = 'input data error: knit not found or author mismatch or author_fee was not changed';
+            res.status(500).json({ id, message, details: result.error });
+        }
+        else
+            res.status(200).json({ id, message: 'content updated successfully' });
+    });
     app.get('/deposit/:user/:amount/:currency', auth.provider, setApiCallId, async (req, res) => {
         const userId = req.params.user;
         const fundsAmount = parseInt(req.params.amount);
