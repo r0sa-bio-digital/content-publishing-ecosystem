@@ -5,10 +5,14 @@ const express = require('express');
 const app = express();
 const http = require('http').Server(app);
 const pg = require('pg');
+const hash = require('js-sha3').sha3_512;
+const markdown = require('marked').marked;
+const htmlEntitiesEncode = require('html-entities').encode;
 const connectionString = process.env.DATABASE_URL;
 const port = process.env.PORT || 3000;
-const defaultHostingProvider = { id: process.env.HOSTER_ID, name: process.env.HOSTER_NAME }; // TODO: implement proper hosting provider detection
+const defaultHostingProvider = {};
 const users = {};
+const apiCallIds = {};
 app.use(express.json({limit: '10mb'}));
 // common functions
 async function runQuery(queryString) {
@@ -27,7 +31,11 @@ async function runQuery(queryString) {
     }
     let result = {};
     try {
-        result = (await client.query(queryString)).rows;
+        const response = await client.query(queryString);
+        if (response.command === 'SELECT')
+            result = response.rows;
+        else
+            result = response.rowCount;
     } catch (e) {
         console.warn(e);
         result = {error: e, step: 'client query'};
@@ -92,6 +100,23 @@ async function getContentRecord(contentId) {
     const queryString = 'SELECT * FROM "public"."content" WHERE "id" = \'' + contentId + '\';';
     return await runQuery(queryString);
 }
+async function addContentRecord(contentDesc) {
+    const {id, text, hashsum, author, author_fee} = contentDesc;
+    const queryString = `INSERT INTO "public"."knits" ("id") VALUES ('${id}');\n` +
+        `INSERT INTO "public"."content" ("id", "text", "author", "author_fee", "hashsum") VALUES ('${id}', '${text}', '${author}', ${author_fee}, '${hashsum}');\n`;
+    return await runQuery(queryString);
+}
+async function updateContentRecordText(contentDesc) {
+    const {id, text, hashsum, author} = contentDesc;
+    const queryString = `UPDATE "public"."content" SET "text" = '${text}', "hashsum" = '${hashsum}' ` +
+        `WHERE "id" = '${id}' AND "author" = '${author}' AND ("text" != '${text}' OR "hashsum" != '${hashsum}');`;
+    return await runQuery(queryString);
+}
+async function updateContentAuthorFee(contentDesc) {
+    const {id, author_fee, author} = contentDesc;
+    const queryString = `UPDATE "public"."content" SET "author_fee" = '${author_fee}' WHERE "id" = '${id}' AND "author" = '${author}' AND "author_fee" != '${author_fee}';`;
+    return await runQuery(queryString);
+}
 function getReadableNumber(numberText) {
     return numberText.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
@@ -107,6 +132,27 @@ async function getExchangeRates() {
         currencies.push({id, name, rate: parseInt(rates[i].c01n_amount), rateText: getReadableNumber(rates[i].c01n_amount)});
     }
     return currencies;
+}
+async function getUserBalance(userId) {
+    const queryString = 'SELECT "balance" FROM "public"."users" WHERE "id" = \'' + userId + '\';';
+    const balanceResponse = await runQuery(queryString);
+    return parseInt(balanceResponse[0].balance);
+}
+async function getUserTransactions(userId) {
+    const queryString = 'SELECT * FROM "public"."transaction_log" WHERE "debited_account" = \'' + userId + '\' OR "credited_account" = \'' + userId + '\';';
+    const transactionsResponse = await runQuery(queryString);
+    return transactionsResponse;
+}
+async function getUserName(userId) {
+    const queryString = 'SELECT "name" FROM "public"."users" WHERE "id" = \'' + userId + '\';';
+    const nameResponse = await runQuery(queryString);
+    return nameResponse[0].name;
+}
+function computeTextHashsum(text)
+{
+    const primaryHash = hash(text);
+    const secondaryHash = hash(primaryHash + text);
+    return primaryHash + '+' + secondaryHash;
 }
 const auth = {
     public: (req, res, next) => next(),
@@ -136,6 +182,19 @@ const auth = {
         next();
     }
 };
+const setApiCallId = (req, res, next) => {
+    const apiCallName = req.route.path;
+    const apiCallDesc = apiCallIds[apiCallName];
+    const apiCallId = apiCallDesc.id;
+    const apiCallPrice = apiCallDesc.price;
+    if (!knit.validate(apiCallId))
+        return res.status(500).json({ message: `Invalid API Call Id for ${apiCallName}` });
+    if (isNaN(apiCallPrice))
+        return res.status(500).json({ message: `Invalid API Call Price for ${apiCallName}` });
+    req.apiCallId = apiCallId;
+    req.apiCallPrice = parseInt(apiCallPrice);
+    next();
+};
 // boot the system
 console.info('\tserver booting started');
 
@@ -147,72 +206,188 @@ runQuery(queryString).then( async (result) => {
         const user = result[i];
         users[user.id] = user;
     }
+    // cache default hosting provider // TODO: implement multiprovider concept // update hosting_providers list every db update or read it dynamically
+    const queryString1 = 'SELECT * FROM "public"."hosting_providers" ORDER BY "id" LIMIT 5000 OFFSET 0;';
+    const hostingProvidersTable = await runQuery(queryString1);
+    {
+        const r = hostingProvidersTable[0];
+        defaultHostingProvider.id = r.id;
+        defaultHostingProvider.name = r.name;
+        defaultHostingProvider.byte_price = parseFloat(r.byte_price);
+    }
+    // cache api call ids list
+    const queryString2 = 'SELECT * FROM "public"."api_calls" ORDER BY "id" LIMIT 5000 OFFSET 0;';
+    const apiCallsTable = await runQuery(queryString2);
+    for (let i = 0; i < apiCallsTable.length; ++i)
+    {
+        const apiCall = apiCallsTable[i];
+        apiCallIds[apiCall.name] = {id: apiCall.id, price: apiCall.price};
+    }
     // define api calls
-    app.get('/knit/generate', auth.user, async (req, res) => {
-        const apiCallId = '95f37a03-c1c7-41fe-bead-33c4536b0a2b';
-        const apiCallPrice = 1000;
+    app.get('/knit/generate', auth.user, setApiCallId, async (req, res) => {
         const resultKnit = knit.generate();
-        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, req.apiCallPrice, undefined, req.apiCallId);
         res.set('Content-Type', 'text/html');
         res.send(resultKnit);
     });
-    app.get('/:knit/extract/timestamp/', auth.user, async (req, res) => {
-        const apiCallId = '95f37a28-aa0e-4a73-a833-7a707144f5ce';
-        const apiCallPrice = 1000;
-        const id = req.params.knit.split('=')[1];
+    app.get('/:knit/extract/timestamp', auth.user, setApiCallId, async (req, res) => {
+        const id = req.params.knit;
         const resultTimestamp = knit.convertTime(id, 'date-object');
-        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, req.apiCallPrice, undefined, req.apiCallId);
         res.set('Content-Type', 'text/html');
         res.send(resultTimestamp.toISOString());
     });
-    app.get('/:knit', auth.user, async (req, res) => {
-        const apiCallId = '95f37a3f-19ad-448e-bd56-04a8da5c0df4';
-        const apiCallPrice = {base: 10000, perSymbol: 10};
-        const id = req.params.knit.split('=')[1];
+    app.post('/hashsum/compute', auth.user, setApiCallId, async (req, res) => {
+        const hashsum = computeTextHashsum(req.body.text);
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, req.apiCallPrice, undefined, req.apiCallId);
+        res.set('Content-Type', 'text/html');
+        res.send(hashsum);
+    });
+    app.get('/:knit/read/:type', auth.user, setApiCallId, async (req, res) => {
+        const id = req.params.knit;
+        const contentType = req.params.type;
         const contentRecord = (await getContentRecord(id))[0];
         if (contentRecord)
         {
-            const {text, author, author_fee} = contentRecord;
-            const apiCallTotalPrice = apiCallPrice.base + apiCallPrice.perSymbol * text.length;
-            await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallTotalPrice, id, apiCallId);
-            await authorFeeTransfer(req.user.id, author, author_fee, id, apiCallId);
-            res.set('Content-Type', 'text/html');
-            res.send(text);
+            const {text, hashsum, author, author_fee} = contentRecord;
+            const trafficPrice = Math.ceil(defaultHostingProvider.byte_price * text.length);
+            const apiCallTotalPrice = req.apiCallPrice + trafficPrice;
+            await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallTotalPrice, id, req.apiCallId);
+            await authorFeeTransfer(req.user.id, author, author_fee, id, req.apiCallId);
+            const actualHashsum = computeTextHashsum(text);
+            if (actualHashsum !== hashsum)
+                res.status(500).json({ message: 'Invalid content hashsum' });
+            else
+            {
+                res.set('Content-Type', 'text/html');
+                if (contentType === 'rasterimage')
+                    res.send(`<img src="${text}" />`);
+                else if (contentType === 'svg')
+                    res.send(text);
+                else if (contentType === 'html')
+                    res.send(text);
+                else if (contentType === 'markdown')
+                    res.send(markdown.parse(text));
+                else if (contentType === 'plaintext')
+                    res.send(`<pre>${htmlEntitiesEncode(text)}</pre>`);
+                else
+                    res.status(500).json({ message: 'Invalid content type "' + contentType + '"' });
+            }
         }
         else
         {
-            await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice.base, undefined, apiCallId);
+            await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, req.apiCallPrice, undefined, req.apiCallId);
             res.status(404).json({ message: 'Content not found' });
         }
     });
-    app.get('/deposit/:user/:amount/:currency', auth.provider, async (req, res) => {
-        const apiCallId = '95f40824-f51c-4a3c-85b4-c15d53b91df5';
-        const apiCallPrice = 5000;
-        const userId = req.params.user.split('=')[1];
-        const fundsAmount = parseInt(req.params.amount.split('=')[1]);
-        const currencyId = req.params.currency.split('=')[1];
-        await hostingFeeTransfer(userId, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
+    app.post('/:knit/add/', auth.user, setApiCallId, async (req, res) => {
+        const id = req.params.knit;
+        const text = req.body.text;
+        const hashsum = computeTextHashsum(text);
+        const author = req.user.id;
+        const author_fee = req.body.author_fee;
+        const trafficPrice = Math.ceil(defaultHostingProvider.byte_price * text.length);
+        const apiCallTotalPrice = req.apiCallPrice + trafficPrice;
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallTotalPrice, id, req.apiCallId);
+        const result = await addContentRecord({id, text, hashsum, author, author_fee});
+        if (result && result.error)
+        {
+            const message = (result.error.code === '23505' && result.error.table === 'knits' && result.error.constraint === 'knytes_pkey') ? `knit ${id} already added to the system`
+                :  (result.error.code === '23505' && result.error.table === 'content' && result.error.constraint === 'content_uniquetext') ? `given content already was added to the system`
+                    : result.error.code === '22P02' ? `${id} is not a correct knit`
+                        : 'unexpected error';
+            res.status(500).json({ id, message, details: result.error });
+        }
+        else
+            res.status(200).json({ id, message: 'content added successfully' });
+    });
+    app.post('/:knit/update/text', auth.user, setApiCallId, async (req, res) => {
+        const id = req.params.knit;
+        const text = req.body.text;
+        const hashsum = computeTextHashsum(text);
+        const author = req.user.id;
+        const trafficPrice = Math.ceil(defaultHostingProvider.byte_price * text.length);
+        const apiCallTotalPrice = req.apiCallPrice + trafficPrice;
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallTotalPrice, id, req.apiCallId);
+        const result = await updateContentRecordText({id, text, hashsum, author});
+        if (result && result.error)
+        {
+            const message = 'unexpected error';
+            res.status(500).json({ id, message, details: result.error });
+        }
+        else if (result !== 1)
+        {
+            const message = 'input data error: knit not found or author mismatch or text+hash was not changed';
+            res.status(500).json({ id, message, details: result.error });
+        }
+        else
+            res.status(200).json({ id, message: 'content updated successfully' });
+    });
+    app.post('/:knit/update/author_fee', auth.user, setApiCallId, async (req, res) => {
+        const id = req.params.knit;
+        const author = req.user.id;
+        const author_fee = req.body.author_fee;
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, req.apiCallPrice, id, req.apiCallId);
+        const result = await updateContentAuthorFee({id, author_fee, author});
+        if (result && result.error)
+        {
+            const message = 'unexpected error';
+            res.status(500).json({ id, message, details: result.error });
+        }
+        else if (result !== 1)
+        {
+            const message = 'input data error: knit not found or author mismatch or author_fee was not changed';
+            res.status(500).json({ id, message, details: result.error });
+        }
+        else
+            res.status(200).json({ id, message: 'content updated successfully' });
+    });
+    app.get('/deposit/:user/:amount/:currency', auth.provider, setApiCallId, async (req, res) => {
+        const userId = req.params.user;
+        const fundsAmount = parseInt(req.params.amount);
+        const currencyId = req.params.currency;
+        await hostingFeeTransfer(userId, defaultHostingProvider.id, req.apiCallPrice, undefined, req.apiCallId);
         const c01nsDepositted = await depositUserFunds(
-            userId, defaultHostingProvider.id, fundsAmount, currencyId, apiCallId);
+            userId, defaultHostingProvider.id, fundsAmount, currencyId, req.apiCallId);
         res.status(200).json({ c01ns: c01nsDepositted, message: 'depositted successfully' });
     });
-    app.get('/withdraw/:user/:amount/:currency', auth.provider, async (req, res) => {
-        const apiCallId = '95f40876-76a1-4399-90b9-143c3b9d5c52';
-        const apiCallPrice = 5000;
-        const userId = req.params.user.split('=')[1];
-        const fundsAmount = parseInt(req.params.amount.split('=')[1]);
-        const currencyId = req.params.currency.split('=')[1];
-        await hostingFeeTransfer(userId, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
+    app.get('/withdraw/:user/:amount/:currency', auth.provider, setApiCallId, async (req, res) => {
+        const userId = req.params.user;
+        const fundsAmount = parseInt(req.params.amount);
+        const currencyId = req.params.currency;
+        await hostingFeeTransfer(userId, defaultHostingProvider.id, req.apiCallPrice, undefined, req.apiCallId);
         const c01nsWithdrew = await withdrawUserFunds(
-            userId, defaultHostingProvider.id, fundsAmount, currencyId, apiCallId);
+            userId, defaultHostingProvider.id, fundsAmount, currencyId, req.apiCallId);
         res.status(200).json({ c01ns: c01nsWithdrew, message: 'withdrew successfully' });
     });
-    app.get('/currency/exchange/rates', auth.user, async (req, res) => {
-        const apiCallId = '95f7d8c2-4dbb-4d10-b394-3143a2307866';
-        const apiCallPrice = 25000;
-        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, apiCallPrice, undefined, apiCallId);
+    app.get('/currency/exchange/rates', auth.user, setApiCallId, async (req, res) => {
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, req.apiCallPrice, undefined, req.apiCallId);
         const rates = await getExchangeRates();
         res.status(200).json(rates);
+    });
+    app.get('/user/balance', auth.user, setApiCallId, async (req, res) => {
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, req.apiCallPrice, undefined, req.apiCallId);
+        const userBalance = await getUserBalance(req.user.id);
+        res.status(200).json({currency: 'c01n', amount: userBalance, amountText: getReadableNumber(userBalance)});
+    });
+    app.get('/user/transactions/history', auth.user, setApiCallId, async (req, res) => {
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, req.apiCallPrice, undefined, req.apiCallId);
+        const userTransactions = await getUserTransactions(req.user.id);
+        res.status(200).json(userTransactions);
+    });
+    app.get('/user/login', auth.user, setApiCallId, async (req, res) => {
+        await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, req.apiCallPrice, undefined, req.apiCallId);
+        const userName = await getUserName(req.user.id);
+        res.status(200).json({id: req.user.id, name: userName});
+    });
+    app.get('/', auth.public, (req, res) => {
+        res.sendFile(__dirname + '/index.html');
+    });
+    app.get('/index.html', auth.public, (req, res) => {
+        res.sendFile(__dirname + '/index.html');
+    });
+    app.get('/favicon.ico', auth.public, (req, res) => {
+        res.sendFile(__dirname + '/favicon.ico');
     });
     app.get('/*', auth.public, (req, res) => {
         res.status(404).end();

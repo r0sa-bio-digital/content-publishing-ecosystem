@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/r0sa-bio-digital/meslo@1.0.0/meslo.css">
+        <script>
+            console.info('welcome to c0ntent');
+            const apiUrl = 'https://c0ntent.herokuapp.com/';
+
+            function getContentDescription()
+            {
+                const mainRequest = location.search.split('?')[1];
+                if (!mainRequest)
+                    return null;
+                if (mainRequest === 'add/content')
+                    return {addContent: true};
+                if (mainRequest === 'update/content/text')
+                    return {updateContentText: true};
+                if (mainRequest === 'update/content/author_fee')
+                    return {updateContentAuthorFee: true};
+                const showRequestParts = mainRequest.split('&');
+                const knit = showRequestParts[0], type = showRequestParts[1];
+                if (knit && type)
+                    return {knit, type};
+                return null;
+            }
+
+            async function onLoad()
+            {
+                const accessToken = localStorage.getItem('accessToken');
+                if (!accessToken)
+                    document.getElementById('login').style.display = 'block';
+                else
+                {
+                    document.getElementById('loading').style.display = 'block';
+                    const contentDescription = getContentDescription();
+                    if (contentDescription && contentDescription.addContent)
+                    {
+                        const loginResponse = await fetch(
+                            apiUrl + 'user/login',
+                            {
+                                method: 'GET',
+                                headers: {
+                                    Authorization: `Basic ${btoa(accessToken + ':')}`
+                                }
+                            }
+                        );
+                        if (loginResponse.status === 200)
+                        {
+                            const userData = await loginResponse.json();
+                            document.getElementById('addContent_authorAccountName').textContent = userData.name;
+                            document.getElementById('addContent').style.display = 'block';
+                        }
+                        else
+                            document.getElementById('loginFailed').style.display = 'block';
+                        document.getElementById('loading').style.display = 'none';
+                    }
+                    else if (contentDescription && contentDescription.updateContentText)
+                    {
+                        const loginResponse = await fetch(
+                            apiUrl + 'user/login',
+                            {
+                                method: 'GET',
+                                headers: {
+                                    Authorization: `Basic ${btoa(accessToken + ':')}`
+                                }
+                            }
+                        );
+                        if (loginResponse.status === 200)
+                        {
+                            const userData = await loginResponse.json();
+                            document.getElementById('updateContentText_authorAccountName').textContent = userData.name;
+                            document.getElementById('updateContentText').style.display = 'block';
+                        }
+                        else
+                            document.getElementById('loginFailed').style.display = 'block';
+                        document.getElementById('loading').style.display = 'none';
+                    }
+                    else if (contentDescription && contentDescription.updateContentAuthorFee)
+                    {
+                        const loginResponse = await fetch(
+                            apiUrl + 'user/login',
+                            {
+                                method: 'GET',
+                                headers: {
+                                    Authorization: `Basic ${btoa(accessToken + ':')}`
+                                }
+                            }
+                        );
+                        if (loginResponse.status === 200)
+                        {
+                            const userData = await loginResponse.json();
+                            document.getElementById('updateContentAuthorFee_authorAccountName').textContent = userData.name;
+                            document.getElementById('updateContentAuthorFee').style.display = 'block';
+                        }
+                        else
+                            document.getElementById('loginFailed').style.display = 'block';
+                        document.getElementById('loading').style.display = 'none';
+                    }
+                    else if (contentDescription && contentDescription.knit && contentDescription.type)
+                    {
+                        const readResponse = await fetch(
+                            apiUrl + `${contentDescription.knit}/read/${contentDescription.type}`,
+                            {
+                                method: 'GET',
+                                headers: {
+                                    Authorization: `Basic ${btoa(accessToken + ':')}`
+                                }
+                            }
+                        );
+                        if (readResponse.status === 200)
+                        {
+                            const content = await readResponse.text();
+                            document.documentElement.innerHTML = content;
+                            return;
+                        }
+                        else if (readResponse.status === 404)
+                            document.getElementById('notFound').style.display = 'block';
+                        else if (readResponse.status === 500)
+                        {
+                            const readResult = await readResponse.json();
+                            document.getElementById('internalError').textContent = 'internal error: ' + readResult.message;
+                            document.getElementById('internalError').style.display = 'block';
+                        }
+                        else
+                            document.getElementById('loginFailed').style.display = 'block';
+                    }
+                    else
+                    {
+                        const loginResponse = await fetch(
+                            apiUrl + 'user/login',
+                            {
+                                method: 'GET',
+                                headers: {
+                                    Authorization: `Basic ${btoa(accessToken + ':')}`
+                                }
+                            }
+                        );
+                        if (loginResponse.status === 200)
+                        {
+                            const userData = await loginResponse.json();
+                            document.getElementById('accountName').textContent = userData.name;
+                            document.getElementById('account').style.display = 'block';
+                        }
+                        else
+                            document.getElementById('loginFailed').style.display = 'block';
+                    }
+                    document.getElementById('loading').style.display = 'none';
+                }
+            }
+            function onLoginClick()
+            {
+                localStorage.setItem('accessToken', document.getElementById('accessTokenInput').value);
+                document.getElementById('login').style.display = 'none';
+                onLoad();
+            }
+            function onResetClick()
+            {
+                localStorage.removeItem('accessToken');
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('notFound').style.display = 'none';
+                document.getElementById('internalError').style.display = 'none';                
+                document.getElementById('loginFailed').style.display = 'none';
+                document.getElementById('account').style.display = 'none';
+                document.getElementById('addContent').style.display = 'none';
+                document.getElementById('updateContentText').style.display = 'none';
+                document.getElementById('updateContentAuthorFee').style.display = 'none';
+                onLoad();
+            }
+            async function onRefreshBalanceClick()
+            {
+                const balanceElement = document.getElementById('accountBalance');
+                balanceElement.textContent = '...';
+                const accessToken = localStorage.getItem('accessToken');
+                const balanceResponse = await fetch(
+                    apiUrl + 'user/balance',
+                    {
+                        method: 'GET',
+                        headers: {
+                            Authorization: `Basic ${btoa(accessToken + ':')}`
+                        }
+                    }
+                );
+                if (balanceResponse.status === 200)
+                {
+                    const balanceData = await balanceResponse.json();
+                    balanceElement.textContent = balanceData.amountText + ' ' + balanceData.currency;
+                }
+                else
+                    balanceElement.textContent = 'failed';
+            }
+            async function onRefreshExchangeRatesClick()
+            {
+                const ratesElement = document.getElementById('exchangeRatesTableBody');
+                ratesElement.innerHTML = '<tr><td>...</td><td></td></tr>';
+                const accessToken = localStorage.getItem('accessToken');
+                const ratesResponse = await fetch(
+                    apiUrl + 'currency/exchange/rates',
+                    {
+                        method: 'GET',
+                        headers: {
+                            Authorization: `Basic ${btoa(accessToken + ':')}`
+                        }
+                    }
+                );
+
+                if (ratesResponse.status === 200)
+                {
+                    const ratesData = await ratesResponse.json();
+                    let html = '';
+                    for (let i = 0; i < ratesData.length; ++i)
+                        html += `<tr><td>${ratesData[i].name}</td><td style="text-align: right;">${ratesData[i].rateText}</td></tr>`;
+                    ratesElement.innerHTML = html;
+                }
+                else
+                    ratesElement.innerHTML = '<tr><td>failed</td><td></td></tr>';
+            }
+            async function onRefreshTransactionHistoryClick()
+            {
+                const historyElement = document.getElementById('transactionHistoryTableBody');
+                historyElement.innerHTML = '<tr><td>...</td><td></td><td></td><td></td></tr>';
+                const accessToken = localStorage.getItem('accessToken');
+                const historyResponse = await fetch(
+                    apiUrl + 'user/transactions/history',
+                    {
+                        method: 'GET',
+                        headers: {
+                            Authorization: `Basic ${btoa(accessToken + ':')}`
+                        }
+                    }
+                );
+                if (historyResponse.status === 200)
+                {
+                    const historyData = await historyResponse.json();
+                    const external_currency_ids = {};
+                    for (let i = 0; i < historyData.length; ++i)
+                    {
+                        const id = historyData[i].external_currency_id;
+                        if (id)
+                            external_currency_ids[id] = true;
+                    }
+                    const currencyNames = {};
+                    for (let knitId in external_currency_ids)
+                    {
+                        const knitResponse = await fetch(
+                            apiUrl + knitId + '/read/plaintext',
+                            {
+                                method: 'GET',
+                                headers: {
+                                    Authorization: `Basic ${btoa(accessToken + ':')}`
+                                }
+                            }
+                        );
+                        if (knitResponse.status === 200)
+                        {
+                            const knitData = await knitResponse.text();
+                            currencyNames[knitId] = knitData;
+                        }
+                    }
+                    let html = '';
+                    for (let i = 0; i < historyData.length; ++i)
+                    {
+                        const sign = historyData[i].debited_account === accessToken ? '-' :
+                            historyData[i].credited_account === accessToken ? '+' :
+                                '?';
+                        const color = sign === '-' ? 'red' :
+                            sign === '+' ? 'green' :
+                                'black';
+                        const externalDirection = sign === '-' ? '>>' :
+                            sign === '+' ? '<<' :
+                                '..';
+                        const external = historyData[i].external_amount && historyData[i].external_currency_id ?
+                            `<span style="color: blue;">${externalDirection}</span> ${historyData[i].external_amount} ${currencyNames[historyData[i].external_currency_id]}` : '';
+                        html += `<tr><td>${historyData[i].creation}</td><td style="text-align: center; color: ${color}">${sign}</td><td style="text-align: right; color: ${color}">${historyData[i].c01n_amount}</td><td>${external}</td></tr>`;
+                    }
+                    historyElement.innerHTML = html;
+                }
+                else
+                    historyElement.innerHTML = '<tr><td>failed</td><td></td><td></td><td></td></tr>';
+            }
+            async function onNewContentSubmitClick()
+            {
+                const stateElem = document.getElementById('newContentSubmitState');
+                const text = document.getElementById('newContentText').value;
+                const author_fee_string = document.getElementById('newContentAuthorFee').value;
+                const author_fee = parseInt(author_fee_string);
+                if (!text)
+                {
+                    stateElem.textContent = ' text must not be empty';
+                    return;
+                }
+                if (isNaN(author_fee) || author_fee_string !== String(author_fee))
+                {
+                    stateElem.textContent = ' author fee must be integer';
+                    return;
+                }
+                stateElem.textContent = ' loading...';
+                const accessToken = localStorage.getItem('accessToken');
+                const response1 = await fetch(
+                    apiUrl + 'knit/generate',
+                    {
+                        method: 'GET',
+                        headers: {
+                            Authorization: `Basic ${btoa(accessToken + ':')}`
+                        }
+                    }
+                );
+                if (response1.status !== 200)
+                {
+                    stateElem.textContent = ' failed to generate new knit';
+                    return;
+                }
+                const newKnit = await response1.text();
+                const body = {text, author_fee};
+                const response2 = await fetch(
+                    apiUrl + `${newKnit}/add`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            Authorization: `Basic ${btoa(accessToken + ':')}`,
+                            'Content-Type': 'application/json',
+                        }, 
+                        body: JSON.stringify(body),
+                    }
+                );
+                if (response2.status !== 200)
+                {
+                    const report = await response2.json();
+                    stateElem.textContent = ' failed to add new content. ' + report.message;
+                    console.warn(report.details);
+                }
+                else
+                {
+                    stateElem.textContent = (await response2.json()).message + '. Knit: ' + newKnit;
+                    document.getElementById('newContentSubmitButton').disabled = true;
+                }
+            }
+            function encodeImageFileAsURL(element, targetElemId) {
+                const file = element.files[0];
+                const reader = new FileReader();
+                reader.onloadend = () => document.getElementById(targetElemId).value = reader.result;
+                reader.readAsDataURL(file);
+            }
+            async function onNewContentSubmitClick2()
+            {
+                const stateElem = document.getElementById('newContentSubmitState2');
+                const text = document.getElementById('newContentText2').value;
+                const updateKnit = document.getElementById('updateKnit').value;
+                if (!text)
+                {
+                    stateElem.textContent = ' text must not be empty';
+                    return;
+                }
+                stateElem.textContent = ' loading...';
+                const accessToken = localStorage.getItem('accessToken');
+                const body = {text};
+                const response = await fetch(
+                    apiUrl + `${updateKnit}/update/text`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            Authorization: `Basic ${btoa(accessToken + ':')}`,
+                            'Content-Type': 'application/json',
+                        }, 
+                        body: JSON.stringify(body),
+                    }
+                );
+                if (response.status !== 200)
+                {
+                    const report = await response.json();
+                    stateElem.textContent = ' failed to update content. ' + report.message;
+                    console.warn(report.details);
+                }
+                else
+                    stateElem.textContent = (await response.json()).message + '. Knit: ' + updateKnit;
+            }
+            async function onNewContentSubmitClick3()
+            {
+                const stateElem = document.getElementById('newContentSubmitState3');
+                const author_fee_string = document.getElementById('newContentAuthorFee2').value;
+                const author_fee = parseInt(author_fee_string);
+                const updateKnit = document.getElementById('updateKnit2').value;
+                if (isNaN(author_fee) || author_fee_string !== String(author_fee))
+                {
+                    stateElem.textContent = ' author fee must be integer';
+                    return;
+                }
+                stateElem.textContent = ' loading...';
+                const accessToken = localStorage.getItem('accessToken');
+                const body = {author_fee};
+                const response = await fetch(
+                    apiUrl + `${updateKnit}/update/author_fee`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            Authorization: `Basic ${btoa(accessToken + ':')}`,
+                            'Content-Type': 'application/json',
+                        }, 
+                        body: JSON.stringify(body),
+                    }
+                );
+                if (response.status !== 200)
+                {
+                    const report = await response.json();
+                    stateElem.textContent = ' failed to update content. ' + report.message;
+                    console.warn(report.details);
+                }
+                else
+                    stateElem.textContent = (await response.json()).message + '. Knit: ' + updateKnit;
+            }
+        </script>
+    </head>
+    <body onload="onLoad();">
+        <div id="login" style="display: none;">
+            <label for="accessTokenInput">access token: </label><input id="accessTokenInput" type="text">
+            <button onclick="onLoginClick();">login</button>
+        </div>
+        <div id="loading" style="display: none;">
+            loading...
+        </div>
+        <div id="account" style="display: none;">
+            <div>
+                <span>name: </span><span id="accountName"></span>
+                <button onclick="onResetClick();">logout</button>
+            </div>
+            <div>
+                <span>balance: </span><span id="accountBalance">?</span>
+                <button onclick="onRefreshBalanceClick();">refresh</button>
+            </div>
+            <div>
+                <span>exchange rates: </span>
+                <button onclick="onRefreshExchangeRatesClick();">refresh</button>
+                <table id="exchangeRatesTable">
+                    <thead>
+                        <td>currency</td>
+                        <td>value in c01ns</td>
+                    </thead>
+                    <tbody id="exchangeRatesTableBody">
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <span>transaction history: </span>
+                <button onclick="onRefreshTransactionHistoryClick();">refresh</button>
+                <table id="transactionHistoryTable">
+                    <thead>
+                        <td>date</td>
+                        <td>±</td>
+                        <td>amount</td>
+                        <td>external</td>
+                    </thead>
+                    <tbody id="transactionHistoryTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="addContent" style="display: none;">
+            <h3>Add new content</h3>
+            <div>
+                <span>author: </span><span id="addContent_authorAccountName"></span>
+                <button onclick="onResetClick();">logout</button>
+            </div>
+            <textarea id="newContentText"></textarea>
+            <div>
+                <input type="file" accept=".jpg,.jpeg,.png,.gif" onchange="encodeImageFileAsURL(this, 'newContentText');" />
+            </div>
+            <div>
+                <label for="newContentAuthorFee">author fee </label>
+                <input id="newContentAuthorFee" type="number">                
+            </div>
+            <div style="margin-top: 1em;">
+                <button id="newContentSubmitButton" onclick="onNewContentSubmitClick();">submit</button>
+                <span id="newContentSubmitState"></span>
+            </div>
+        </div>
+
+        <div id="updateContentText" style="display: none;">
+            <h3>Update content text</h3>
+            <div>
+                <span>author: </span><span id="updateContentText_authorAccountName"></span>
+                <button onclick="onResetClick();">logout</button>
+            </div>
+            <div>
+                <span>target knit: </span><input id="updateKnit" type="text"/>
+            </div>
+            <textarea id="newContentText2"></textarea>
+            <div>
+                <input type="file" accept=".jpg,.jpeg,.png,.gif" onchange="encodeImageFileAsURL(this, 'newContentText2');" />
+            </div>
+            <div style="margin-top: 1em;">
+                <button id="newContentSubmitButton2" onclick="onNewContentSubmitClick2();">submit</button>
+                <span id="newContentSubmitState2"></span>
+            </div>
+        </div>
+
+        <div id="updateContentAuthorFee" style="display: none;">
+            <h3>Update content author fee</h3>
+            <div>
+                <span>author: </span><span id="updateContentAuthorFee_authorAccountName"></span>
+                <button onclick="onResetClick();">logout</button>
+            </div>
+            <div>
+                <span>target knit: </span><input id="updateKnit2" type="text"/>
+            </div>
+            <div>
+                <label for="newContentAuthorFee2">author fee </label>
+                <input id="newContentAuthorFee2" type="number">                
+            </div>
+            <div style="margin-top: 1em;">
+                <button id="newContentSubmitButton3" onclick="onNewContentSubmitClick3();">submit</button>
+                <span id="newContentSubmitState3"></span>
+            </div>
+        </div>
+
+        <div id="notFound" style="display: none;">
+            <span>content not found</span>
+        </div>
+        <div id="internalError" style="display: none;">
+            <span id="internalErrorMessage"></span>
+        </div>
+        <div id="loginFailed" style="display: none;">
+            <span>login failed</span>
+            <button onclick="onResetClick();">reset</button>
+        </div>
+    </body>
+</html>
