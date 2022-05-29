@@ -372,7 +372,41 @@
                     console.warn(report.details);
                 }
                 else
-                    stateElem.textContent = (await response.json()).message + '. Knit: ' + newKnit;
+                    stateElem.textContent = (await response.json()).message + '. Knit: ' + updateKnit;
+            }
+            async function onNewContentSubmitClick3()
+            {
+                const stateElem = document.getElementById('newContentSubmitState3');
+                const author_fee_string = document.getElementById('newContentAuthorFee2').value;
+                const author_fee = parseInt(author_fee_string);
+                const updateKnit = document.getElementById('updateKnit2').value;
+                if (isNaN(author_fee) || author_fee_string !== String(author_fee))
+                {
+                    stateElem.textContent = ' author fee must be integer';
+                    return;
+                }
+                stateElem.textContent = ' loading...';
+                const accessToken = localStorage.getItem('accessToken');
+                const body = {author_fee};
+                const response = await fetch(
+                    apiUrl + `${updateKnit}/update/author_fee`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            Authorization: `Basic ${btoa(accessToken + ':')}`,
+                            'Content-Type': 'application/json',
+                        }, 
+                        body: JSON.stringify(body),
+                    }
+                );
+                if (response.status !== 200)
+                {
+                    const report = await response.json();
+                    stateElem.textContent = ' failed to update content. ' + report.message;
+                    console.warn(report.details);
+                }
+                else
+                    stateElem.textContent = (await response.json()).message + '. Knit: ' + updateKnit;
             }
         </script>
     </head>
@@ -464,6 +498,9 @@
             <div>
                 <span>author: </span><span id="updateContentAuthorFee_authorAccountName"></span>
                 <button onclick="onResetClick();">logout</button>
+            </div>
+            <div>
+                <span>target knit: </span><input id="updateKnit2" type="text"/>
             </div>
             <div>
                 <label for="newContentAuthorFee2">author fee </label>
