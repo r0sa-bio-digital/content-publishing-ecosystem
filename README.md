@@ -288,9 +288,10 @@ Content publishing ecosystem to organize content exchange between authors and co
 				* using crypto currency for buying/selling c01ns
 				* idea of selling ownership for content records via NFT
 				* crypto platform growth through high demanded service implementation
-			* `add search engine block`
+			* add search engine block
 				* how semantic search of content in semantic web could stimulate market of niche information goods and services 
 		* Perform first pitch for investors
+			* `read WAX blockchain presentation materials on [wax.io](https://wax.io)`
 			* make crypto-oriented pitch scenario
 			* unify and align all materials to the scenario
 			* organise conference call with all interested participants
