@@ -284,11 +284,11 @@ Content publishing ecosystem to organize content exchange between authors and co
 					* think is it really good idea to transform developers to authors
 						* yes, it is good way to motivate developers do better core features
 					* technical roadmap must support business roadmap
-			* `add crypto currency block`
+			* add crypto currency block
 				* using crypto currency for buying/selling c01ns
 				* idea of selling ownership for content records via NFT
 				* crypto platform growth through high demanded service implementation
-			* add search engine block
+			* `add search engine block`
 				* how semantic search of content in semantic web could stimulate market of niche information goods and services 
 		* Perform first pitch for investors
 			* make crypto-oriented pitch scenario
