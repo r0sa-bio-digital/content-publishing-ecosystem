@@ -290,8 +290,11 @@ Content publishing ecosystem to organize content exchange between authors and co
 				* crypto platform growth through high demanded service implementation
 			* add search engine block
 				* how semantic search of content in semantic web could stimulate market of niche information goods and services 
+		* `Formalise idea of service for investors`
+			* content is an elementary investable unit
+				* it has keeper (provider), author, owner, beneficiarys (owner and investor/investors totally getting 100% of author fee)
 		* Perform first pitch for investors
-			* `read WAX blockchain presentation materials on [wax.io](https://wax.io)`
+			* read WAX blockchain presentation materials on [wax.io](https://wax.io)
 			* make crypto-oriented pitch scenario
 			* unify and align all materials to the scenario
 			* organise conference call with all interested participants
