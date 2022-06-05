@@ -290,9 +290,17 @@ Content publishing ecosystem to organize content exchange between authors and co
 				* crypto platform growth through high demanded service implementation
 			* add search engine block
 				* how semantic search of content in semantic web could stimulate market of niche information goods and services 
-		* `Formalise idea of service for investors`
+		* Formalise idea of service for investors
 			* content is an elementary investable unit
-				* it has keeper (provider), author, owner, beneficiarys (owner and investor/investors totally getting 100% of author fee)
+				* it has keeper (provider), author, holder, beneficiarys (holder and investor/investors totally getting 100% of author fee)
+			* c0ntent ecosystem is a direct tool for
+				* storing information of investor's content equity structure
+				* getting income from content equity
+				* selling of content equity
+				* monitoring of assets structure and performance
+				* monitoring of funded authors performance
+			* `update main busines-model according to new entities`
+			* move fund-equity model to main busines-model graph
 		* Perform first pitch for investors
 			* read WAX blockchain presentation materials on [wax.io](https://wax.io)
 			* make crypto-oriented pitch scenario
