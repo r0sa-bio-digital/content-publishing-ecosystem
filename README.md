@@ -299,13 +299,11 @@ Content publishing ecosystem to organize content exchange between authors and co
 				* selling of content equity
 				* monitoring of assets structure and performance
 				* monitoring of funded authors performance
-			* `update main busines-model according to new entities`
-			* move fund-equity model to main busines-model graph
+			* update main busines-model according to new entities
 		* Perform first pitch for investors
-			* read WAX blockchain presentation materials on [wax.io](https://wax.io)
-			* make crypto-oriented pitch scenario
-			* unify and align all materials to the scenario
-			* organise conference call with all interested participants
+			* cross-review presentation materials
+			* `contact potential investors`
+			* schedule meetings with all interested participants
 		* Improve content management functionality
 			* the goal: allow user to perform complete content creation/distribution cycle using web frontend only
 			* user dashboard frontend
@@ -332,6 +330,11 @@ Content publishing ecosystem to organize content exchange between authors and co
 						* in return for investment authors will pay some percent from author fee to investor
 							* applyed only to content records funded by investor
 						* automatically computed and payed ammount from provider/author to investor is called investor fee
+		* Implement investor role
+			* investors db table
+			* investor percent determination mechanism
+			* automated investor fee for author
+			* fixate all funds and returns in transactions log
 		* Add content frontend extension - code editor with preview
 			* html/css/js
 			* css
@@ -372,11 +375,6 @@ Content publishing ecosystem to organize content exchange between authors and co
 	* to don't charge user for failed calls as for successful calls
 	* think how we should charge for failed calls
 	* make all calls more optimal in terms of computation, db transactions and fees
-* Implement investor role
-	* investors db table
-	* investor percent determination mechanism
-	* automated investor fee for provider
-	* fixate all funds and returns in transactions log
 * Think about tools for deleting content from the system
 * Research best db for the transactions log, because postgresql is too much costly
 	* Check out ClickHouse first
