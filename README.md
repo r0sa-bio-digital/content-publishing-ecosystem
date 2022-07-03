@@ -275,7 +275,7 @@ Content publishing ecosystem to organize content exchange between authors and co
 				* update text
 				* update author fee
 		* Extend b2c business model
-			* `formalise needs for all roles`
+			* formalise needs for all roles
 				* for all roles add list of reasons to create conceptually new content ecosystem
 					* use Daniel Pink "Drive" theory to motivate authors and investors
 			* add technical roadmap
@@ -290,9 +290,20 @@ Content publishing ecosystem to organize content exchange between authors and co
 				* crypto platform growth through high demanded service implementation
 			* add search engine block
 				* how semantic search of content in semantic web could stimulate market of niche information goods and services 
+		* Formalise idea of service for investors
+			* content is an elementary investable unit
+				* it has keeper (provider), author, holder, beneficiarys (holder and investor/investors totally getting 100% of author fee)
+			* c0ntent ecosystem is a direct tool for
+				* storing information of investor's content equity structure
+				* getting income from content equity
+				* selling of content equity
+				* monitoring of assets structure and performance
+				* monitoring of funded authors performance
+			* update main busines-model according to new entities
 		* Perform first pitch for investors
-			* make crypto-oriented pitch scenario
-			* organise conference call with all interested participants
+			* cross-review presentation materials
+			* `contact potential investors`
+			* schedule meetings with all interested participants
 		* Improve content management functionality
 			* the goal: allow user to perform complete content creation/distribution cycle using web frontend only
 			* user dashboard frontend
@@ -319,6 +330,11 @@ Content publishing ecosystem to organize content exchange between authors and co
 						* in return for investment authors will pay some percent from author fee to investor
 							* applyed only to content records funded by investor
 						* automatically computed and payed ammount from provider/author to investor is called investor fee
+		* Implement investor role
+			* investors db table
+			* investor percent determination mechanism
+			* automated investor fee for author
+			* fixate all funds and returns in transactions log
 		* Add content frontend extension - code editor with preview
 			* html/css/js
 			* css
@@ -359,11 +375,6 @@ Content publishing ecosystem to organize content exchange between authors and co
 	* to don't charge user for failed calls as for successful calls
 	* think how we should charge for failed calls
 	* make all calls more optimal in terms of computation, db transactions and fees
-* Implement investor role
-	* investors db table
-	* investor percent determination mechanism
-	* automated investor fee for provider
-	* fixate all funds and returns in transactions log
 * Think about tools for deleting content from the system
 * Research best db for the transactions log, because postgresql is too much costly
 	* Check out ClickHouse first
