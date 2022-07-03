@@ -233,7 +233,7 @@ runQuery(queryString).then( async (result) => {
     app.get('/:knit/extract/timestamp/:format', auth.user, setApiCallId, async (req, res) => {
         const {knit: id, format} = req.params;
         const resultTimestamp = format === 'ISO' ? knit.convertTime(id, 'date-object').toISOString()
-            : knit.convertTime(id, 'unix-float');
+            : knit.convertTime(id, 'unix-float').toString();
         await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, req.apiCallPrice, undefined, req.apiCallId);
         res.set('Content-Type', 'text/html');
         res.send(resultTimestamp);
