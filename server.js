@@ -230,12 +230,13 @@ runQuery(queryString).then( async (result) => {
         res.set('Content-Type', 'text/html');
         res.send(resultKnit);
     });
-    app.get('/:knit/extract/timestamp', auth.user, setApiCallId, async (req, res) => {
-        const id = req.params.knit;
-        const resultTimestamp = knit.convertTime(id, 'date-object');
+    app.get('/:knit/extract/timestamp/:format', auth.user, setApiCallId, async (req, res) => {
+        const {knit as id, format} = req.params.knit;
+        const resultTimestamp = format === 'ISO' ? knit.convertTime(id, 'date-object').toISOString()
+            : knit.convertTime(id, 'unix-float');
         await hostingFeeTransfer(req.user.id, defaultHostingProvider.id, req.apiCallPrice, undefined, req.apiCallId);
         res.set('Content-Type', 'text/html');
-        res.send(resultTimestamp.toISOString());
+        res.send(resultTimestamp);
     });
     app.post('/hashsum/compute', auth.user, setApiCallId, async (req, res) => {
         const hashsum = computeTextHashsum(req.body.text);
